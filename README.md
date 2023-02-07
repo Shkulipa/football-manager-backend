@@ -30,7 +30,7 @@ docs: https://docs.nestjs.com/cli/overview
 2. nest generate res --no-spec
 ```
 
-## Errors in Nestjs
+## Errors Exceptions in Nestjs
 classes: https://docs.nestjs.com/exception-filters
 status: https://medium.com/@abeythilakeudara3/nestjs-exception-filters-part-02-24afcbe116cf
 
@@ -38,7 +38,6 @@ status: https://medium.com/@abeythilakeudara3/nestjs-exception-filters-part-02-2
 docs: https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401
 
 ## Migrations
-
 migrations are using the "mongo-migrations.js" file, , and follow commands:
 ```
 yarn migrate:docs
@@ -50,14 +49,10 @@ yarn migrate:up
 yarn migrate:down
 ```
 
-for seeders are using "mongo-seeders.js", and follow commands:
+for seeds are using "mongo-seeds.js", and follow commands:
 ```
-yarn seeder:status
-yarn seeder:create
-yarn seeder:up
-yarn seeder:down
+yarn seeds:status
+yarn seeds:create
+yarn seeds:up
+yarn seeds:down
 ```
-
-Todo
-[] - login
-[] - confirm email

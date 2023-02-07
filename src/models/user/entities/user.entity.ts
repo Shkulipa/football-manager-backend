@@ -1,6 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { hash } from 'bcrypt';
+import {
+  arrayRoles,
+  EUserRoles,
+} from 'src/common/interfaces/userRoles.interfaces';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -11,14 +15,23 @@ export class User {
   @Prop({ required: true, unique: true, type: String })
   email: string;
 
-  @Prop({ required: true, type: Boolean, default: false })
-  isConfirmEmail: boolean;
-
   @Prop({ required: true, unique: true, type: String })
   username: string;
 
+  @Prop({ required: true, type: Boolean, default: false })
+  isConfirmEmail: boolean;
+
+  @Prop({ type: String, unique: true })
+  activationId: string;
+
   @Prop({ required: true, type: String })
   password: string;
+
+  @Prop({ required: true, type: Array, enum: [...arrayRoles], default: [] })
+  roles: EUserRoles[];
+
+  @Prop({ type: String })
+  refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

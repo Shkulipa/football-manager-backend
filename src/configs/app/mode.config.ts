@@ -9,8 +9,18 @@ export const modeConfig: ConfigModuleOptions = {
   validationSchema: Joi.object({
     NODE_ENV: Joi.string().valid('development', 'production'),
     PORT: Joi.number().required(),
+    CLIENT_URL: Joi.string().required(),
+
     MONGODB_URL: Joi.string().required(),
     MONGODB_DATABASE_NAME: Joi.string().required(),
+
+    SMTP_HOST: Joi.string().required(),
+    SMTP_PORT: Joi.number().required(),
+    SMTP_USER: Joi.string().required(),
+    SMTP_PASS: Joi.string().required(),
+
+    SECRET_ACCESS: Joi.string().required(),
+    SECRET_REFRESH: Joi.string().required(),
   }),
 
   validationOptions: {

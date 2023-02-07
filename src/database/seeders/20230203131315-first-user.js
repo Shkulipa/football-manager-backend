@@ -1,3 +1,5 @@
+const email = 'firstuser@gmail.com';
+
 module.exports = {
   async up(db, client) {
     // TODO write your migration here.
@@ -6,11 +8,11 @@ module.exports = {
     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
 
     await db.collection('users').insertOne({
-      email: 'firstuser@gmail.com',
+      email,
       username: 'firstuser',
       isConfirmEmail: true,
-      password: '$2b$10$LA2mUbUx7lIoJ7QVAHPoBeohF6yTPEeeJZa01AiaHtxrGH561xRXS', // pass is hashed(real pass: 12345678)
-      token: null,
+      password: '$2b$10$LA2mUbUx7lIoJ7QVAHPoBeohF6yTPEeeJZa01AiaHtxrGH561xRXS', // pass was hashed(real pass: 12345678)
+      roles: ['ADD_TEAM', 'DELETE_TEAM'] // see roles here: src/common/interfaces/userRoles.interfaces.ts
     });
   },
 
@@ -19,6 +21,6 @@ module.exports = {
     // Example:
     // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
 
-    await db.collection('users').remove({ email: 'firstuser@gmail.com' });
+    await db.collection('users').remove({ email });
   },
 };
