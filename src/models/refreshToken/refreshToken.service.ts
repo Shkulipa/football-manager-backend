@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { pick } from 'lodash';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
+import { IUserData } from 'src/common/interfaces/userData.interfaces';
 import { IUserJtwData } from 'src/common/interfaces/userJwtData.interfaces';
 import { JwtService } from 'src/models/jwt/jwt.service';
 import { User, UserDocument } from '../user/entities/user.entity';
@@ -39,17 +40,18 @@ export class RefreshTokenService {
       });
       if (!user)
         throw new HttpException(
-          `User with email:${tokenData.email} didn't found`,
+          `User with email:${user.email} didn't found`,
           HttpStatus.BAD_REQUEST,
         );
 
-      const jwtData: IUserJtwData = {
+      const userData: IUserData = {
         ...pick(user, ['_id', 'email', 'username', 'roles']),
       };
-      const { refreshToken, accessToken } =
-        this.jwtService.createTokens(jwtData);
+      const { refreshToken, accessToken } = this.jwtService.createTokens(
+        userData._id,
+      );
       const res = {
-        ...jwtData,
+        ...userData,
         accessToken,
       };
 

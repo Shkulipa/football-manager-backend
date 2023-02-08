@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { compare } from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserDto } from './dto/createUser.dto';
@@ -147,6 +147,18 @@ export class UserService {
       return result;
     } catch (err) {
       this.logger.error(err);
+      throw err;
+    }
+  }
+
+  async findById(id: string) {
+    try {
+      const user = await this.userModel.findById(new Types.ObjectId(id));
+      if (!user)
+        throw new HttpException("User wasn't found", HttpStatus.NOT_FOUND);
+
+      return user;
+    } catch (err) {
       throw err;
     }
   }

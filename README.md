@@ -8,19 +8,14 @@ if you need a get up the mongoDB localy, use it:
 ```
 yarn docker
 ```
-then open in browser: http://localhost:8081
+then open in browser: http://localhost:8081 (for UI of DB)
 
+# Run Application
 ```
-# development
-1. yarn start
-
-# watch mode
-1. yarn start:dev (will take variables from .env)
-2. yarn start-mode:dev  (will take variables from .env.development)
-3. yarn start-mode:prod (will take variables from .env.production)
-
-# production mode
-yarn start:prod (run dist/main)
+1. yarn start:prod (will take variables from .env.production)
+2. yarn start:dev  (will take variables from .env.development)
+3. yarn start:local (will take variables from .env.local)
+4. yarn prod (run dist/main)
 ```
 
 ## CLI

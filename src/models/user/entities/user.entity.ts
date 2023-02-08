@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
 import { hash } from 'bcrypt';
-import {
-  arrayRoles,
-  EUserRoles,
-} from 'src/common/interfaces/userRoles.interfaces';
+import { HydratedDocument } from 'mongoose';
+import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
+
+const arrayRoles: EUserRoles[] = [
+  ...Object.keys(EUserRoles).map((key) => EUserRoles[key]),
+];
 
 export type UserDocument = HydratedDocument<User>;
 
