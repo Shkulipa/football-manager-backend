@@ -33,21 +33,24 @@ status: https://medium.com/@abeythilakeudara3/nestjs-exception-filters-part-02-2
 docs: https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401
 
 ## Migrations
-migrations are using the "mongo-migrations.js" file, , and follow commands:
+common commands:
 ```
 yarn migrate:docs
-yarn migrate:init
-yarn migrate:help
-yarn migrate:status
-yarn migrate:create
-yarn migrate:up
-yarn migrate:down
+yarn NODE_ENV= migrate:init
+yarn NODE_ENV= migrate:help
+```
+
+migrations are using the "mongo-migrations.js" file,
+```
+migrate:prod:status (for prod DB)
+migrate:dev:status (for dev DB)
+migrate:local:status (for local DB)
+...
 ```
 
 for seeds are using "mongo-seeds.js", and follow commands:
 ```
-yarn seeds:status
-yarn seeds:create
-yarn seeds:up
-yarn seeds:down
+seeds:prod:status (for prod DB)
+seeds:dev:status (for dev DB)
+seeds:local:status (for local DB)
 ```

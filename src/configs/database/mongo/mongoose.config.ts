@@ -6,13 +6,8 @@ const mongooseConfig: MongooseModuleAsyncOptions = {
   imports: [ConfigModule],
   useFactory: async (configService: ConfigService) => {
     const MONGODB_URL = configService.get<string>('MONGODB_URL');
-    const MONGODB_DATABASE_NAME = configService.get<string>(
-      'MONGODB_DATABASE_NAME',
-    );
-    const uri = `${MONGODB_URL}/${MONGODB_DATABASE_NAME}`;
-
     return {
-      uri,
+      uri: MONGODB_URL,
     };
   },
   inject: [ConfigService],

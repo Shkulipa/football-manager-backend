@@ -12,7 +12,6 @@ export const modeConfig: ConfigModuleOptions = {
     CLIENT_URL: Joi.string().required(),
 
     MONGODB_URL: Joi.string().required(),
-    MONGODB_DATABASE_NAME: Joi.string().required(),
 
     SMTP_HOST: Joi.string().required(),
     SMTP_PORT: Joi.number().required(),
