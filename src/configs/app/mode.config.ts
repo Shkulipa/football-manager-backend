@@ -7,7 +7,7 @@ export const modeConfig: ConfigModuleOptions = {
   envFilePath: !ENV ? '.env' : `.env.${ENV}`,
 
   validationSchema: Joi.object({
-    NODE_ENV: Joi.string().valid('development', 'production'),
+    NODE_ENV: Joi.string().valid('production', 'development', 'local'),
     PORT: Joi.number().required(),
     CLIENT_URL: Joi.string().required(),
 
