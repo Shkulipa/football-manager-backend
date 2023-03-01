@@ -11,6 +11,7 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({
   versionKey: false,
+  timestamps: { createdAt: 'createdAt', updatedAt: false },
 })
 export class User {
   @Prop({ required: true, unique: true, type: String })
@@ -33,6 +34,12 @@ export class User {
 
   @Prop({ type: String })
   refreshToken: string;
+
+  @Prop({ type: Boolean, default: false })
+  isBlock: boolean;
+
+  @Prop({ type: Date })
+  isMute: Date | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

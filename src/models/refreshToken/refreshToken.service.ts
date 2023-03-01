@@ -24,7 +24,9 @@ export class RefreshTokenService {
           HttpStatus.BAD_REQUEST,
         );
 
-      const tokenData = this.jwtService.verifyToken(token) as IUserJtwData;
+      const tokenData = this.jwtService.verifyRefreshToken(
+        token,
+      ) as IUserJtwData;
 
       const tokenDB = await this.userModel.findOne({
         refreshToken: token,

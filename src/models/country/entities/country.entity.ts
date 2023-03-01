@@ -1,21 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type FlagDocument = HydratedDocument<Flag>;
+export type CountryDocument = HydratedDocument<Country>;
 
 @Schema({
   versionKey: false,
+  collection: 'countries',
 })
-export class Flag {
+export class Country {
   @Prop({ required: true, unique: true, type: String })
-  name: string;
+  country: string;
 
   @Prop({ required: true, unique: true, type: String })
-  urlFlag: string;
+  flag: string;
 
-  // name of file from urlFlag, by this field we can delete the file in s3
+  // name of file from flag, by this field we can delete the file in s3
   @Prop({ required: true, unique: true, type: String })
   key: string;
 }
 
-export const FlagSchema = SchemaFactory.createForClass(Flag);
+export const CountrySchema = SchemaFactory.createForClass(Country);

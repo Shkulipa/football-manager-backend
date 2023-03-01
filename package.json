@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "docker": "docker-compose up -d",
+    "docker:compose": "docker-compose up -d",
     "start": "nest start",
     "prod": "node dist/main",
     "start:prod": "NODE_ENV=production nest start --watch",
@@ -20,33 +20,30 @@
     "migrate:init": "migrate-mongo init",
     "migrate:help": "migrate-mongo help",
 
+    "migrate::create": "NODE_ENV=local migrate-mongo create -f 'mongo-migrations.js'",
+    "seeds:create": "migrate-mongo create -f 'mongo-seeds.js'",
+
     "migrate:prod:status": "NODE_ENV=production migrate-mongo status -f 'mongo-migrations.js'",
-    "migrate:prod:create": "NODE_ENV=production migrate-mongo create -f 'mongo-migrations.js'",
     "migrate:prod:up": "NODE_ENV=production migrate-mongo up -f 'mongo-migrations.js'",
     "migrate:prod:down": "NODE_ENV=production migrate-mongo down -f 'mongo-migrations.js'",
 
     "migrate:dev:status": "NODE_ENV=development migrate-mongo status -f 'mongo-migrations.js'",
-    "migrate:dev:create": "NODE_ENV=development migrate-mongo create -f 'mongo-migrations.js'",
     "migrate:dev:up": "NODE_ENV=development migrate-mongo up -f 'mongo-migrations.js'",
     "migrate:dev:down": "NODE_ENV=development migrate-mongo down -f 'mongo-migrations.js'",
 
     "migrate:local:status": "NODE_ENV=local migrate-mongo status -f 'mongo-migrations.js'",
-    "migrate:local:create": "NODE_ENV=local migrate-mongo create -f 'mongo-migrations.js'",
     "migrate:local:up": "NODE_ENV=local migrate-mongo up -f 'mongo-migrations.js'",
     "migrate:local:down": "NODE_ENV=local migrate-mongo down -f 'mongo-migrations.js'",
 
     "seeds:prod:status": "NODE_ENV=production migrate-mongo status -f 'mongo-seeds.js'",
-    "seeds:prod:create": "NODE_ENV=production migrate-mongo create -f 'mongo-seeds.js'",
     "seeds:prod:up": "NODE_ENV=production migrate-mongo up -f 'mongo-seeds.js'",
     "seeds:prod:down": "NODE_ENV=production migrate-mongo down -f 'mongo-seeds.js'",
 
     "seeds:dev:status": "NODE_ENV=development migrate-mongo status -f 'mongo-seeds.js'",
-    "seeds:dev:create": "NODE_ENV=development migrate-mongo create -f 'mongo-seeds.js'",
     "seeds:dev:up": "NODE_ENV=development migrate-mongo up -f 'mongo-seeds.js'",
     "seeds:dev:down": "NODE_ENV=development migrate-mongo down -f 'mongo-seeds.js'",
 
     "seeds:local:status": "NODE_ENV=local migrate-mongo status -f 'mongo-seeds.js'",
-    "seeds:local:create": "NODE_ENV=local migrate-mongo create -f 'mongo-seeds.js'",
     "seeds:local:up": "NODE_ENV=local migrate-mongo up -f 'mongo-seeds.js'",
     "seeds:local:down": "NODE_ENV=local migrate-mongo down -f 'mongo-seeds.js'",
 

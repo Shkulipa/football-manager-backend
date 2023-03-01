@@ -6,7 +6,7 @@ yarn
 # Run Application
 if you need a get up the mongoDB localy, use it:
 ```
-yarn docker
+yarn docker:compose
 ```
 then open in browser: http://localhost:8081 (for UI of DB)
 
@@ -63,3 +63,7 @@ seeds:prod:status (for prod DB)
 seeds:dev:status (for dev DB)
 seeds:local:status (for local DB)
 ```
+
+# Tests
+tutorials:
+1. https://www.youtube.com/watch?v=1Vc6Xw8FMpg&ab_channel=MichaelGuay

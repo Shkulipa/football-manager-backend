@@ -1,6 +1,6 @@
 import { IsOptional } from 'class-validator';
 
-export class UpdateFlagDto {
+export class UpdateCountryDto {
   @IsOptional()
-  readonly name: string;
+  readonly country: string;
 }

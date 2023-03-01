@@ -17,10 +17,6 @@ module.exports = {
   },
   ignorePatterns: [
     '.eslintrc.js',
-    'mongo-migrations.js',
-    'mongo-seeders.js',
-    'src/database/seeders/*',
-    'src/database/migrations/*',
   ],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',

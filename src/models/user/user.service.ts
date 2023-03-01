@@ -23,7 +23,7 @@ export class UserService {
 
   private readonly logger = new Logger(UserService.name);
 
-  async create(createUserDto: CreateUserDto) {
+  async signup(createUserDto: CreateUserDto) {
     try {
       const newUser = omit(createUserDto, ['confirmPassword']);
 
@@ -53,7 +53,7 @@ export class UserService {
       const CLIENT_URL = this.configService.get<string>('CLIENT_URL');
       const activationLink = `${CLIENT_URL}/confirm-email/${activationId}`;
 
-      this.mailerService.sendMail({
+      /* this.mailerService.sendMail({
         to: 'caspernumlock@gmail.com', // list of receivers
         from: 'noreply', // sender address
         subject: 'Verification email in Soccer Manager', // Subject line
@@ -64,7 +64,7 @@ export class UserService {
           username: createUserDto.username,
           activationLink,
         },
-      });
+      }); */
 
       const result = {
         ...pick(createUser, [
@@ -82,22 +82,26 @@ export class UserService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto) {
+  async signin(loginUserDto: LoginUserDto) {
     try {
       const { username, password } = loginUserDto;
 
       const user = await this.userModel
         .findOne()
-        .or([{ username }, { email: username }]);
+        .or([{ username }, { email: username }])
+        .select(['-activationId']);
       if (!user)
         throw new HttpException('User wasn\t found', HttpStatus.NOT_FOUND);
+
+      if (user.isBlock)
+        throw new HttpException('User is blocked', HttpStatus.FORBIDDEN);
 
       const isEqualPassword = await compare(password, user.password);
       if (!isEqualPassword)
         throw new HttpException('Password incorrect', HttpStatus.UNAUTHORIZED);
 
-      const userData = { ...pick(user, ['_id', 'email', 'username', 'roles']) };
-      const tokens = this.jwtService.createTokens(userData);
+      const userData = { ...omit(user.toObject(), ['password', 'isBlock']) };
+      const tokens = this.jwtService.createTokens({ _id: userData._id });
 
       user.refreshToken = tokens.refreshToken;
       user.save();

@@ -9,15 +9,34 @@ export class JwtService {
 
   private readonly logger = new Logger(JwtService.name);
 
-  verifyToken(token: string) {
+  private verifyToken(token: string, secret: string) {
     try {
-      const SECRET_REFRESH = this.configService.get<string>('SECRET_REFRESH');
-      const decoded = verify(token, SECRET_REFRESH);
+      const decoded = verify(token, secret);
 
       return decoded;
     } catch (err) {
       this.logger.error(err);
       throw new HttpException(err.message, HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  verifyAccessToken(token: string) {
+    try {
+      const SECRET_ACCESS = this.configService.get<string>('SECRET_ACCESS');
+      const decoded = this.verifyToken(token, SECRET_ACCESS);
+      return decoded;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  verifyRefreshToken(token: string) {
+    try {
+      const SECRET_REFRESH = this.configService.get<string>('SECRET_REFRESH');
+      const decoded = this.verifyToken(token, SECRET_REFRESH);
+      return decoded;
+    } catch (err) {
+      throw err;
     }
   }
 

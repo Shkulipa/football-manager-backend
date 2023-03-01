@@ -11,75 +11,78 @@ import {
   UsePipes,
   ValidationPipe,
   Patch,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { FlagService } from './flag.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { CreateFlagDto } from './dto/createFlag.dto';
 import { fileSizeGuard } from 'src/common/guards/fileSize.guard';
 import { fileTypes, maxSizeMB } from 'src/common/constants/file.constants';
 import { fileTypeGuard } from 'src/common/guards/fileType.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
-import { ObjectIdPipe } from 'src/common/pipes/objectId.pipe';
+import { IsObjectIdPipe } from 'src/common/pipes/isObjectId.pipe';
 import { QueryParams } from 'src/common/decorators/query.decorator';
 import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
-import { UpdateFlagDto } from './dto/updateFlag.dto';
+import { UpdateCountryDto } from './dto/updateCountry.dto';
+import { CountryService } from './country.service';
+import { CreateCountryDto } from './dto/createCountry.dto';
 
-const flagImgField = 'imgFlag';
+const countryImgField = 'imgCountry';
 
-@Controller('/flag')
-export class FlagController {
-  constructor(private readonly flagService: FlagService) {}
+@Controller('/country')
+export class CountryController {
+  constructor(private readonly countryService: CountryService) {}
 
   @Get('/')
   getAll(@QueryParams() query: IParsedQuery) {
-    return this.flagService.getAll(query);
+    return this.countryService.getAll(query);
   }
 
   @Get('/:id')
-  findById(@Param('id', new ObjectIdPipe()) id: string) {
-    return this.flagService.findById(id);
+  findById(@Param('id', new IsObjectIdPipe()) id: string) {
+    return this.countryService.findById(id);
   }
 
   @Post('/')
-  @UseGuards(AuthGuard)
+  @Roles(EUserRoles.COUNTRY_CREATE)
+  @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
-  @UseInterceptors(FileInterceptor(flagImgField))
+  @UseInterceptors(FileInterceptor(countryImgField))
   create(
     @UploadedFile() file: Express.Multer.File,
-    @Body() createFlagDto: CreateFlagDto,
+    @Body() createCountryDto: CreateCountryDto,
   ) {
+    if (!file)
+      throw new HttpException("File wasn't provided", HttpStatus.BAD_REQUEST);
     fileSizeGuard(file.size, maxSizeMB);
     fileTypeGuard(file.mimetype, fileTypes);
 
-    return this.flagService.create(file, createFlagDto);
+    return this.countryService.create(file, createCountryDto);
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard)
-  @Roles(EUserRoles.UPDATE_FLAG)
-  @UseGuards(RolesGuard)
+  @Roles(EUserRoles.COUNTRY_UPDATE)
+  @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
-  @UseInterceptors(FileInterceptor(flagImgField))
+  @UseInterceptors(FileInterceptor(countryImgField))
   update(
-    @Param('id', new ObjectIdPipe()) id: string,
+    @Param('id', new IsObjectIdPipe()) id: string,
     @UploadedFile() file: Express.Multer.File,
-    @Body() updateFlagDto: UpdateFlagDto,
+    @Body() updateCountryDto: UpdateCountryDto,
   ) {
     if (file) {
       fileSizeGuard(file.size, maxSizeMB);
       fileTypeGuard(file.mimetype, fileTypes);
     }
-    return this.flagService.update(file, updateFlagDto, id);
+    return this.countryService.update(file, updateCountryDto, id);
   }
 
   @Delete('/:id')
-  @UseGuards(AuthGuard)
-  @Roles(EUserRoles.DELETE_FLAG)
-  @UseGuards(RolesGuard)
-  delete(@Param('id', new ObjectIdPipe()) id: string) {
-    return this.flagService.delete(id);
+  @Roles(EUserRoles.COUNTRY_DELETE)
+  @UseGuards(AuthGuard, RolesGuard)
+  delete(@Param('id', new IsObjectIdPipe()) id: string) {
+    return this.countryService.delete(id);
   }
 }

@@ -11,8 +11,20 @@ module.exports = {
       email,
       username: 'firstuser',
       isConfirmEmail: true,
+      isBlock: false,
+      createdAt: Date.now(),
       password: '$2b$10$LA2mUbUx7lIoJ7QVAHPoBeohF6yTPEeeJZa01AiaHtxrGH561xRXS', // pass was hashed(real pass: 12345678)
-      roles: ['ADD_TEAM', 'DELETE_TEAM'] // see roles here: src/common/interfaces/userRoles.interfaces.ts
+      roles: [
+        'COUNTRY_CREATE', 
+        'COUNTRY_DELETE', 
+        'COUNTRY_UPDATE', 
+        'LEAGUE_CREATE', 
+        'LEAGUE_DELETE', 
+        'LEAGUE_UPDATE',
+        'REAL_TEAM_CREATE',
+        'REAL_TEAM_UPDATE',
+        'REAL_TEAM_DELETE'
+      ] // see roles here: src/common/interfaces/userRoles.interfaces.ts
     });
   },
 

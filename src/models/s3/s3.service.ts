@@ -5,6 +5,8 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
+
+// can be raplaced by 'nanoid', because take a less size
 import { v4 as uuidv4 } from 'uuid';
 import { extension } from 'mime-types';
 

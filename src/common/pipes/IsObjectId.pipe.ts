@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, PipeTransform } from '@nestjs/common';
 import { Types } from 'mongoose';
 
-export class ObjectIdPipe implements PipeTransform {
+export class IsObjectIdPipe implements PipeTransform {
   async transform(id: string) {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId)
