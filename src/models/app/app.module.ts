@@ -12,6 +12,8 @@ import { LeagueModule } from 'src/models/league/league.module';
 import { CountryModule } from '../country/country.module';
 import { RealTeamModule } from '../realTeam/realTeam.module';
 import { PlayerModule } from '../player/player.module';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { PlayerModule } from '../player/player.module';
     RefreshTokenModule,
     PlayerModule,
   ],
-  controllers: [],
-  providers: [MongoConnection],
+  controllers: [AppController],
+  providers: [AppService, MongoConnection],
 })
 export class AppModule {}

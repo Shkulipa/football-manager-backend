@@ -19,8 +19,15 @@ if you wanna run from deployed on the production or staging, run this:
 ```
 
 ## Commits
-1. yarn commit
-2. git commit "fix|merge|docs: ..."
+several methods:
+in terminal:
+```
+yarn commit
+```
+or
+```
+git commit "fix|merge|docs: ..."
+```
 
 If an error occurs during the commit:
 ```
@@ -34,7 +41,7 @@ Also, you commit shouldn't more than 88 characters
 (You can check file with rules: .husky/commit-msg)
 
 ## CI/CD (deploy)
-1. i am using railway.app here
+1. I am using railway.app here
 2. login there
 3. there is a folder with name "football-manager", there 2 brunches for prod and dev
 

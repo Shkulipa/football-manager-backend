@@ -19,9 +19,10 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
+import { ApiTags } from '@nestjs/swagger';
 
 const playerPhotoField = 'playerPhotoField';
-
+@ApiTags('player')
 @Controller('/player')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}

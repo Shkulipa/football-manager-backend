@@ -13,6 +13,7 @@ import {
   Patch,
   HttpException,
   HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/common/guards/auth.guard';
@@ -28,9 +29,13 @@ import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
 import { UpdateCountryDto } from './dto/updateCountry.dto';
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/createCountry.dto';
+import { AllExceptionFilter } from 'src/common/decorators/allExceptionFilter.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 const countryImgField = 'imgCountry';
 
+@ApiTags('country')
+@UseFilters(new AllExceptionFilter())
 @Controller('/country')
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}

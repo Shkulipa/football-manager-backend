@@ -30,9 +30,11 @@ import { IsObjectIdPipe } from 'src/common/pipes/isObjectId.pipe';
 import { UpdateRealTeamDto } from './dto/updateRealTeam.dto';
 import { LeagueService } from '../league/league.service';
 import { pick } from 'lodash';
+import { ApiTags } from '@nestjs/swagger';
 
 const realTeamImgField = 'realTeamImg';
 
+@ApiTags('real-team')
 @Controller('/real-team')
 export class RealTeamController {
   constructor(

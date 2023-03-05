@@ -29,9 +29,11 @@ import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
 import { IsObjectIdPipe } from 'src/common/pipes/isObjectId.pipe';
 import { UpdateLeagueDto } from './dto/updateLeague.dto';
 import { CountryService } from '../country/country.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 const leagueImgField = 'imgLeague';
 
+@ApiTags('league')
 @Controller('/league')
 export class LeagueController {
   constructor(
@@ -49,6 +51,7 @@ export class LeagueController {
     return this.leagueService.findById(id);
   }
 
+  @ApiBearerAuth('JWT')
   @Post('/')
   @Roles(EUserRoles.LEAGUE_CREATE)
   @UseGuards(AuthGuard)
