@@ -1,8 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import { path } from 'app-root-path';
+import * as MarkdownIt from 'markdown-it';
+import hljs from 'highlight.js';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  getReamde(): string {
+    const filePath = path + '/README.md';
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const md = new MarkdownIt({
+      html: true,
+      highlight: (str: string, lang: string) => {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return (
+              '<pre style="background-color: #f5f5f5; padding: 1em;"><code class="hljs" style="color: #333;">' +
+              hljs.highlight(lang, str, true).value +
+              '</code></pre>'
+            );
+          } catch (__) {}
+        }
+
+        return (
+          '<pre style="background-color: #f5f5f5; padding: 1em;"><code style="color: #333;">' +
+          md.utils.escapeHtml(str) +
+          '</code></pre>'
+        );
+      },
+    });
+    const htmlContent = md.render(fileContent);
+    return htmlContent;
   }
 }

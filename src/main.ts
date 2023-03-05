@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config/dist/config.service';
 import { Logger } from '@nestjs/common/services/logger.service';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { RequestMethod } from '@nestjs/common';
 
 async function bootstrap() {
   const logger = new Logger('Main(main.ts)');
@@ -17,6 +18,10 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Football manager API Doc')
     .setVersion(packageJson.version)
+    .setLicense(
+      packageJson.license,
+      'https://github.com/Shkulipa/football-manager-backend',
+    )
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
       'JWT',
@@ -24,7 +29,9 @@ async function bootstrap() {
     .build();
 
   app.use(cookieParser());
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', {
+    exclude: [{ path: '', method: RequestMethod.GET }],
+  });
   app.setViewEngine('ejs');
 
   const configService = app.get(ConfigService);
@@ -40,7 +47,7 @@ async function bootstrap() {
   });
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api', app, document);
+  SwaggerModule.setup('/api/docs', app, document);
 
   await app.listen(port);
 

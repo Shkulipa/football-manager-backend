@@ -1,9 +1,12 @@
+# Football manager Simulator
+---
+
 ## Installation
 ```
 yarn
 ```
-
-# Run Application
+---
+## Run Application
 if you need a get up the mongoDB localy, use it:
 ```
 yarn docker:compose
@@ -17,7 +20,7 @@ if you wanna run from deployed on the production or staging, run this:
 3. yarn start:local (will take variables from .env.local)
 4. yarn prod (run dist/main)
 ```
-
+---
 ## Commits
 several methods:
 in terminal:
@@ -40,14 +43,18 @@ feat - you can change on the another word like: feat|fix|chore|docs|test|style|r
 Also, you commit shouldn't more than 88 characters
 (You can check file with rules: .husky/commit-msg)
 
+---
+
 ## CI/CD (deploy)
 1. I am using railway.app here
 2. login there
 3. there is a folder with name "football-manager", there 2 brunches for prod and dev
 
-Where "prod" brunch is a production(https://football-manager-backend-prod.up.railway.app) "dev" brunch is a staging(https://football-manager-backend-dev.up.railway.app).
+Where "prod" brunch is a production([Production  Link](https://football-manager-backend-prod.up.railway.app)) "dev" brunch is a stagging([Stagging  Link](https://football-manager-backend-dev.up.railway.app)).
 
 for deploy, you need just make a commit in according brunch and make a push into repository, and after deploying will be automatically in fit website was mentioned above in(CI/CD).
+
+---
 
 ## CLI
 docs: https://docs.nestjs.com/cli/overview
@@ -56,12 +63,19 @@ docs: https://docs.nestjs.com/cli/overview
 2. nest generate res --no-spec
 ```
 
+---
+
 ## Errors Exceptions in Nestjs
-classes: https://docs.nestjs.com/exception-filters
-status: https://medium.com/@abeythilakeudara3/nestjs-exception-filters-part-02-24afcbe116cf
+classes: [read article](https://docs.nestjs.com/exception-filters)<br>
+status: [read article](https://medium.com/@abeythilakeudara3/nestjs-exception-filters-part-02-24afcbe116cf)
+
+---
 
 ## Folder Structure
-docs: https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401
+
+docs: [article](https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401)
+
+---
 
 ## Migrations
 first of all, install ts-node:
@@ -88,7 +102,7 @@ seeds:prod:status (for prod DB)
 seeds:dev:status (for dev DB)
 seeds:local:status (for local DB)
 ```
-
+---
 # Tests
 tutorials:
-1. https://www.youtube.com/watch?v=1Vc6Xw8FMpg&ab_channel=MichaelGuay
+1. [watch video](https://www.youtube.com/watch?v=1Vc6Xw8FMpg&ab_channel=MichaelGuay)
