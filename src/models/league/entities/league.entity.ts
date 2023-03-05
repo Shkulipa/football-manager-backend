@@ -17,10 +17,6 @@ export class League {
 
   @Prop({ required: true, unique: true, type: String })
   logoLeague: string;
-
-  // name of file from logoLeague, by this field we can delete the file in s3
-  @Prop({ required: true, unique: true, type: String })
-  key: string;
 }
 
 export const LeagueSchema = SchemaFactory.createForClass(League);

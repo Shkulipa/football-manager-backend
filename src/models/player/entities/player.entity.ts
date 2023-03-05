@@ -5,7 +5,6 @@ import { RealTeam } from 'src/models/realTeam/entities/realTeam.entity';
 import { EPositionPlayer } from '../interfaces/positionPlayer.interfaces';
 import { ERolePlayer } from '../interfaces/rolePlayer.interfaces';
 import { ETypeCard } from '../interfaces/typeCard.interfaces';
-import { PlayerPhoto, PlayerPhotoModel } from './playerPhoto.entity';
 
 export type PlayerDocument = HydratedDocument<Player>;
 
@@ -29,8 +28,8 @@ export class Player extends Document {
   @Prop({ required: true, type: Types.ObjectId, ref: RealTeam.name })
   realTeamId: string;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: PlayerPhoto.name })
-  photoId: string;
+  @Prop({ required: true, type: Types.ObjectId })
+  photo: string;
 
   @Prop({ required: true, type: [Number, Number], default: [0, 0] })
   currentPOS: [number, number];
@@ -61,7 +60,3 @@ export class Player extends Document {
 }
 
 export const PlayerSchema = SchemaFactory.createForClass(Player);
-
-PlayerSchema.post('findOneAndDelete', async function (doc) {
-  await PlayerPhotoModel.deleteMany({ _id: doc.photoId });
-});

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator'
 import { InjectModel } from '@nestjs/mongoose';
 import { isEmpty, pick } from 'lodash';
 import { Model, Types } from 'mongoose';
+import getKeyS3Helper from 'src/common/helpers/getKeyS3.helper';
 import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
 import { S3Service } from '../s3/s3.service';
 import { CreateLeagueDto } from './dto/createLeague.dto';
@@ -64,13 +65,12 @@ export class LeagueService {
        * check countryId or throw err
        */
       // load file in s3
-      const { urlFile, key } = await this.s3Service.create(file, this.path);
+      const urlFile = await this.s3Service.create(file, this.path);
 
       const newCountry = {
         name: createLeagueDto.name,
         countryId: new Types.ObjectId(createLeagueDto.countryId),
         logoLeague: urlFile,
-        key,
       };
 
       await this.leagueModel.create(newCountry);
@@ -93,9 +93,10 @@ export class LeagueService {
       };
 
       if (file) {
-        await this.s3Service.delete(league.key);
-        const fileData = await this.s3Service.create(file, this.path);
-        const updatedObj = { logoLeague: fileData.urlFile, key: fileData.key };
+        const key = getKeyS3Helper(league.logoLeague);
+        await this.s3Service.delete(key);
+        const logoLeague = await this.s3Service.create(file, this.path);
+        const updatedObj = { logoLeague };
         Object.assign(newLeagueData, updatedObj);
       }
 
@@ -127,7 +128,8 @@ export class LeagueService {
       if (!league)
         throw new HttpException("League wasn't found", HttpStatus.BAD_REQUEST);
 
-      await this.s3Service.delete(league.key);
+      const key = getKeyS3Helper(league.logoLeague);
+      await this.s3Service.delete(key);
       return await this.leagueModel.findByIdAndRemove(new Types.ObjectId(id));
     } catch (err) {
       this.logger.error(err);
