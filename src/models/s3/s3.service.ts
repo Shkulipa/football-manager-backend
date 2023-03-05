@@ -57,10 +57,7 @@ export class S3Service {
       await this.s3Client.send(new PutObjectCommand(uploadParams));
       const urlFile = `https://${this.AWS_BUCKET_NAME}.s3.${this.AWS_BUCKET_REGION}.amazonaws.com/${Key}`;
 
-      return {
-        urlFile,
-        key: Key, // need for delete obj
-      };
+      return urlFile;
     } catch (err) {
       this.logger.error(err);
       throw err;

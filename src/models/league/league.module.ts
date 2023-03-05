@@ -11,8 +11,10 @@ import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: League.name, schema: LeagueSchema }]),
-    MongooseModule.forFeature([{ name: Country.name, schema: CountrySchema }]),
+    MongooseModule.forFeature([
+      { name: League.name, schema: LeagueSchema },
+      { name: Country.name, schema: CountrySchema },
+    ]),
     S3Module,
     CountryModule,
     JwtModule,

@@ -1,5 +1,4 @@
-import { IsOptional, IsString, Validate } from 'class-validator';
-import { IsObjectIdValidation } from 'src/common/validations/isObjectId.validation';
+import { IsMongoId, IsOptional, IsString, Validate } from 'class-validator';
 
 export class UpdateLeagueDto {
   @IsOptional()
@@ -7,7 +6,6 @@ export class UpdateLeagueDto {
   readonly name: string;
 
   @IsOptional()
-  @IsString()
-  @Validate(IsObjectIdValidation)
+  @IsMongoId()
   readonly countryId: string;
 }

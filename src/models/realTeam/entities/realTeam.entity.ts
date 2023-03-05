@@ -22,10 +22,6 @@ export class RealTeam {
   @Prop({ required: true, unique: true, type: String })
   logoClub: string;
 
-  // name of file from logoClub, by this field we can delete the file in s3
-  @Prop({ required: true, unique: true, type: String })
-  key: string;
-
   @Prop({
     type: {
       att: { required: true, type: Number, default: 0 },

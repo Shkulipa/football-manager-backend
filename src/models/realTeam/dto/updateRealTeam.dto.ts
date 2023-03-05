@@ -1,6 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsOptional, IsString, Validate } from 'class-validator';
-import { IsObjectIdValidation } from 'src/common/validations/isObjectId.validation';
+import { IsMongoId, IsOptional, IsString } from 'class-validator';
 import { CreateRealTeamDto } from './createRealTeam.dto';
 
 export class UpdateRealTeamDto extends PartialType(CreateRealTeamDto) {
@@ -8,8 +7,6 @@ export class UpdateRealTeamDto extends PartialType(CreateRealTeamDto) {
   @IsString()
   readonly clubName: string;
 
-  @IsOptional()
-  @IsString()
-  @Validate(IsObjectIdValidation)
+  @IsMongoId()
   readonly leagueId: string;
 }

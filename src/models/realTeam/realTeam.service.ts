@@ -8,6 +8,7 @@ import { CreateRealTeamDto } from './dto/createRealTeam.dto';
 import { RealTeam, RealTeamDocument } from './entities/realTeam.entity';
 import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
 import { UpdateRealTeamDto } from './dto/updateRealTeam.dto';
+import getKeyS3Helper from 'src/common/helpers/getKeyS3.helper';
 
 @Injectable()
 export class RealTeamService {
@@ -71,7 +72,7 @@ export class RealTeamService {
   ) {
     try {
       // load file in s3
-      const { urlFile, key } = await this.s3Service.create(file, this.path);
+      const urlFile = await this.s3Service.create(file, this.path);
 
       const league = await this.leagueModel
         .findById(new Types.ObjectId(createRealTeamDto.leagueId))
@@ -88,7 +89,6 @@ export class RealTeamService {
         countryId: new Types.ObjectId(league.countryId),
         leagueId: new Types.ObjectId(createRealTeamDto.leagueId),
         logoClub: urlFile,
-        key,
       };
 
       await this.realTeamModel.create(newRealTeam);
@@ -119,9 +119,10 @@ export class RealTeamService {
       };
 
       if (file) {
-        await this.s3Service.delete(realTeam.key);
-        const fileData = await this.s3Service.create(file, this.path);
-        const updatedObj = { logoClub: fileData.urlFile, key: fileData.key };
+        const key = getKeyS3Helper(realTeam.logoClub);
+        await this.s3Service.delete(key);
+        const logoClubUrl = await this.s3Service.create(file, this.path);
+        const updatedObj = { logoClub: logoClubUrl };
         Object.assign(newRealTeamData, { leagueId, ...updatedObj });
       }
 
@@ -155,7 +156,9 @@ export class RealTeamService {
       if (!realTeam)
         throw new HttpException("Team wasn't found", HttpStatus.BAD_REQUEST);
 
-      await this.s3Service.delete(realTeam.key);
+      const key = getKeyS3Helper(realTeam.logoClub);
+
+      await this.s3Service.delete(key);
       return await this.realTeamModel.findByIdAndRemove(new Types.ObjectId(id));
     } catch (err) {
       this.logger.error(err);

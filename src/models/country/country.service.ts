@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isEmpty, pick } from 'lodash';
 import { Model, Types } from 'mongoose';
+import getKeyS3Helper from 'src/common/helpers/getKeyS3.helper';
 import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
 import { S3Service } from 'src/models/s3/s3.service';
 import { CreateCountryDto } from './dto/createCountry.dto';
@@ -53,12 +54,11 @@ export class CountryService {
   async create(file: Express.Multer.File, createCountryDto: CreateCountryDto) {
     try {
       // load file in s3
-      const { urlFile, key } = await this.s3Service.create(file, this.path);
+      const urlFile = await this.s3Service.create(file, this.path);
 
       const newCountryData = {
         country: createCountryDto.country,
         flag: urlFile,
-        key,
       };
       const newCountry = await this.countryModel.create(newCountryData);
 
@@ -86,9 +86,10 @@ export class CountryService {
       };
 
       if (file) {
-        await this.s3Service.delete(country.key);
-        const fileData = await this.s3Service.create(file, this.path);
-        const updatedObj = { flag: fileData.urlFile, key: fileData.key };
+        const key = getKeyS3Helper(country.flag);
+        await this.s3Service.delete(key);
+        const flag = await this.s3Service.create(file, this.path);
+        const updatedObj = { flag };
         Object.assign(newCountryData, updatedObj);
       }
 
@@ -120,7 +121,8 @@ export class CountryService {
       if (!country)
         throw new HttpException("Country wasn't found", HttpStatus.BAD_REQUEST);
 
-      await this.s3Service.delete(country.key);
+      const key = getKeyS3Helper(country.flag);
+      await this.s3Service.delete(key);
       return await this.countryModel.findByIdAndRemove(new Types.ObjectId(id));
     } catch (err) {
       this.logger.error(err);

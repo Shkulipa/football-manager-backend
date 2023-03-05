@@ -1,4 +1,4 @@
-const email = 'firstuser@gmail.com';
+const email = 'admin@gmail.com';
 
 module.exports = {
   async up(db, client) {
@@ -9,7 +9,7 @@ module.exports = {
 
     await db.collection('users').insertOne({
       email,
-      username: 'firstuser',
+      username: 'admin',
       isConfirmEmail: true,
       isBlock: false,
       createdAt: Date.now(),
@@ -23,7 +23,10 @@ module.exports = {
         'LEAGUE_UPDATE',
         'REAL_TEAM_CREATE',
         'REAL_TEAM_UPDATE',
-        'REAL_TEAM_DELETE'
+        'REAL_TEAM_DELETE',
+        'PLAYER_CREATE',
+        'PLAYER_UPDATE',
+        'PLAYER_DELETE'
       ] // see roles here: src/common/interfaces/userRoles.interfaces.ts
     });
   },
