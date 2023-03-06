@@ -1,6 +1,8 @@
 # Football manager Simulator
 ---
-
+TODO:
+- [] eslint for imports order
+- [] players controller
 ## Installation
 ```
 yarn
@@ -11,7 +13,7 @@ if you need a get up the mongoDB localy, use it:
 ```
 yarn docker:compose
 ```
-then open in browser: http://localhost:8081 (for UI of DB)
+then open in browser: [UI of MongoDB](http://localhost:8081)(for UI of DB)
 
 if you wanna run from deployed on the production or staging, run this:
 ```
@@ -20,6 +22,12 @@ if you wanna run from deployed on the production or staging, run this:
 3. yarn start:local (will take variables from .env.local)
 4. yarn prod (run dist/main)
 ```
+
+Swagger: 
+- [Localhost](http://localhost:8080/api/docs)
+- [Development](http://localhost:8080/api/docs)
+- [Production](http://localhost:8080/api/docs)
+
 ---
 ## Commits
 several methods:
@@ -57,7 +65,7 @@ for deploy, you need just make a commit in according brunch and make a push into
 ---
 
 ## CLI
-docs: https://docs.nestjs.com/cli/overview
+docs: [CLI docs](https://docs.nestjs.com/cli/overview)
 ```
 1. nest generate --help
 2. nest generate res --no-spec

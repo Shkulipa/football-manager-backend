@@ -4,7 +4,7 @@
   "description": "backend part of Football Simulator",
   "author": "Oleksii Shkulipa",
   "private": true,
-  "license": "MIT License",
+  "license": "MIT",
   "keywords": [
     "ts",
     "nestjs",

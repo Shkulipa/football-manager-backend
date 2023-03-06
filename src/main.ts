@@ -5,28 +5,24 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from 'src/models/app/app.module';
 import { ConfigService } from '@nestjs/config/dist/config.service';
 import { Logger } from '@nestjs/common/services/logger.service';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { RequestMethod } from '@nestjs/common';
+import { RequestMethod } from '@nestjs/common/enums/request-method.enum';
 
 async function bootstrap() {
   const logger = new Logger('Main(main.ts)');
 
-  const packageJsonPath = join(__dirname, '..', 'package.json');
-  const packageJson = JSON.parse(readFileSync(packageJsonPath).toString());
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   const config = new DocumentBuilder()
     .setTitle('Football manager API Doc')
-    .setVersion(packageJson.version)
-    .setLicense(
-      packageJson.license,
-      'https://github.com/Shkulipa/football-manager-backend',
-    )
+    .setVersion('0.0.1') // from package.json
+    .setLicense('MIT', 'https://github.com/Shkulipa/football-manager-backend') // from package.json
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
       'JWT',
     )
     .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/api/docs', app, document);
 
   app.use(cookieParser());
   app.setGlobalPrefix('api', {
@@ -38,6 +34,7 @@ async function bootstrap() {
   const port = configService.get('PORT');
   const clientPort = parseInt(configService.get('CLIENT_PORT'));
   const corsWebSites = String(configService.get('CORS_WEBSITES')) || '';
+
   app.enableCors({
     origin: [
       `http://localhost:${port}`,
@@ -45,9 +42,6 @@ async function bootstrap() {
       ...corsWebSites.split(','),
     ],
   });
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api/docs', app, document);
 
   await app.listen(port);
 
