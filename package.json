@@ -23,6 +23,7 @@
   "homepage": "https://github.com/JacobSNGoodwin/ranker#readme",
   "scripts": {
     "commit": "cz",
+    "compodoc": "npx @compodoc/compodoc -p tsconfig.json --port 8081 -s",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
