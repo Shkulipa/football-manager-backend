@@ -1,5 +1,5 @@
-import * as Joi from 'joi';
 import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces/config-module-options.interface';
+import * as Joi from 'joi';
 
 const ENV = process.env.NODE_ENV;
 

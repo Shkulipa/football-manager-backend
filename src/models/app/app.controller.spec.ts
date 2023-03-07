@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { path } from 'app-root-path';
 import * as fs from 'fs';
-import * as MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
+import * as MarkdownIt from 'markdown-it';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 

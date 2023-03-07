@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, HydratedDocument, Types } from 'mongoose';
 import { Country } from 'src/models/country/entities/country.entity';
 import { RealTeam } from 'src/models/realTeam/entities/realTeam.entity';
+
 import { EPositionPlayer } from '../interfaces/positionPlayer.interfaces';
 import { ERolePlayer } from '../interfaces/rolePlayer.interfaces';
 import { ETypeCard } from '../interfaces/typeCard.interfaces';

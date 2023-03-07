@@ -1,5 +1,6 @@
-import { Db } from 'mongodb/mongodb';
 import { MigrationInterface } from 'mongo-migrate-ts/dist/lib/MigrationInterface';
+import { Db } from 'mongodb/mongodb';
+
 import { countryIdFirst, countryIdSecond } from '../constants/ids';
 
 export class test11677838512184 implements MigrationInterface {

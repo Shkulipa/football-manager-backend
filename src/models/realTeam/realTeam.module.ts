@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { RealTeamService } from './realTeam.service';
-import { RealTeamController } from './realTeam.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { S3Module } from '../s3/s3.module';
-import { RealTeam, RealTeamSchema } from './entities/realTeam.entity';
+
+import { JwtModule } from '../jwt/jwt.module';
 import { League, LeagueSchema } from '../league/entities/league.entity';
 import { LeagueModule } from '../league/league.module';
-import { JwtModule } from '../jwt/jwt.module';
+import { S3Module } from '../s3/s3.module';
 import { UserModule } from '../user/user.module';
+import { RealTeam, RealTeamSchema } from './entities/realTeam.entity';
+import { RealTeamController } from './realTeam.controller';
+import { RealTeamService } from './realTeam.service';
 
 @Module({
   imports: [

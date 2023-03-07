@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
 import { path } from 'app-root-path';
-import * as MarkdownIt from 'markdown-it';
+import * as fs from 'fs';
 import hljs from 'highlight.js';
+import * as MarkdownIt from 'markdown-it';
 
 @Injectable()
 export class AppService {

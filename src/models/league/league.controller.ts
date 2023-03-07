@@ -1,35 +1,36 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  UseGuards,
-  UseInterceptors,
-  UsePipes,
-  ValidationPipe,
-  UploadedFile,
+  Controller,
+  Delete,
+  Get,
   HttpException,
   HttpStatus,
   Param,
   Patch,
-  Delete,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { LeagueService } from './league.service';
-import { CreateLeagueDto } from './dto/createLeague.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { fileTypes, maxSizeMB } from 'src/common/constants/file.constants';
+import { QueryParams } from 'src/common/decorators/query.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
-import { fileTypeGuard } from 'src/common/guards/fileType.guard';
-import { maxSizeMB, fileTypes } from 'src/common/constants/file.constants';
 import { fileSizeGuard } from 'src/common/guards/fileSize.guard';
-import { QueryParams } from 'src/common/decorators/query.decorator';
+import { fileTypeGuard } from 'src/common/guards/fileType.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
+import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
 import { IsObjectIdPipe } from 'src/common/pipes/isObjectId.pipe';
-import { UpdateLeagueDto } from './dto/updateLeague.dto';
+
 import { CountryService } from '../country/country.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateLeagueDto } from './dto/createLeague.dto';
+import { UpdateLeagueDto } from './dto/updateLeague.dto';
+import { LeagueService } from './league.service';
 
 const leagueImgField = 'imgLeague';
 

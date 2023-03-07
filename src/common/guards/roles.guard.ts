@@ -1,14 +1,15 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
   HttpException,
   HttpStatus,
+  Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { EVariables } from '../constants/namesVariables';
 import { ExpressRequestInterface } from 'src/common/interfaces/expressRequest.interfaces';
 import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
+
+import { EVariables } from '../constants/namesVariables';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

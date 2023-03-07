@@ -1,12 +1,12 @@
+import { MigrationInterface } from 'mongo-migrate-ts/dist/lib/MigrationInterface';
+import { Db } from 'mongodb/mongodb';
+
 import {
   countryIdFirst,
   countryIdSecond,
   leagueIdFirst,
   leagueIdSecond,
 } from './../constants/ids';
-
-import { Db } from 'mongodb/mongodb';
-import { MigrationInterface } from 'mongo-migrate-ts/dist/lib/MigrationInterface';
 
 export class test11677838512184 implements MigrationInterface {
   public async up(db: Db) {

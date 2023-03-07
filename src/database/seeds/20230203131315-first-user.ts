@@ -1,5 +1,5 @@
-import { Db } from 'mongodb/mongodb';
 import { MigrationInterface } from 'mongo-migrate-ts/dist/lib/MigrationInterface';
+import { Db } from 'mongodb/mongodb';
 import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
 
 const email = 'admin@gmail.com';

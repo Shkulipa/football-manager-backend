@@ -1,4 +1,4 @@
-import { IQuery, IParsedQuery } from 'src/common/interfaces/query.interfaces';
+import { IParsedQuery, IQuery } from 'src/common/interfaces/query.interfaces';
 
 export const queryHelper = ({ limit, page }: IQuery): IParsedQuery => {
   limit ? (limit = Math.max(1, Math.round(+limit))) : (limit = 10);

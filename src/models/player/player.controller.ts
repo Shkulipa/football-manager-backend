@@ -1,25 +1,26 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { PlayerService } from './player.service';
-import { CreatePlayerDto } from './dto/createPlayer.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
-import { ApiTags } from '@nestjs/swagger';
+
+import { CreatePlayerDto } from './dto/createPlayer.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
+import { PlayerService } from './player.service';
 
 const playerPhotoField = 'playerPhotoField';
 @ApiTags('player')

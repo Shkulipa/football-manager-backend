@@ -1,26 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
-  UsePipes,
-  ValidationPipe,
-  UseGuards,
+  Controller,
   Get,
   Param,
+  Post,
   Res,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/createUser.dto';
-import { IsConfirmPassword } from './guards/isConfirmPassword';
-import { LoginUserDto } from './dto/loginUser.dto';
-import { Response } from 'express';
 import {
-  ApiTags,
-  ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiTags,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import { ErrorDto } from 'src/common/dto/error.dto';
+
+import { CreateUserDto } from './dto/createUser.dto';
+import { LoginUserDto } from './dto/loginUser.dto';
 import { SignupDto } from './dto/signup.dto';
+import { IsConfirmPassword } from './guards/isConfirmPassword';
+import { UserService } from './user.service';
 
 @ApiTags('auth')
 @Controller('/auth')

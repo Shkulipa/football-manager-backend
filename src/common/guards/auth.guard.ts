@@ -7,6 +7,7 @@ import { pick } from 'lodash';
 import { ExpressRequestInterface } from 'src/common/interfaces/expressRequest.interfaces';
 import { JwtService } from 'src/models/jwt/jwt.service';
 import { UserService } from 'src/models/user/user.service';
+
 import { IUserJtwData } from '../interfaces/userJwtData.interfaces';
 
 @Injectable()

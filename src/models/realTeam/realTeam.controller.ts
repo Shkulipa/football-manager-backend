@@ -1,36 +1,37 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
-  HttpException,
-  HttpStatus,
-  UploadedFile,
 } from '@nestjs/common';
-import { RealTeamService } from './realTeam.service';
-import { CreateRealTeamDto } from './dto/createRealTeam.dto';
-import { AuthGuard } from 'src/common/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
+import { pick } from 'lodash';
+import { fileTypes, maxSizeMB } from 'src/common/constants/file.constants';
+import { QueryParams } from 'src/common/decorators/query.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
-import { maxSizeMB, fileTypes } from 'src/common/constants/file.constants';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 import { fileSizeGuard } from 'src/common/guards/fileSize.guard';
 import { fileTypeGuard } from 'src/common/guards/fileType.guard';
-import { QueryParams } from 'src/common/decorators/query.decorator';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 import { IParsedQuery } from 'src/common/interfaces/query.interfaces';
+import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
 import { IsObjectIdPipe } from 'src/common/pipes/isObjectId.pipe';
-import { UpdateRealTeamDto } from './dto/updateRealTeam.dto';
+
 import { LeagueService } from '../league/league.service';
-import { pick } from 'lodash';
-import { ApiTags } from '@nestjs/swagger';
+import { CreateRealTeamDto } from './dto/createRealTeam.dto';
+import { UpdateRealTeamDto } from './dto/updateRealTeam.dto';
+import { RealTeamService } from './realTeam.service';
 
 const realTeamImgField = 'realTeamImg';
 

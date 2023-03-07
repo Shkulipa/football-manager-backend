@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { LeagueService } from './league.service';
-import { LeagueController } from './league.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { S3Module } from '../s3/s3.module';
-import { League, LeagueSchema } from './entities/league.entity';
-import { Country, CountrySchema } from '../country/entities/country.entity';
+
 import { CountryModule } from '../country/country.module';
+import { Country, CountrySchema } from '../country/entities/country.entity';
 import { JwtModule } from '../jwt/jwt.module';
+import { S3Module } from '../s3/s3.module';
 import { UserModule } from '../user/user.module';
+import { League, LeagueSchema } from './entities/league.entity';
+import { LeagueController } from './league.controller';
+import { LeagueService } from './league.service';
 
 @Module({
   imports: [

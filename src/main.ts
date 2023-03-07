@@ -1,11 +1,11 @@
-import { NestFactory } from '@nestjs/core';
-import * as cookieParser from 'cookie-parser';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from 'src/models/app/app.module';
-import { ConfigService } from '@nestjs/config/dist/config.service';
-import { Logger } from '@nestjs/common/services/logger.service';
 import { RequestMethod } from '@nestjs/common/enums/request-method.enum';
+import { Logger } from '@nestjs/common/services/logger.service';
+import { ConfigService } from '@nestjs/config/dist/config.service';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+import { AppModule } from 'src/models/app/app.module';
 
 async function bootstrap() {
   const logger = new Logger('Main(main.ts)');

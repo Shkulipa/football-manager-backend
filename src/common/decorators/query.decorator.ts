@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ExpressRequestInterface } from 'src/common/interfaces/expressRequest.interfaces';
 import { queryHelper } from 'src/common/helpers/query.helper';
+import { ExpressRequestInterface } from 'src/common/interfaces/expressRequest.interfaces';
 
 export const QueryParams = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {

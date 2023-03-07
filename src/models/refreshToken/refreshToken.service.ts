@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { IUserData } from 'src/common/interfaces/userData.interfaces';
 import { IUserJtwData } from 'src/common/interfaces/userJwtData.interfaces';
 import { JwtService } from 'src/models/jwt/jwt.service';
+
 import { User, UserDocument } from '../user/entities/user.entity';
 
 @Injectable()

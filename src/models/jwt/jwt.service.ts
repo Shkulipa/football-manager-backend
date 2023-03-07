@@ -1,6 +1,6 @@
-import { sign, verify } from 'jsonwebtoken';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { sign, verify } from 'jsonwebtoken';
 import { IUserJtwData } from 'src/common/interfaces/userJwtData.interfaces';
 
 @Injectable()

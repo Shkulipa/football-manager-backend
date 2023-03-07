@@ -1,7 +1,7 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerOptions } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { MailerAsyncOptions } from '@nestjs-modules/mailer/dist/interfaces/mailer-async-options.interface';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { path } from 'app-root-path';
 
 export const mailerConfig: MailerAsyncOptions = {

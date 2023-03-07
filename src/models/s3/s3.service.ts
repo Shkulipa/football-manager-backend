@@ -1,14 +1,13 @@
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
-} from '@aws-sdk/client-s3';
-
+import { extension } from 'mime-types';
 // can be raplaced by 'nanoid', because take a less size
 import { v4 as uuidv4 } from 'uuid';
-import { extension } from 'mime-types';
 
 @Injectable()
 export class S3Service {

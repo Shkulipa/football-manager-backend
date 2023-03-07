@@ -1,21 +1,22 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsString,
   MaxLength,
-  IsEnum,
-  IsArray,
-  ArrayMaxSize,
-  ArrayMinSize,
-  ValidateNested,
   Validate,
+  ValidateNested,
 } from 'class-validator';
+
 import { EPositionPlayer } from '../interfaces/positionPlayer.interfaces';
 import { ERolePlayer } from '../interfaces/rolePlayer.interfaces';
 import { ETypeCard } from '../interfaces/typeCard.interfaces';
-import { SkillDto } from './skill.dto';
 import { Range } from './../validations/range.validation';
+import { SkillDto } from './skill.dto';
 
 export class CreatePlayerDto {
   @IsNotEmpty()

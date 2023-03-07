@@ -1,15 +1,16 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { compare } from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
-import { CreateUserDto } from './dto/createUser.dto';
-import { User, UserDocument } from './entities/user.entity';
-import { omit, pick } from 'lodash';
-import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
+import { InjectModel } from '@nestjs/mongoose';
+import { MailerService } from '@nestjs-modules/mailer';
+import { compare } from 'bcrypt';
+import { omit, pick } from 'lodash';
+import { Model, Types } from 'mongoose';
 import { JwtService } from 'src/models/jwt/jwt.service';
+import { v4 as uuidv4 } from 'uuid';
+
+import { CreateUserDto } from './dto/createUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
+import { User, UserDocument } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
