@@ -3,17 +3,19 @@ version: '3.1'
 services:
   mongo:
     image: mongo
+    container_name: football-manager-mongo
     restart: always
     volumes:
-      - mongodb-data:/data/db
+    - ../mongodb-data:/data/db
     ports:
       - '27018:27017'
 
   mongo-express:
     image: mongo-express
+    container_name: football-manager-mongo-express
     restart: always
     volumes:
-      - mongodb-data:/data/db
+      - ../mongodb-data:/data/db
     depends_on:
       - mongo
     ports:
@@ -23,5 +25,22 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongo
       - ME_CONFIG_MONGODB_PORT=27017
 
-volumes:
-    mongodb-data:
+  redis:
+    image: 'redislabs/rejson:2.0.0'
+    container_name: football-manager-redis
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - ../redis-data:/data/db
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: football-manager-redisinsight
+    restart: always
+    ports:
+      - "6380:8001"
+    depends_on:
+      - redis
+    volumes:
+      - ../redis-data:/data/db

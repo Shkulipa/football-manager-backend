@@ -1,20 +1,33 @@
-# Football manager Simulator(API)
+# Football Manager Simulator(API)
 
 ---
 
-TODO
-- [ ] eslint for imports order <br>
-- [ ] players controller
+## TODO
+- [ ] creating user team(generate random players)
 
-## Installation
+socket.io
+- [ ] search opponent
+- [ ] play match
+- [ ] rating elo after played match
+- [ ] chat(common, direct msg)
+- [ ] buying/sell players by other players
+
+- [ ] stripe(buy money)
+
+## Project start instructions 
+### Installation
 ```
 yarn
 ```
 
----
+### Change your node
+```
+nvm use
+```
+if you haven't "nvm", install it on your computer
 
-## Run Application
-if you need a get up the mongoDB localy, use it:
+### Run Application
+if you need a get up the mongoDB locale, use it:
 ```
 yarn docker:compose
 ```
@@ -22,13 +35,13 @@ then you can open in browser: [UI of MongoDB](http://localhost:8081)(for UI of D
 <br><br>
 if you wanna run from deployed on the production or staging, run this:
 ```
-yarn start:prod (will take variables from .env.production)
-```
-```
 yarn start:dev  (will take variables from .env.development)
 ```
 ```
-yarn start:local (will take variables from .env.local)
+yarn start:staging (will take variables from .env.staging)
+```
+```
+yarn start:prod (will take variables from .env.production)
 ```
 ```
 yarn prod (run dist/main)
@@ -95,7 +108,7 @@ Also, you commit shouldn't more than 88 characters
 
 <br>
 
-Where "prod" brunch is a production([Production  Link](https://football-manager-backend-prod.up.railway.app)) "dev" brunch is a stagging([Stagging  Link](https://football-manager-backend-dev.up.railway.app)).
+Where "prod" brunch is a production([Production  Link](https://football-manager-backend-prod.up.railway.app)) "dev" brunch is a staging([Staging  Link](https://football-manager-backend-staging.up.railway.app)).
 
 <br><br>
 for deploy, you need just make a commit in according brunch and make a push into repository, and after deploying will be automatically in fit website was mentioned above in(CI/CD).
@@ -126,6 +139,7 @@ docs: [article](https://medium.com/the-crowdlinker-chronicle/best-way-to-structu
 ---
 
 ## Migrations
+for migrations for countries, leagues, real teams, you need put images of logo in s3 bucket
 first of all, install ts-node:
 ```
 npm i -g ts-node
@@ -134,7 +148,7 @@ npm i -g ts-node
 <br><br>
 common commands:
 ```
-yarn migrate:help
+yarn migrate:help [command](down, up and so on)
 ```
 
 <br><br>
@@ -143,32 +157,39 @@ migrations are using the "migrations.ts" file,
 yarn migrate:prod:status (for prod DB)
 ```
 ```
+yarn migrate:stag:status (for stag DB)
+```
+```
 yarn migrate:dev:status (for dev DB)
 ```
+
+create
 ```
-yarn migrate:local:status (for local DB)
+migrate:dev:create
 ```
 
-<br><br>
-for seeds are using "seeds.ts", and follow commands:
+up
 ```
-yarn seeds:prod:status (for prod DB)
+yarn migrate:dev:up (for development DB)
 ```
+
+down
 ```
-yarn seeds:dev:status (for dev DB)
+yarn migrate:dev:down -l (for development DB)
 ```
-```
-yarn seeds:local:status (for local DB)
-```
+Where -l last migrations
 
 ---
+
+# Content taken:
+- [flags](https://flagdownload.com/)
+- [teams](https://www.whoscored.com)
+- [Player skills & info](https://www.fmscout.com/club/arsenal.html)
 
 # Tests
 tutorials:
 1. [watch video](https://www.youtube.com/watch?v=1Vc6Xw8FMpg&ab_channel=MichaelGuay)
 
-<br><br>
-
----
-
-<br><br>
+# Stripe
+tutorials:
+1. [watch video](https://www.youtube.com/watch?v=-90OHI_Gd80&t=829s&ab_channel=UnBox)

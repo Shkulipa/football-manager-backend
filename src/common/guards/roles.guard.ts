@@ -1,47 +1,20 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { ExpressRequestInterface } from 'src/common/interfaces/expressRequest.interfaces';
-import { EUserRoles } from 'src/common/interfaces/userRoles.interfaces';
+import { CanActivate, ExecutionContext, Type } from '@nestjs/common';
 
-import { EVariables } from '../constants/namesVariables';
+import { EUserRoles } from '../constants/user-roles.enum';
+import { IUserData } from '../interfaces/user-data.interfaces';
 
-@Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export const RolesGuard = (...needAvailable: EUserRoles[]): Type<CanActivate> => {
+  return class RolesGuardMixin implements CanActivate {
+    canActivate(context: ExecutionContext): boolean {
+      const req = context.switchToHttp().getRequest();
+      const user: IUserData = req.user;
 
-  canActivate(context: ExecutionContext): boolean {
-    const roleForAccess = this.reflector.get<EUserRoles>(
-      EVariables.ROLE,
-      context.getHandler(),
-    );
-
-    if (!roleForAccess) {
-      return true;
+      if (needAvailable.length === 0) {
+        // allowed to all exists roles
+        return true;
+      } else {
+        return needAvailable.every((role) => user.roles.includes(role));
+      }
     }
-
-    const { user } = context
-      .switchToHttp()
-      .getRequest<ExpressRequestInterface>();
-
-    /**
-     * @info
-     * if you need that all needing roles should also be in a user, see it:
-     * https://stackoverflow.com/questions/53606337/check-if-array-contains-all-elements-of-another-array
-     */
-    const isAccess = user.roles.includes(roleForAccess);
-
-    if (!isAccess)
-      throw new HttpException(
-        "Forbidden, haven't access",
-        HttpStatus.FORBIDDEN,
-      );
-
-    return true;
-  }
-}
+  };
+};

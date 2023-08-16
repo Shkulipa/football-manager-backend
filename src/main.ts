@@ -1,39 +1,48 @@
-import { RequestMethod } from '@nestjs/common/enums/request-method.enum';
-import { Logger } from '@nestjs/common/services/logger.service';
+import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config/dist/config.service';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
-import { AppModule } from 'src/models/app/app.module';
+import { AppModule } from 'src/modules/app/app.module';
+
+import { EEnvVariables } from './common/constants/env-variables.enum';
+import { EMode } from './common/constants/mode.enum';
+import { AllExceptionFilter } from './common/decorators/all-exception-filter.decorator';
+import swaggerConfig from './configs/app/swagger.config';
 
 async function bootstrap() {
   const logger = new Logger('Main(main.ts)');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('Football manager API Doc')
-    .setVersion('0.0.1') // from package.json
-    .setLicense('MIT', 'https://github.com/Shkulipa/football-manager-backend') // from package.json
-    .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
-      'JWT',
-    )
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api/docs', app, document);
+  app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
+  const configService = app.get(ConfigService);
+  const mode = configService.get(EEnvVariables.NODE_ENV);
+
+  /** swagger */
+  if (mode === EMode.DEVELOPMENT || mode === EMode.STAGING) {
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('/api/docs', app, document);
+  }
+
+  /** cookie */
   app.use(cookieParser());
+
+  /** prefix in url */
   app.setGlobalPrefix('api', {
     exclude: [{ path: '', method: RequestMethod.GET }],
   });
+
+  /** ejs for emails */
   app.setViewEngine('ejs');
 
-  const configService = app.get(ConfigService);
-  const port = configService.get('PORT');
-  const clientPort = parseInt(configService.get('CLIENT_PORT'));
-  const corsWebSites = String(configService.get('CORS_WEBSITES')) || '';
+  /** cors */
+  const port = configService.get(EEnvVariables.PORT);
+  const clientPort = parseInt(port);
+  const corsWebSites = String(configService.get(EEnvVariables.CORS_WEBSITES)) || '';
 
   app.enableCors({
     origin: [
@@ -44,7 +53,6 @@ async function bootstrap() {
   });
 
   await app.listen(port);
-
   logger.log(`Server running on port ${port}`);
 }
 bootstrap();
