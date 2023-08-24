@@ -64,9 +64,6 @@ export class LeagueService {
       {
         $set: newLeagueData,
       },
-      {
-        new: true,
-      },
     );
 
     return { success: true };

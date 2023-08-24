@@ -11,7 +11,6 @@ export class firstUser implements MigrationInterface {
       username: 'admin',
       isConfirmEmail: true,
       createdAt: new Date(),
-      ratingElo: 1500,
       money: 10000,
       password: '$2b$10$GcjAf87930jVKT8n2CVcx.6ExY21VyD3Fo5V0t1ORIpgr.275gPPq', // pass was hashed(real pass: 123456A@a)
       roles: [

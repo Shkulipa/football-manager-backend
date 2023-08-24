@@ -35,9 +35,6 @@ export class User {
   @Prop({ type: String })
   refreshToken: string;
 
-  @Prop({ required: true, type: Number, default: 1500 })
-  ratingElo: number;
-
   @Prop({ required: true, type: Number, default: 10000 })
   money: number;
 }

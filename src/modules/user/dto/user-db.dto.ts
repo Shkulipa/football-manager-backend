@@ -66,10 +66,6 @@ export class UsersDbDto extends Document {
 
   @ApiProperty({ type: Number })
   @IsInt()
-  ratingElo: number;
-
-  @ApiProperty({ type: Number })
-  @IsInt()
   money: number;
 
   @ApiProperty({ required: true, type: String })

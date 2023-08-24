@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EErrors } from 'src/common/constants/errors.enum';
 import { FileImages } from 'src/common/constants/file.constants';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
@@ -96,6 +96,7 @@ export class RealTeamController {
     description: 'delete real team',
     operationId: OperationIds.REAL_TEAM_UPDATE,
   })
+  @ApiConsumes('multipart/form-data')
   @ComposeAuthDecorator(EUserRoles.COUNTRY_CREATE)
   @UseInterceptors(FileInterceptor(realTeamImgField, uploadFilesLimits(FileImages, 1)))
   @ApiResponse({ status: 200, type: CommonSuccessResDto, description: 'OK' })

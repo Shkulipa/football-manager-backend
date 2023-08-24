@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PipelineStage } from 'mongoose';
+import { Model, PipelineStage, Types } from 'mongoose';
 import { CommonCountryLookup } from 'src/common/aggregate/lookups/common-country.lookup';
 import { CommonRealTeamLookup } from 'src/common/aggregate/lookups/common-real-team.lookup';
 import { commonItemsMatch } from 'src/common/aggregate/matches/common-items.match';
-import { parsedIdsWithNull, toId } from 'src/common/helpers/transform.helper';
+import { parsedIdsWithNull, toId, toIdsArr } from 'src/common/helpers/transform.helper';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 
 import {
@@ -15,10 +15,12 @@ import {
   minRatingPlayer,
   minSkillPlayer,
 } from './constants/common-player-values';
+import { EPlayerPositionName } from './constants/player-position-name.enum';
 import { ERolePlayer } from './constants/rolePlayer.enum';
 import { CreateRealPlayerReqDto } from './dto/create-real-player-req.dto';
 import { QueryGetRealPlayersReqDto } from './dto/query-get-real-players-req.dto';
 import { RealPlayer, RealPlayerDocument } from './entities/real-player.entity';
+import { isExistPlayers } from './helpers/is-exsist-player.helper';
 import { ratingHelper } from './helpers/rating.helper';
 
 @Injectable()
@@ -37,6 +39,68 @@ export class RealPlayerRepository extends BaseMongoRepository<RealPlayerDocument
       $gte: from || minSkillPlayer,
       $lte: to || maxSkillPlayer,
     };
+  }
+
+  // for real team
+  async checkExistPlayersForRealTeam(playersIds: (string | Types.ObjectId)[], realTeamId?: string) {
+    const players = await this.realPlayerModel.find({
+      _id: { $in: toIdsArr(playersIds) },
+      realTeamId: { $or: [toId(realTeamId), null] },
+    });
+
+    if (players.length !== playersIds.length)
+      throw new BadRequestException('you can only add a player if he is without a club or belongs to this team');
+
+    const foundIds = players.map((doc) => doc._id.toString());
+    isExistPlayers(playersIds, foundIds);
+
+    return players;
+  }
+
+  // for user team
+  async checkExistPlayersForUserTeam(playersIds: (string | Types.ObjectId)[]) {
+    const players = await this.realPlayerModel.find({
+      _id: { $in: toIdsArr(playersIds) },
+    });
+    const foundIds = players.map((doc) => doc._id.toString());
+    isExistPlayers(playersIds, foundIds);
+
+    return players;
+  }
+
+  async formRandomPlayers() {
+    const projectPlayer: PipelineStage.Project['$project'] = {
+      _id: 1,
+    };
+
+    const players = await this.realPlayerModel.aggregate([
+      {
+        $facet: {
+          GKs: [
+            { $match: { positions: { $in: [EPlayerPositionName.GK] } } },
+            { $project: projectPlayer },
+            { $sample: { size: 2 } },
+          ],
+          others: [
+            { $match: { positions: { $nin: [EPlayerPositionName.GK] } } },
+            { $project: projectPlayer },
+            { $sample: { size: 23 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          allPlayers: { $concatArrays: ['$GKs', '$others'] },
+        },
+      },
+      {
+        $project: {
+          players: '$allPlayers',
+        },
+      },
+    ]);
+
+    return players[0].players;
   }
 
   async getRealPlayers(query: QueryGetRealPlayersReqDto) {

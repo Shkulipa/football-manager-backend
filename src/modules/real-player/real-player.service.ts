@@ -88,9 +88,9 @@ export class RealPlayerService {
       },
     );
 
-    // delete from main or bench squad
-    if (realPlayer.realTeamId.toString() !== id) {
-      await this.realTeamRepository.deletePlayerFromRealTeam(id);
+    // delete from main or bench squad if team was updated for this player
+    if (realTeamId && realTeamId.toString() !== realPlayer.realTeamId.toString()) {
+      await this.realTeamRepository.deletePlayerFromRealTeamSquad(id);
     }
 
     return { success: true };
@@ -105,7 +105,7 @@ export class RealPlayerService {
     }
 
     await this.realPlayerRepository.findByIdAndRemove(id);
-    await this.realTeamRepository.deletePlayerFromRealTeam(id);
+    await this.realTeamRepository.deletePlayerFromRealTeamSquad(id);
     return { success: true };
   }
 }

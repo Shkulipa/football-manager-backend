@@ -14,24 +14,24 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import Trim from 'src/common/decorators/trim.decorator';
+import { IsValidPlayerRole } from 'src/modules/real-team/decoratores/player-role.decorator';
+import { SkillsDto } from 'src/modules/real-team/dto/skills.dto';
+import { TSquad } from 'src/modules/real-team/interfaces/squad.interface';
 
-import { IsValidPlayerRole } from '../decoratores/player-role.decorator';
-import { TSquad } from '../interfaces/squad.interface';
-import { SkillsDto } from './skills.dto';
-
-export class RealTeamDbDto {
+export class UserTeamDbDto extends Document {
   @ApiProperty({ required: true, type: String })
   @IsMongoId()
   @IsString()
   @IsNotEmpty()
-  _id: Types.ObjectId;
+  _id: string | Types.ObjectId;
 
   @ApiProperty({ required: true, type: String })
+  @IsMongoId()
   @IsString()
   @IsNotEmpty()
-  leagueId: string | Types.ObjectId;
+  userId: string | Types.ObjectId;
 
   @ApiProperty({ required: true, type: String })
   @IsString()
@@ -40,7 +40,7 @@ export class RealTeamDbDto {
 
   @ApiProperty({ required: true, type: String, maxLength: 50, minLength: 4 })
   @MaxLength(50)
-  @MinLength(4)
+  @MinLength(3)
   @IsString()
   @IsNotEmpty()
   @Trim()
@@ -68,4 +68,16 @@ export class RealTeamDbDto {
   @Transform(({ value }) => JSON.parse(value))
   @IsMongoId({ each: true })
   bench?: (string | Types.ObjectId)[];
+
+  @ApiProperty({ isArray: true, type: String })
+  @IsOptional()
+  @IsArray()
+  @Transform(({ value }) => JSON.parse(value))
+  @IsMongoId({ each: true })
+  reserve?: (string | Types.ObjectId)[];
+
+  @ApiProperty({ required: true, type: String })
+  @IsString()
+  @IsNotEmpty()
+  createdAt: Date;
 }

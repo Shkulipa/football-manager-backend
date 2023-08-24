@@ -7,4 +7,5 @@ export enum ECollectionName {
   REAL_TEAMS = 'real-teams',
   REAL_TEAMS_SQUAD = 'real-teams-squad',
   USERS = 'users',
+  USERS_TEAM = 'users-team',
 }

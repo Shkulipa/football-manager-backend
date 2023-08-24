@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PipelineStage } from 'mongoose';
 import { CommonJoinMainSquad } from 'src/common/aggregate/lookups/common-join-main-squad';
 import { CommonLeagueLookup } from 'src/common/aggregate/lookups/common-league-lookup';
 import { CommonRealPlayerLookup } from 'src/common/aggregate/lookups/common-real-player.lookup';
 import { commonItemsMatch } from 'src/common/aggregate/matches/common-items.match';
-import { parsedIdsWithNull, toId, toIdsArr } from 'src/common/helpers/transform.helper';
+import { parsedIdsWithNull, toId } from 'src/common/helpers/transform.helper';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 
 import { EPlayerPositionName } from '../real-player/constants/player-position-name.enum';
@@ -37,24 +37,12 @@ export class RealTeamRepository extends BaseMongoRepository<RealTeamDocument> {
    */
   async validateSquad(realTeamDto: UpdateRealTeamReqDto | CreateRealTeamReqDto, realTeamId?: string) {
     checkDuplicatePlayerHelper(realTeamDto);
-
     const playersIds = [...(realTeamDto.main ? Object.values(realTeamDto.main) : []), ...(realTeamDto.bench || [])];
-    const players = await this.realPlayersRepository.find({
-      _id: { $in: toIdsArr(playersIds) },
-      realTeamId: { $or: [toId(realTeamId), null] },
-    });
-
-    if (players.length !== playersIds.length)
-      throw new BadRequestException('you can only add a player if he is without a club or belongs to this team');
-
-    const foundIds = players.map((doc) => doc._id.toString());
-    const nonExistingIds = playersIds.filter((id) => !foundIds.includes(id));
-    const idsNotFoundPlayers = nonExistingIds.join(',');
-    if (nonExistingIds.length !== 0) throw new BadRequestException(`Players with ids: ${idsNotFoundPlayers} not found`);
+    const players = await this.realPlayersRepository.checkExistPlayersForRealTeam(playersIds, realTeamId);
     return players;
   }
 
-  async deletePlayerFromRealTeam(id: string) {
+  async deletePlayerFromRealTeamSquad(id: string) {
     // find player in bench or in main squad
     const positions = Object.values(EPlayerPositionName) as string[];
     const mainFieldsArray = positions.map((position) => ({

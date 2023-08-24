@@ -101,6 +101,13 @@ export class RealTeamService {
     const skills = { att, mid, def };
     Object.assign(newRealTeamData, skills);
 
+    // update ids to Types.ObjectId
+    for (const key in newRealTeamData.main) {
+      newRealTeamData.main[key] = toId(newRealTeamData.main[key]);
+    }
+    newRealTeamData.bench =
+      newRealTeamData.bench && newRealTeamData.bench.length > 0 ? toIdsArr(newRealTeamData.bench) : [];
+
     // https://mongoosejs.com/docs/tutorials/findoneandupdate.html
     await this.realTeamRepository.findOneAndUpdate(
       { _id: realTeam._id },

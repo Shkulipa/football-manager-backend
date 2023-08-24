@@ -17,6 +17,8 @@ class validator implements ValidatorConstraintInterface {
     const values = Object.values(value);
     const validPositions = Object.values(EPlayerPositionName) as string[];
 
+    if (values.length > 11) throw new BadRequestException('In main squad, you can have max 11 players');
+
     const isValidKeys = keys.every((key: string) => validPositions.includes(key));
     if (!isValidKeys)
       throw new BadRequestException(`Keys in ${args.property} have to includes: ${validPositions.join(',')}`);

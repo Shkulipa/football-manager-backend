@@ -38,4 +38,10 @@ export enum OperationIds {
   USER_UPDATE_PASSWORD = 'user-update-password',
   USER_UPDATE_USERNAME = 'user-update-username',
   USER_UPDATE_EMAIL = 'user-update-email',
+
+  USER_TEAM_GET_BY_ID = 'user-team-get-by-id',
+  USER_TEAM_GET_OWN = 'user-team-get-own',
+  USER_TEAM_CREATE = 'user-team-create',
+  USER_TEAM_UPDATE = 'user-team-update',
+  USER_TEAM_DELETE = 'user-team-delete',
 }
