@@ -13,7 +13,7 @@ import {
 } from './../../../modules/real-player/helpers/group-players-by-position.helper';
 import data from './../../constants/ids';
 
-export class countSkillRealTeams implements MigrationInterface {
+export class CountSkillRealTeams implements MigrationInterface {
   public async up(db: Db) {
     const arrObjRealTeams = Object.values(data.realTeams);
     const teams = await db

@@ -88,7 +88,7 @@ export class RealPlayerService {
       },
     );
 
-    // delete from main or bench squad if team was updated for this player
+    // delete from main or bench squad if team of this player was updated for this player
     if (realTeamId && realTeamId.toString() !== realPlayer.realTeamId.toString()) {
       await this.realTeamRepository.deletePlayerFromRealTeamSquad(id);
     }

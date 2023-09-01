@@ -12,7 +12,7 @@ const { AWS_BUCKET_NAME, AWS_BUCKET_REGION } = process.env;
 const link = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/public/real-players/`;
 const playersIds = Object.values(data.realPlayer);
 
-export class realPlayers implements MigrationInterface {
+export class RealPlayers implements MigrationInterface {
   public async up(db: Db) {
     const itemsRealTeams = allRealPlayers.map((realPlayer) => {
       const rating = ratingHelper(realPlayer.skills); // calculate rating is based on skills

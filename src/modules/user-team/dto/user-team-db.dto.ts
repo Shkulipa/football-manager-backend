@@ -6,6 +6,7 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsNotEmptyObject,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -37,6 +38,11 @@ export class UserTeamDbDto extends Document {
   @IsString()
   @IsNotEmpty()
   logoClub: string;
+
+  @ApiProperty({ required: true, type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  ratingElo: number;
 
   @ApiProperty({ required: true, type: String, maxLength: 50, minLength: 4 })
   @MaxLength(50)

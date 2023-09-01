@@ -10,7 +10,7 @@ import { realTeamsData } from './../../data/real-teams.data';
 const { AWS_BUCKET_NAME, AWS_BUCKET_REGION } = process.env;
 const link = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/public/real-teams/`;
 
-export class realTeams implements MigrationInterface {
+export class RealTeams implements MigrationInterface {
   public async up(db: Db) {
     const itemsRealTeams = realTeamsData.map((realTeam) => ({ ...realTeam, logoClub: link + realTeam.logoClub }));
     await db.collection(ECollectionName.REAL_TEAMS).insertMany(itemsRealTeams);

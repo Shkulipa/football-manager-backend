@@ -18,9 +18,11 @@ import { ActivationModule } from '../activation/activation.module';
 import { AuthModule } from '../auth/auth.module';
 import { CountryModule } from '../country/country.module';
 import { HealthCheckModule } from '../healthCheck/healthCheck.module';
+import { MatchModule } from '../match/match.module';
 import { RealPlayerModule } from '../real-player/real-player.module';
 import { RealTeamModule } from '../real-team/real-team.module';
 import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
+import { SearchOpponentModule } from '../search-opponent/search-opponent.module';
 import { UserTeamModule } from '../user-team/user-team.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -44,6 +46,8 @@ import { AppService } from './app.service';
     RealPlayerModule,
     QueueModule,
     UserTeamModule,
+    SearchOpponentModule,
+    MatchModule,
   ],
   controllers: [AppController],
   providers: [AppService, MongoConnection],

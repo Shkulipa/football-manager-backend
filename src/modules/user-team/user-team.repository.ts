@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CommonJoinMainSquad } from 'src/common/aggregate/lookups/common-join-main-squad';
 import { CommonRealPlayerLookup } from 'src/common/aggregate/lookups/common-real-player.lookup';
 import { CommonUserLookup } from 'src/common/aggregate/lookups/common-user.lookup';
@@ -65,6 +65,15 @@ export class UserTeamRepository extends BaseMongoRepository<UserTeamDbDto> {
       .exec();
 
     return result[0];
+  }
+
+  async matchmakingTeam(userId: string) {
+    const team = await this.userTeamModel.findOne({ userId: new Types.ObjectId(userId) });
+    if (!team) throw new NotFoundException("Team for user wasn't found");
+
+    if (Object.values(team.main).length < 11) throw new BadRequestException('Your main squad should exist 11 players');
+
+    return team;
   }
 
   async countSkillUserTeam(id: string) {

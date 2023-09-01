@@ -8,7 +8,7 @@ import { AppModule } from 'src/modules/app/app.module';
 
 import { EEnvVariables } from './common/constants/env-variables.enum';
 import { EMode } from './common/constants/mode.enum';
-import { AllExceptionFilter } from './common/decorators/all-exception-filter.decorator';
+import { AllExceptionFilter } from './common/exceptions/all-exception-filter.decorator';
 import swaggerConfig from './configs/app/swagger.config';
 
 async function bootstrap() {

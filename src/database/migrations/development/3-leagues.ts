@@ -10,7 +10,7 @@ import { leaguesData } from './../../data/leagues.data';
 const { AWS_BUCKET_NAME, AWS_BUCKET_REGION } = process.env;
 const link = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/public/leagues/`;
 
-export class leagues implements MigrationInterface {
+export class Leagues implements MigrationInterface {
   public async up(db: Db) {
     const itemsLeagues = leaguesData.map((league) => ({ ...league, logoLeague: link + league.logoLeague }));
     await db.collection(ECollectionName.LEAGUES).insertMany(itemsLeagues);

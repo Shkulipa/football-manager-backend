@@ -3,10 +3,10 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CommonServerErrorResDto {
   @ApiProperty({
     required: true,
-    type: String,
+    type: Number,
     description: 'statusCode',
   })
-  statusCode: string;
+  statusCode: number;
 
   @ApiProperty({
     required: true,
