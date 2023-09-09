@@ -9,3 +9,4 @@ export const LEAGUE_TAG = 'league';
 export const REAL_TEAM_TAG = 'real-team';
 export const REAL_PLAYER_TAG = 'real-player';
 export const TOKEN_TAG = 'token';
+export const MATCH_TAG = 'match';

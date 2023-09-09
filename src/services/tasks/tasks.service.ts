@@ -18,6 +18,6 @@ export class TasksService {
 
     const count = countActivations + countRestorePassword;
 
-    this.logger.log(`DATA CLEANUP FINISHED, task time: ${Number(new Date()) - beginTime} ms}, total deleted: ${count}`);
+    this.logger.log(`DATA CLEANUP FINISHED, task time: ${Number(new Date()) - beginTime} ms, total deleted: ${count}`);
   }
 }

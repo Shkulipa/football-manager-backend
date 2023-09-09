@@ -20,7 +20,7 @@ import { ERolePlayer } from './constants/rolePlayer.enum';
 import { CreateRealPlayerReqDto } from './dto/create-real-player-req.dto';
 import { QueryGetRealPlayersReqDto } from './dto/query-get-real-players-req.dto';
 import { RealPlayer, RealPlayerDocument } from './entities/real-player.entity';
-import { isExistPlayers } from './helpers/is-exsist-player.helper';
+import { isExistPlayers } from './helpers/is-exist-player.helper';
 import { ratingHelper } from './helpers/rating.helper';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class RealPlayerRepository extends BaseMongoRepository<RealPlayerDocument
   async checkExistPlayersForRealTeam(playersIds: (string | Types.ObjectId)[], realTeamId?: string) {
     const players = await this.realPlayerModel.find({
       _id: { $in: toIdsArr(playersIds) },
-      realTeamId: { $or: [toId(realTeamId), null] },
+      realTeamId: { $or: [toId(realTeamId), null] }, // if you need check players for exactly team
     });
 
     if (players.length !== playersIds.length)

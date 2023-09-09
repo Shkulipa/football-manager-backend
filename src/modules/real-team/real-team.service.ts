@@ -81,7 +81,7 @@ export class RealTeamService {
       ...pick(realTeam, ['leagueId', 'logoClub', 'clubName', 'key', 'main', 'bench']),
     };
 
-    const players = await this.realTeamRepository.validateSquad(updateRealTeamDto);
+    const players = await this.realTeamRepository.validateSquad(updateRealTeamDto, id);
 
     if (file) {
       const key = getKeyS3Helper(realTeam.logoClub);

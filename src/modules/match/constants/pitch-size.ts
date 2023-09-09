@@ -1,0 +1,5 @@
+export const pitchSize = {
+  pitchWidth: 680,
+  pitchHeight: 1050,
+  goalWidth: 90,
+};

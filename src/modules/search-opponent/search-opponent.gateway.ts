@@ -40,7 +40,7 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
     this.logger.debug(
       `disconnect user: socketId(${client.id}) id(${client.user._id}), username(${client.user.username})`,
     );
-    this.removeFromPoll(client.id);
+    this.pollUsers = this.pollUsers.filter((user) => user.socketId !== client.id);
     this.logger.debug(`current poll: ${JSON.stringify(this.pollUsers)}`);
   }
 
@@ -55,7 +55,7 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
 
       const team = await this.userTeamRepository.matchmakingTeam(client.user._id.toString());
       const teamData = {
-        ...pick(team, ['clubName', 'logoClub', 'ratingElo', 'skills', 'main', 'bench']),
+        ...pick(team, ['_id', 'clubName', 'logoClub', 'ratingElo', 'skills', 'main', 'bench']),
       };
 
       const currPlayer: UserPoll = {
@@ -72,8 +72,6 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
       this.logger.debug(`current user(${currPlayer.user.username}) find opponent...`);
 
       if (foundOpponent) {
-        this.removeFromPoll(currPlayer.socketId);
-        this.removeFromPoll(foundOpponent.socketId);
         this.startMatch(currPlayer, foundOpponent);
       }
     } catch (err) {
@@ -83,10 +81,8 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
   }
 
   private findOpponent(currPlayer: UserPoll) {
-    // Проходим по пулу пользователей и ищем соперника
     const opponent = this.pollUsers.find((user) => {
-      // Проверяем, что это не текущий пользователь и разница в рейтинге не больше 100
-      return user.socketId !== currPlayer.socketId && Math.abs(user.team.ratingElo - currPlayer.team.ratingElo) <= 100;
+      return user.socketId !== currPlayer.socketId && Math.abs(user.team.ratingElo - currPlayer.team.ratingElo) <= 150;
     });
 
     if (opponent) return opponent;
@@ -102,10 +98,14 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
     const resSearch = JSON.stringify({ matchId: matchId });
     this.io.to(currPlayer.socketId).emit('searched-match', resSearch);
     this.io.to(player2.socketId).emit('searched-match', resSearch);
-  }
 
-  private removeFromPoll(socketId: string) {
-    this.pollUsers = this.pollUsers.filter((user) => user.socketId !== socketId);
-    this.logger.debug('remove From Poll user with socket id:', socketId);
+    this.io.sockets.get(currPlayer.socketId.toString()).disconnect();
+    this.io.sockets.get(player2.socketId.toString()).disconnect();
+
+    this.pollUsers = this.pollUsers.filter(
+      (user) => user.socketId !== currPlayer.socketId || user.socketId !== player2.socketId,
+    );
+    this.logger.debug('remove From Poll user with socket id:', currPlayer.socketId);
+    this.logger.debug('remove From Poll user with socket id:', player2.socketId);
   }
 }

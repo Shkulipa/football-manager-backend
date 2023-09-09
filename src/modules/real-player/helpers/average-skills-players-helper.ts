@@ -4,9 +4,11 @@ import { PlayerGroupDto } from '../dto/player-group.dto';
 const averageSkillPlayerHelper = (players: PlayerGroupDto[]) => {
   const averageVal =
     players.reduce((sumSkills, p) => {
+      const skills = { ...p.skills };
+
       if (!p.positions.includes(EPlayerPositionName.GK)) {
-        delete p.skills.penalty_taking;
-        delete p.skills.saving;
+        delete skills.penalty_taking;
+        delete skills.saving;
       }
 
       const skillsValues = Object.values(p.skills);

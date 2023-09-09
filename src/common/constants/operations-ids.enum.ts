@@ -44,4 +44,6 @@ export enum OperationIds {
   USER_TEAM_CREATE = 'user-team-create',
   USER_TEAM_UPDATE = 'user-team-update',
   USER_TEAM_DELETE = 'user-team-delete',
+
+  MATCH_UPDATE_SQUADS = 'match-update-squads',
 }

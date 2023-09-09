@@ -3,15 +3,12 @@
 ---
 
 ## TODO
-socket.io
-- [ ] search opponent
-- [ ] play match
-- [ ] rating elo after played match
-- [ ] chat(common, direct msg)
-
+- [ ] buying cases
+- [ ] stripe(buy money)
 - [ ] buying/sell players by other players
 
-- [ ] stripe(buy money)
+socket.io
+- [ ] chat(common, direct msg)
 
 ## Project start instructions 
 ### Installation

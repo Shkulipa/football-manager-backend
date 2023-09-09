@@ -15,9 +15,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Types } from 'mongoose';
+import { maxSizeBench } from 'src/common/constants/team';
 import Trim from 'src/common/decorators/trim.decorator';
 
-import { IsValidPlayerRole } from '../decoratores/player-role.decorator';
+import { IsValidPlayerRole } from '../decorators/player-role.decorator';
 import { TSquad } from '../interfaces/squad.interface';
 import { SkillsDto } from './skills.dto';
 
@@ -64,7 +65,7 @@ export class RealTeamDbDto {
   @ApiProperty({ isArray: true, type: String })
   @IsOptional()
   @IsArray()
-  @ArrayMaxSize(7)
+  @ArrayMaxSize(maxSizeBench)
   @Transform(({ value }) => JSON.parse(value))
   @IsMongoId({ each: true })
   bench?: (string | Types.ObjectId)[];

@@ -5269,6 +5269,11 @@ fn-args@^5.0.0:
   resolved "https://registry.yarnpkg.com/fn-args/-/fn-args-5.0.0.tgz#7a18e105c8fb3bf0a51c30389bf16c9ebe740bb3"
   integrity sha512-CtbfI3oFFc3nbdIoHycrfbrxiGgxXBXXuyOl49h47JawM1mYrqpiRqnH5CB2mBatdXvHHOUO6a+RiAuuvKt0lw==
 
+footballsimulationengine@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/footballsimulationengine/-/footballsimulationengine-4.0.0.tgz#94ea1c4f1c1a09246a5f23a38f868cb579fd3bb0"
+  integrity sha512-F2cR4Uic22/0sTzZi9PGbtQBGsCVQKjHz6/RYmAp2yxIQM+E4keJIz2iyMg6nbE7llIVuWQhEyziHyuBCMXTUg==
+
 fork-ts-checker-webpack-plugin@7.2.11:
   version "7.2.11"
   resolved "https://registry.npmjs.org/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-7.2.11.tgz"
