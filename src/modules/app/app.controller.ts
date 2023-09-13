@@ -1,14 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Request } from 'express';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
 import { ComposeErrorsDecorator } from 'src/common/decorators/compose-errors.decorator';
+import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
+import { StripeService } from 'src/services/stripe/stripe.service';
 
 import { AppService } from './app.service';
 
 @Controller()
 @ComposeErrorsDecorator()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService, private readonly stripeService: StripeService) {}
 
   @Get()
   @ApiOperation({
@@ -18,5 +21,23 @@ export class AppController {
   @ApiResponse({ status: 200, type: 'string', description: 'OK' })
   readme() {
     return this.appService.getReadme();
+  }
+
+  /**
+   * receive webhooks from stripe
+   * @returns {Promise<CommonSuccessResDto>}
+   */
+  @Post('/webhook')
+  @ApiOperation({
+    summary: 'stripe webhook',
+    description: 'webhook for handling actions from stripe',
+    operationId: OperationIds.STRIPE_WEBHOOK,
+  })
+  @ApiResponse({ status: 200, type: CommonSuccessResDto, description: 'OK' })
+  stripeWebhookHandler(
+    @Body() rawBody: Buffer,
+    @Headers('stripe-signature') signature: string,
+  ): Promise<CommonSuccessResDto> {
+    return this.stripeService.stripeWebhookHandler(signature, rawBody);
   }
 }

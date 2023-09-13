@@ -3,8 +3,6 @@
 ---
 
 ## TODO
-- [ ] buying cases
-- [ ] stripe(buy money)
 - [ ] buying/sell players by other players
 
 socket.io
@@ -97,10 +95,19 @@ Also, you commit shouldn't more than 88 characters
 
 ---
 
+## Stripe
+in terminal:
+1. login stripe
+2. stripe listen --forward-to http://localhost:8080/api/webhook
+3. copy -> past secret that was selected in bold in .env STRIPE_WEBHOOK_ENDPOINT_SECRET
+
+https://stripe.com/docs/testing#regulatory-cards - tests cards
+webhooks: 
+- https://stripe.com/docs/webhooks
+- https://stripe.com/docs/payments/handling-payment-events
+
 ## CI/CD (deploy)
-1. I am using railway.app here
-2. login there
-3. there is a folder with name "football-manager", there 2 brunches for prod and dev
+https://www.youtube.com/watch?v=G5gt5vIo1rA&ab_channel=MichaelGuay
 
 <br>
 

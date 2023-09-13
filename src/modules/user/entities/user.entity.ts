@@ -3,6 +3,7 @@ import { HydratedDocument, Model } from 'mongoose';
 import { ECollectionName } from 'src/common/constants/collection-name.enum';
 import { EUserRoles } from 'src/common/constants/user-roles.enum';
 import { hashPasswordHelper } from 'src/common/helpers/hash-password.helper';
+import { PacksDto } from 'src/modules/packs/dto/packs.dto';
 
 import { UsersDbDto } from '../dto/user-db.dto';
 
@@ -37,6 +38,13 @@ export class User {
 
   @Prop({ required: true, type: Number, default: 10000 })
   money: number;
+
+  @Prop({
+    type: PacksDto,
+    required: true,
+    default: { bronze: 0, silver: 0, gold: 0 },
+  })
+  packs: PacksDto;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

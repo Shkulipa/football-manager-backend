@@ -4,9 +4,11 @@ import { Model, PipelineStage, Types } from 'mongoose';
 import { CommonCountryLookup } from 'src/common/aggregate/lookups/common-country.lookup';
 import { CommonRealTeamLookup } from 'src/common/aggregate/lookups/common-real-team.lookup';
 import { commonItemsMatch } from 'src/common/aggregate/matches/common-items.match';
+import { randomIntFromInterval } from 'src/common/helpers/random-int-from-interval.helper';
 import { parsedIdsWithNull, toId, toIdsArr } from 'src/common/helpers/transform.helper';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 
+import { EPacksTypes } from '../packs/constants/packs-type.enum';
 import {
   maxAgePlayer,
   maxRatingPlayer,
@@ -18,7 +20,9 @@ import {
 import { EPlayerPositionName } from './constants/player-position-name.enum';
 import { ERolePlayer } from './constants/rolePlayer.enum';
 import { CreateRealPlayerReqDto } from './dto/create-real-player-req.dto';
+import { GetRandomPlayerForPackDto } from './dto/get-random-player-for-pack.dto';
 import { QueryGetRealPlayersReqDto } from './dto/query-get-real-players-req.dto';
+import { RealPlayerDbDto } from './dto/real-player.db.dto';
 import { RealPlayer, RealPlayerDocument } from './entities/real-player.entity';
 import { isExistPlayers } from './helpers/is-exist-player.helper';
 import { ratingHelper } from './helpers/rating.helper';
@@ -280,5 +284,53 @@ export class RealPlayerRepository extends BaseMongoRepository<RealPlayerDocument
       skills,
       photo: urlFile,
     });
+  }
+
+  async getRandomPlayerForPack(typePack: EPacksTypes): Promise<GetRandomPlayerForPackDto> {
+    let rating: { $gte: number; $lte: number };
+    let size: number;
+    let money: number;
+
+    switch (typePack) {
+      case EPacksTypes.BRONZE:
+        rating = { $gte: 1, $lte: 2 };
+        size = randomIntFromInterval(2, 4);
+        money = randomIntFromInterval(500, 2000);
+        break;
+      case EPacksTypes.SILVER:
+        rating = { $gte: 1, $lte: 3 };
+        size = randomIntFromInterval(3, 5);
+        money = randomIntFromInterval(2000, 5000);
+        break;
+      case EPacksTypes.GOLD:
+        rating = { $gte: 1, $lte: 5 };
+        size = randomIntFromInterval(4, 6);
+        money = randomIntFromInterval(5000, 10000);
+        break;
+      default:
+        break;
+    }
+
+    const query = await this.realPlayerModel
+      .aggregate([
+        {
+          $match: {
+            rating, // Select players with ratings from 0 to 5
+          },
+        },
+        { $sample: { size } }, // Select one random player from the results
+      ])
+      .exec();
+
+    const promises = query.map((p) => this.getRealPlayer(p._id));
+    const resPromises = (await Promise.allSettled(promises)) as { value: RealPlayerDbDto; status: string }[];
+    const players = resPromises.map((p) => p.value);
+
+    const res: GetRandomPlayerForPackDto = {
+      players,
+      money,
+    };
+
+    return res;
   }
 }

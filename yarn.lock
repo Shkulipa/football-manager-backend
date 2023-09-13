@@ -2889,6 +2889,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.5.7.tgz#4b8ecac87fbefbc92f431d09c30e176fc0a7c377"
   integrity sha512-dP7f3LdZIysZnmvP3ANJYTSwg+wLLl8p7RqniVlV7j+oXSXAbt9h0WIBFmJy5inWZoX9wZN6eXx+YXd9Rh3RBA==
 
+"@types/node@>=8.1.0":
+  version "20.6.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.6.0.tgz#9d7daa855d33d4efec8aea88cd66db1c2f0ebe16"
+  integrity sha512-najjVq5KN2vsH2U/xyh2opaSEz6cZMR2SetLIlxlj08nOcmPOemJmUK2o4kUzfLqfrWE0PIrNeE16XhYDd3nqg==
+
 "@types/nodemailer@^6.4.7":
   version "6.4.7"
   resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.7.tgz#658f4bca47c1a895b1d7e054b3b54030a5e1f5e0"
@@ -3637,7 +3642,7 @@ body-parser@1.20.1:
     type-is "~1.6.18"
     unpipe "1.0.0"
 
-body-parser@1.20.2:
+body-parser@1.20.2, body-parser@^1.20.2:
   version "1.20.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.2.tgz#6feb0e21c4724d06de7ff38da36dad4f57a747fd"
   integrity sha512-ml9pReCu3M61kGlqoTm2umSXTlRTuGTx0bfYj+uIUKKYycG5NtSbeetV3faSU6R7ajOPw0g/J1PvK4qNy7s5bA==
@@ -7632,6 +7637,11 @@ nestjs-pino@^3.3.0:
   resolved "https://registry.yarnpkg.com/nestjs-pino/-/nestjs-pino-3.3.0.tgz#28af741cd6626bc52fa365b99ab13a415f22820d"
   integrity sha512-FVMbzz0wi7YKqtrifnAjcQejGmhIfxXY2q+jdW1bK7RxN9640UJ7pDeQa/FOQMSu1Ud0L0/eqI3Ha9NejJxIjQ==
 
+nestjs-stripe@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/nestjs-stripe/-/nestjs-stripe-1.0.0.tgz#a001e8f691e7b6d3e5bb838b2621c955d33d66e6"
+  integrity sha512-esBcx9CTix8hfk+wkwVg7IvJcCXXa8e7NAtJLWgW/fb4vOFCp1Ai5EpEgV3hZKoPCERL/DtvKM0tvME+iWWf0Q==
+
 netmask@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-2.0.2.tgz#8b01a07644065d536383835823bc52004ebac5e7"
@@ -9107,6 +9117,19 @@ strip-json-comments@3.1.1, strip-json-comments@^3.1.0, strip-json-comments@^3.1.
   version "3.1.1"
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
+
+stripe-event-types@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/stripe-event-types/-/stripe-event-types-2.4.0.tgz#75ef84d60bc14545e836c3ebfca6aa1cfd23e580"
+  integrity sha512-5ORZMW/WKjc31nsGMCUECOS+xVjtHhAFJJ8833ft3471hIjQrMbLMPBEb5AcJM8mKRRULpKmCVMDU0lLYrxERQ==
+
+stripe@^13.5.0:
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/stripe/-/stripe-13.5.0.tgz#e9d928d73abfa5afd0fe3aff6d60419f5ddeb99a"
+  integrity sha512-odGQbvkDVxR7ldxXth7kWaUv6M31bsPMYKCBR8oIIRDoiR4MfxWaLdz5h7QQDsGtelZugqx7AEVoC6twST+0VQ==
+  dependencies:
+    "@types/node" ">=8.1.0"
+    qs "^6.11.0"
 
 strnum@^1.0.5:
   version "1.0.5"

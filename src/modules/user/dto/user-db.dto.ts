@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -7,6 +8,7 @@ import {
   IsInt,
   IsMongoId,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   Matches,
@@ -16,6 +18,7 @@ import { Document, Types } from 'mongoose';
 import { EUserRoles } from 'src/common/constants/user-roles.enum';
 import Password from 'src/common/decorators/password.decorator';
 import Trim from 'src/common/decorators/trim.decorator';
+import { PacksDto } from 'src/modules/packs/dto/packs.dto';
 
 export class UsersDbDto extends Document {
   @ApiProperty({ required: true, type: String })
@@ -67,6 +70,12 @@ export class UsersDbDto extends Document {
   @ApiProperty({ type: Number })
   @IsInt()
   money: number;
+
+  @ApiProperty({ type: PacksDto })
+  @IsObject()
+  @IsNotEmpty()
+  @Type(() => PacksDto)
+  packs: PacksDto;
 
   @ApiProperty({ required: true, type: String })
   @IsString()

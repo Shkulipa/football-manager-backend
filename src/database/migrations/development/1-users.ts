@@ -11,6 +11,11 @@ const commonData = {
   money: 10000,
   password: '$2b$10$GcjAf87930jVKT8n2CVcx.6ExY21VyD3Fo5V0t1ORIpgr.275gPPq', // pass was hashed(real pass: 123456A@a)
   roles: [],
+  packs: {
+    bronze: 1,
+    silver: 1,
+    gold: 1,
+  },
 };
 
 export class Users implements MigrationInterface {

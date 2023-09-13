@@ -142,4 +142,12 @@ export class BaseMongoRepository<TDocument extends Document> {
   ): Promise<QueryWithHelpers<DeleteResult, TDocument>> {
     return await this.model.deleteMany(filter, options);
   }
+
+  async findById(
+    id: string | Types.ObjectId,
+    projection?: ProjectionType<TDocument> | null,
+    options?: QueryOptions<TDocument> | null,
+  ): Promise<TDocument> {
+    return await this.model.findById(id, projection, options);
+  }
 }

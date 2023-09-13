@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import { raw } from 'express';
 import { AppModule } from 'src/modules/app/app.module';
 
 import { EEnvVariables } from './common/constants/env-variables.enum';
@@ -28,13 +29,15 @@ async function bootstrap() {
     SwaggerModule.setup('/api/docs', app, document);
   }
 
-  /** cookie */
-  app.use(cookieParser());
+  app.use(`/api/webhook`, raw({ type: '*/*' }));
 
   /** prefix in url */
   app.setGlobalPrefix('api', {
     exclude: [{ path: '', method: RequestMethod.GET }],
   });
+
+  /** cookie */
+  app.use(cookieParser());
 
   /** ejs for emails */
   app.setViewEngine('ejs');

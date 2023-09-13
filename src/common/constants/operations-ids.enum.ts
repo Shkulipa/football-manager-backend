@@ -46,4 +46,9 @@ export enum OperationIds {
   USER_TEAM_DELETE = 'user-team-delete',
 
   MATCH_UPDATE_SQUADS = 'match-update-squads',
+
+  PACK_GET = 'pack-get',
+  PACK_OPEN = 'pack-open',
+
+  STRIPE_WEBHOOK = 'stripe_webhook',
 }
