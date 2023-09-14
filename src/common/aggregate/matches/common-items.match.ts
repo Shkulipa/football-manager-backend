@@ -5,7 +5,10 @@ import { PipelineStage, Types } from 'mongoose';
  * @param {(Types.ObjectId | null)[]} arr - array of mongo ids or null
  * @returns {PipelineStage.Match['$match']} - PipelineStage of mongoose
  */
-export const commonItemsMatch = (arr: (Types.ObjectId | null)[], fieldName: string): PipelineStage.Match['$match'] =>
+export const commonItemsMatch = (
+  arr: (Types.ObjectId | null | string)[],
+  fieldName: string,
+): PipelineStage.Match['$match'] =>
   arr.length > 0
     ? {
         $expr: {

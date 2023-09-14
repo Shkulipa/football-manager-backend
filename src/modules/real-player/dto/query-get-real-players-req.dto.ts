@@ -1,7 +1,8 @@
-import { applyDecorators, BadRequestException } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsEnum, IsInt, IsNumber, IsOptional, IsString, Max, Min, ValidateIf } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsCheckGreaterThan } from 'src/common/decorators/is-check-greater-than.decorator';
 import Trim from 'src/common/decorators/trim.decorator';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { commonArrayNullIdValidator } from 'src/common/validators/common-array-null-id.validator';
@@ -136,15 +137,4 @@ function ComposeSkillDecorators() {
     Type(() => Number),
   ];
   return applyDecorators(...decorators);
-}
-
-function IsCheckGreaterThan(from: string, to: string) {
-  const validateIf = ValidateIf((item) => {
-    if (item[to]) {
-      if (item[from] > item[to]) throw new BadRequestException(`${from} must not be greater than ${to}`);
-    }
-    return true;
-  });
-
-  return applyDecorators(validateIf);
 }

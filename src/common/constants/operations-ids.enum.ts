@@ -45,10 +45,15 @@ export enum OperationIds {
   USER_TEAM_UPDATE = 'user-team-update',
   USER_TEAM_DELETE = 'user-team-delete',
 
-  MATCH_UPDATE_SQUADS = 'match-update-squads',
+  AUCTION_GET_LOTS = 'auction-get-lot',
+  AUCTION_CREATE_LOT = 'auction-create-lot',
+  AUCTION_BUY_LOT = 'auction-buy-lot',
+  AUCTION_CANCEL_LOT = 'auction-cancel-lot',
 
   PACK_GET = 'pack-get',
   PACK_OPEN = 'pack-open',
+
+  MATCH_UPDATE_SQUADS = 'match-update-squads',
 
   STRIPE_WEBHOOK = 'stripe_webhook',
 }

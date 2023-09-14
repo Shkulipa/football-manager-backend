@@ -18,6 +18,7 @@ import { StripeModule } from 'src/services/stripe/stripe.module';
 import { TasksModule } from 'src/services/tasks/tasks.module';
 
 import { ActivationModule } from '../activation/activation.module';
+import { AuctionModule } from '../auction/auction.module';
 import { AuthModule } from '../auth/auth.module';
 import { CountryModule } from '../country/country.module';
 import { HealthCheckModule } from '../healthCheck/healthCheck.module';
@@ -57,6 +58,7 @@ import { AppService } from './app.service';
     StripeModule,
     ShopModule,
     PacksModule,
+    AuctionModule,
   ],
   controllers: [AppController],
   providers: [AppService, MongoConnection],

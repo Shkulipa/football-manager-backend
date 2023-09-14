@@ -38,7 +38,7 @@ export class RealPlayerRepository extends BaseMongoRepository<RealPlayerDocument
     super(realPlayerModel, 'Real Player');
   }
 
-  private matchSkillPlayer(from: number, to: number) {
+  matchSkillPlayer(from: number, to: number) {
     return {
       $gte: from || minSkillPlayer,
       $lte: to || maxSkillPlayer,

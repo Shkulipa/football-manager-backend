@@ -3,10 +3,8 @@
 ---
 
 ## TODO
-- [ ] buying/sell players by other players
-
 socket.io
-- [ ] chat(common, direct msg)
+- [ ] chat(common)
 
 ## Project start instructions 
 ### Installation

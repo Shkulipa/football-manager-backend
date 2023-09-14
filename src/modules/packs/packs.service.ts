@@ -1,4 +1,5 @@
-import { BadRequestException, Logger } from '@nestjs/common';
+import { NotFound } from '@aws-sdk/client-s3';
+import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 
@@ -27,17 +28,33 @@ export class PacksService {
 
   async openPack(user: IUserData, openPacksReqDto: OpenPacksReqDto): Promise<GetRandomPlayerForPackDto> {
     const { pack } = openPacksReqDto;
+    const userTeam = await this.userTeamRepository.findOne({ userId: toId(user._id) });
+    if (!userTeam) throw new NotFoundException("You haven't team");
+
     const { packs } = await this.userRepository.findById(user._id);
     if (packs[pack] < 1) throw new BadRequestException(`You haven\'t enough ${pack} packs`);
 
     // get random players, and random money amount
     const openRes = await this.realPlayerRepository.getRandomPlayerForPack(pack);
-    const newPlayersIds = openRes.players.map((p) => toId(p._id));
+
+    // all players in user team
+    const playersIdsInUserTeam = [Object.values(userTeam.main), userTeam.bench, userTeam.reserve].map((p) =>
+      p.toString(),
+    );
+
+    // delete duplicates
+    const newPlayersIds = openRes.players.filter((p) => !playersIdsInUserTeam.includes(p._id.toString()));
+    const parseIdsNewPlayersIds = newPlayersIds.map((p) => toId(p._id));
+
+    const res: GetRandomPlayerForPackDto = {
+      ...openRes,
+      players: openRes.players.filter((p) => parseIdsNewPlayersIds.includes(p._id)),
+    };
 
     // add  players into reserve
     await this.userTeamRepository.findOneAndUpdate(
       { userId: toId(user._id) },
-      { $push: { reserve: { $each: newPlayersIds } } },
+      { $push: { reserve: { $each: parseIdsNewPlayersIds } } },
     );
 
     // decrement cases and increment money
@@ -51,6 +68,6 @@ export class PacksService {
       },
     );
 
-    return openRes;
+    return res;
   }
 }

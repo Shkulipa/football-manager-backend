@@ -12,3 +12,4 @@ export const TOKEN_TAG = 'token';
 export const MATCH_TAG = 'match';
 export const PACKS_TAG = 'packs';
 export const SHOP_TAG = 'shop';
+export const AUCTION_TAG = 'auction';
