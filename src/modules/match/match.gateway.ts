@@ -16,15 +16,10 @@ import { WSAuthMiddleware } from 'src/common/middlewares/ws-auth.middleware';
 import { JwtService } from 'src/services/jwt/jwt.service';
 
 import { MatchRepository } from '../match/match.repository';
-import { EPlayerPositionName } from '../real-player/constants/player-position-name.enum';
-import { playerPositions } from '../real-player/constants/player-positions';
 import { UserService } from '../user/user.service';
-import { defaultStats } from './constants/default-stats.interface';
 import { pitchSize } from './constants/pitch-size';
-import { parserPositionsHelper } from './helpers/parser-positions.helper';
 import { IMatchInfo } from './interfaces/football-simulator-engine/match-info.interface';
 import { ENameTeams } from './interfaces/football-simulator-engine/name-teams.interface';
-import { IPlayer } from './interfaces/football-simulator-engine/player.interface';
 import { EStatusMatch } from './interfaces/match-detail.interface';
 import { MatchService } from './match.service';
 

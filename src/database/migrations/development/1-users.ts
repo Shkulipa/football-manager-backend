@@ -54,6 +54,13 @@ export class Users implements MigrationInterface {
       username: 'user2',
       ...commonData,
     });
+
+    await db.collection(ECollectionName.USERS).insertOne({
+      _id: usersData[3]._id,
+      email: usersData[3].email,
+      username: 'user3',
+      ...commonData,
+    });
   }
 
   public async down(db: Db) {

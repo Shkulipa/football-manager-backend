@@ -2,10 +2,6 @@
 
 ---
 
-## TODO
-socket.io
-- [ ] chat(common)
-
 ## Project start instructions 
 ### Installation
 ```
@@ -181,6 +177,11 @@ yarn migrate:dev:down -l (for development DB)
 Where -l last migrations
 
 ---
+
+# Sockets:
+- https://www.youtube.com/playlist?list=PLnrGn4P6C4P5J2rSSyiAyxZegws4SS8ey
+- https://www.youtube.com/watch?v=7xpLYk4q0Sg&ab_channel=MichaelGuay
+- https://www.youtube.com/watch?v=iObzX8-Y5xg&t=932s&ab_channel=AnsontheDeveloper
 
 # Content taken:
 - [flags](https://flagdownload.com/)

@@ -33,10 +33,10 @@ export class MatchService {
   async validationStartMatch(matchId: string) {
     const match = await this.matchRepository.getMatchById(matchId);
 
-    if (match.status === `"${EStatusMatch.IN_PROCESS}"`)
+    if (match.status === `${EStatusMatch.IN_PROCESS}`)
       throw new BadRequestException("Match has already started, subscribe to 'match-simulation'");
 
-    if (match.status === `"${EStatusMatch.FINISHED}"`) throw new BadRequestException('Match has already finished');
+    if (match.status === `${EStatusMatch.FINISHED}`) throw new BadRequestException('Match has already finished');
 
     if (!match.player1.isReady || !match.player1.isReady)
       throw new BadRequestException(`For starting match(${matchId}) need be ready for both players`);

@@ -20,6 +20,7 @@ import { TasksModule } from 'src/services/tasks/tasks.module';
 import { ActivationModule } from '../activation/activation.module';
 import { AuctionModule } from '../auction/auction.module';
 import { AuthModule } from '../auth/auth.module';
+import { ChatsModule } from '../chats/chats.module';
 import { CountryModule } from '../country/country.module';
 import { HealthCheckModule } from '../healthCheck/healthCheck.module';
 import { MatchModule } from '../match/match.module';
@@ -59,6 +60,7 @@ import { AppService } from './app.service';
     ShopModule,
     PacksModule,
     AuctionModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService, MongoConnection],

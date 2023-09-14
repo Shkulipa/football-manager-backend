@@ -69,6 +69,12 @@ export class UserTeams implements MigrationInterface {
       userId: usersData[2]._id,
       clubName: 'clubName user-2',
     });
+    await db.collection(ECollectionName.USERS_TEAM).insertOne({
+      ...commonData,
+      _id: userTeams[3],
+      userId: usersData[3]._id,
+      clubName: 'clubName user-3',
+    });
   }
 
   public async down(db: Db) {
