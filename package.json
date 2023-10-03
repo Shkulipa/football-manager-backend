@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "backend part of Football Simulator",
   "author": "Oleksii Shkulipa",
-  "private": false,
   "license": "MIT",
   "keywords": [
     "ts",

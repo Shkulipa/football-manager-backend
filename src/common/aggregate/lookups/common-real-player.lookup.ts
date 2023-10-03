@@ -17,7 +17,7 @@ export const CommonRealPlayerLookup = (localField: string, as: string): Pipeline
         _id: 1, // Specifying the fields you want to select,
         name: 1,
         number: 1,
-        countryId: { $arrayElemAt: ['$countryId', 0] },
+        country: { $arrayElemAt: ['$countryId', 0] },
         age: 1,
         positions: 1,
         skills: 1,

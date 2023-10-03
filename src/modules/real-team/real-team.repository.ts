@@ -127,9 +127,9 @@ export class RealTeamRepository extends BaseMongoRepository<RealTeamDocument> {
         {
           $project: {
             _id: 1,
-            leagueId: 1,
+            league: 1,
             clubName: 1,
-            logoName: 1,
+            logoClub: 1,
             main: 1,
             bench: 1,
             skills: 1,
@@ -141,7 +141,25 @@ export class RealTeamRepository extends BaseMongoRepository<RealTeamDocument> {
     return result[0];
   }
 
-  async getRealTeams(query: QueryGetRealTeamsReqDto) {
+  async getTeamsShortInfo() {
+    const result = await this.realTeamModel
+      .aggregate([
+        { $sort: { 'leagues.name': 1 } },
+        ...CommonLeagueLookup,
+        {
+          $project: {
+            countryId: 0,
+            main: 0,
+            bench: 0,
+          },
+        },
+      ])
+      .exec();
+
+    return result;
+  }
+
+  async getTeamsFullInfo(query: QueryGetRealTeamsReqDto) {
     const { limit, page, leagueId, clubName } = query;
     const skip = (page - 1) * limit;
 

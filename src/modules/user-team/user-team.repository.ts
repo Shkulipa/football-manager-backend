@@ -51,7 +51,7 @@ export class UserTeamRepository extends BaseMongoRepository<UserTeamDbDto> {
         {
           $project: {
             _id: 1,
-            userId: { $arrayElemAt: ['$userId', 0] },
+            user: { $arrayElemAt: ['$userId', 0] },
             logoClub: 1,
             ratingElo: 1,
             clubName: 1,

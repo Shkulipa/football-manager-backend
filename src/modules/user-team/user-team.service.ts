@@ -54,7 +54,9 @@ export class UserTeamService {
   }
 
   async findById(id: string) {
-    return await this.userTeamRepository.findById(id);
+    const team = await this.userTeamRepository.findById(id);
+    if (!team) throw new NotFoundException("Team wasn't found");
+    return team;
   }
 
   async getOwnTeam(user: IUserData) {

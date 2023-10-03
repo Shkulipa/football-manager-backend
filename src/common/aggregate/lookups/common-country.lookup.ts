@@ -15,7 +15,7 @@ export const CommonCountryLookup: PipelineStage.Lookup['$lookup'] = {
     {
       $project: {
         _id: 1, // Specifying the fields you want to select
-        country: 1,
+        name: 1,
         flag: 1,
       },
     },

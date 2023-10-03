@@ -11,8 +11,10 @@ import { attackers, defenders, midfielders } from '../real-player/helpers/group-
 import { RealPlayerRepository } from './../real-player/real-player.repository';
 import { CreateRealTeamReqDto } from './dto/create-real-team-req.dto';
 import { QueryGetRealTeamsReqDto } from './dto/query-get-real-teams-req.dto';
+import { RealTeamShortResDto } from './dto/real-team-short-info-res.dto';
 import { UpdateRealTeamReqDto } from './dto/update-real-team-req.dto';
-import { TSquad } from './interfaces/squad.interface';
+import { groupTeamsHelper } from './helper/group-teams.helper';
+import { TSquadId } from './interfaces/squad.interface';
 import { RealTeamRepository } from './real-team.repository';
 
 @Injectable()
@@ -26,11 +28,18 @@ export class RealTeamService {
 
   private readonly path = 'public/real-teams';
 
-  async findAll(query: QueryGetRealTeamsReqDto) {
-    return await this.realTeamRepository.getRealTeams(query);
+  async getTeamsShortInfo() {
+    const teams = await this.realTeamRepository.getTeamsShortInfo();
+    const groupedTeams = groupTeamsHelper(teams) as RealTeamShortResDto[];
+    return groupedTeams;
+  }
+
+  async getTeamsFullInfo(query: QueryGetRealTeamsReqDto) {
+    return await this.realTeamRepository.getTeamsFullInfo(query);
   }
 
   async findById(id: string) {
+    await this.realTeamRepository.validation(id);
     return await this.realTeamRepository.getRealTeam(id);
   }
 
@@ -61,7 +70,7 @@ export class RealTeamService {
       clubName: createRealTeamDto.clubName,
       leagueId: new Types.ObjectId(createRealTeamDto.leagueId),
       logoClub: urlFile,
-      ...(Object.values(parsedMainSquad).length > 0 ? { main: parsedMainSquad as TSquad } : []),
+      ...(Object.values(parsedMainSquad).length > 0 ? { main: parsedMainSquad as TSquadId } : []),
       ...(createRealTeamDto.bench ? { bench: toIdsArr(createRealTeamDto.bench) } : []),
       skills,
     };

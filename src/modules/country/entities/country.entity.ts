@@ -10,7 +10,7 @@ export type CountryDocument = HydratedDocument<Country>;
 })
 export class Country {
   @Prop({ required: true, unique: true, type: String })
-  country: string;
+  name: string;
 
   @Prop({ required: true, unique: true, type: String })
   flag: string;

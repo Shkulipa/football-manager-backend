@@ -25,9 +25,9 @@ import { uploadFilesLimits } from 'src/common/helpers/files.helper';
 
 import { CreateRealTeamReqDto } from './dto/create-real-team-req.dto';
 import { GetRealTeamResDto } from './dto/get-real-team-res.dto';
-import { GetRealTeamsResDto } from './dto/get-real-teams-res.dto';
+import { GetRealTeamsFullResDto } from './dto/get-teams-full-info.res.dto';
 import { QueryGetRealTeamsReqDto } from './dto/query-get-real-teams-req.dto';
-import { RealTeamDbDto } from './dto/real-team.db.dto';
+import { RealTeamShortResDto } from './dto/real-team-short-info-res.dto';
 import { UpdateRealTeamReqDto } from './dto/update-real-team-req.dto';
 import { RealTeamService } from './real-team.service';
 
@@ -39,31 +39,46 @@ export class RealTeamController {
   constructor(private readonly realTeamService: RealTeamService) {}
 
   /**
-   * get real teams
-   * @returns {Promise<GetRealTeamsResDto>}
+   * get all real teams with short data(without squad, using in teams, single match)
+   * @returns {Promise<RealTeamShortResDto[]>}
    */
-  @Get()
+  @Get('/short-info')
   @ApiOperation({
-    description: 'get real teams',
+    description:
+      'get all real teams with short data(without squads(main, bench), using in pages(on front): teams, single match)',
     operationId: OperationIds.REAL_TEAM_GET_MANY,
   })
-  @ApiResponse({ status: 200, type: GetRealTeamsResDto, description: 'OK' })
-  async findAll(@Query() query: QueryGetRealTeamsReqDto): Promise<GetRealTeamsResDto> {
-    return await this.realTeamService.findAll(query);
+  @ApiResponse({ status: 200, type: [RealTeamShortResDto], description: 'OK' })
+  async getTeamsShortInfo(): Promise<RealTeamShortResDto[]> {
+    return await this.realTeamService.getTeamsShortInfo();
+  }
+
+  /**
+   * get real teams full data(with squads)
+   * @returns {Promise<GetRealTeamsFullResDto>}
+   */
+  @Get('/full-info')
+  @ApiOperation({
+    description: 'get real teams full data(with squads)',
+    operationId: OperationIds.REAL_TEAM_GET_MANY_INFO,
+  })
+  @ApiResponse({ status: 200, type: GetRealTeamsFullResDto, description: 'OK' })
+  async getTeamsFullInfo(@Query() query: QueryGetRealTeamsReqDto): Promise<GetRealTeamsFullResDto> {
+    return await this.realTeamService.getTeamsFullInfo(query);
   }
 
   /**
    * get real team
-   * @returns {Promise<RealTeamDbDto>}
+   * @returns {Promise<GetRealTeamsFullResDto>}
    */
   @Get('/:id')
   @ApiOperation({
     description: 'get real team',
     operationId: OperationIds.REAL_TEAM_GET_BY_ID,
   })
-  @ApiResponse({ status: 200, type: GetRealTeamResDto, description: 'OK' })
+  @ApiResponse({ status: 200, type: GetRealTeamsFullResDto, description: 'OK' })
   @ComposeOthersErrorsDecorator(EErrors.NOT_FOUND_ERROR)
-  async findById(@Param() { id }: CommonPathReqDto): Promise<RealTeamDbDto> {
+  async findById(@Param() { id }: CommonPathReqDto): Promise<GetRealTeamsFullResDto> {
     return await this.realTeamService.findById(id);
   }
 

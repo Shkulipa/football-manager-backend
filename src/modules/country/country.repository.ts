@@ -22,7 +22,7 @@ export class CountryRepository extends BaseMongoRepository<CountryDocument> {
 
   async createCountry(urlFile: string, createCountryReqDto: CreateCountryReqDto) {
     const newCountryData = {
-      country: createCountryReqDto.country,
+      name: createCountryReqDto.name,
       flag: urlFile,
     };
     const newCountry = await this.countryModel.create(newCountryData);

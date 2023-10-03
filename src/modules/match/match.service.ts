@@ -5,7 +5,6 @@ import { hasDuplicatesIds } from 'src/common/helpers/duplicates.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { IORedisKey } from 'src/services/redis/redis.module';
 
-import { EPlayerPositionName } from '../real-player/constants/player-position-name.enum';
 import { playerPositions, playerPositionsSecondTeam } from '../real-player/constants/player-positions';
 import averageSkillPlayerHelper from '../real-player/helpers/average-skills-players-helper';
 import { ratingHelper } from '../real-player/helpers/rating.helper';
@@ -13,7 +12,6 @@ import { UserTeamRepository } from '../user-team/user-team.repository';
 import { defaultStats } from './constants/default-stats.interface';
 import { NameKeys } from './constants/name-keys.enum';
 import { UpdateSquadsReqDto } from './dto/update-squads-req.dto';
-import { parserPositionsHelper } from './helpers/parser-positions.helper';
 import { IMatchInfo } from './interfaces/football-simulator-engine/match-info.interface';
 import { ENameTeams } from './interfaces/football-simulator-engine/name-teams.interface';
 import { IPlayer, IPlayerParse } from './interfaces/football-simulator-engine/player.interface';
@@ -58,7 +56,7 @@ export class MatchService {
         realPlayerId: player._id,
         name: player.name,
         rating: +(ratingHelper(player.skills) * 20).toFixed(0),
-        position: position === EPlayerPositionName.GK ? EPlayerPositionName.GK : parserPositionsHelper(position),
+        position,
         skill: player.skills,
         currentPOS:
           sideTeam === ENameTeams.KICK_OFF_TEAM ? playerPositions[position] : playerPositionsSecondTeam[position],
@@ -213,7 +211,7 @@ export class MatchService {
       const updatedDataPlayer = {
         ...p,
         originPOS,
-        position: position === EPlayerPositionName.GK ? EPlayerPositionName.GK : parserPositionsHelper(position),
+        position,
       };
       return updatedDataPlayer;
     });

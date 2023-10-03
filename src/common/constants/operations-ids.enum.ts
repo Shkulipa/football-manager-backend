@@ -24,6 +24,7 @@ export enum OperationIds {
   LEAGUE_DELETE = 'league-delete',
 
   REAL_TEAM_GET_MANY = 'real-team-get-many',
+  REAL_TEAM_GET_MANY_INFO = 'real-team-get-many-info',
   REAL_TEAM_GET_BY_ID = 'real-team-get-by-id',
   REAL_TEAM_CREATE = 'real-team-create',
   REAL_TEAM_UPDATE = 'real-team-update',

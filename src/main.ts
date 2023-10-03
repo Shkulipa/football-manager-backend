@@ -49,7 +49,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      `http://localhost:${port}`,
+      'http://localhost:5173',
+      `http://localhost:${clientPort}`,
       new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
       ...corsWebSites.split(','),
     ],

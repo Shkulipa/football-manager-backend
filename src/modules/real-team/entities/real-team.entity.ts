@@ -4,7 +4,7 @@ import { ECollectionName } from 'src/common/constants/collection-name.enum';
 import { League } from 'src/modules/league/entities/league.entity';
 
 import { SkillsDto } from '../dto/skills.dto';
-import { TSquad } from '../interfaces/squad.interface';
+import { TSquadId } from '../interfaces/squad.interface';
 
 export type RealTeamDocument = HydratedDocument<RealTeam>;
 
@@ -31,7 +31,7 @@ export class RealTeam {
 
   // Squads
   @Prop({ required: true, type: Object, default: {} })
-  main: TSquad;
+  main: TSquadId;
 
   @Prop({ required: true, type: [Types.ObjectId], default: [] })
   bench: Types.ObjectId[];

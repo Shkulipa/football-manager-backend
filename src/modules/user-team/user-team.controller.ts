@@ -15,6 +15,7 @@ import { uploadFilesLimits } from 'src/common/helpers/files.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 
 import { CreateUserTeamReqDto } from './dto/create-user-team-req.dto';
+import { GetUserTeamResDto } from './dto/get-user-team-res.dto';
 import { UpdateUserTeamReqDto } from './dto/update-user-team-req.dto';
 import { UserTeamService } from './user-team.service';
 
@@ -49,6 +50,7 @@ export class UserTeamController {
 
   /**
    * get team squad, and what a user manages this team
+   * @returns {Promise<GetUserTeamResDto>}
    */
   @Get(':id')
   @ApiOperation({
@@ -56,12 +58,14 @@ export class UserTeamController {
     operationId: OperationIds.USER_TEAM_GET_BY_ID,
   })
   @ComposeOthersErrorsDecorator(EErrors.NOT_FOUND_ERROR)
-  findById(@Param() { id }: CommonPathReqDto) {
+  @ApiResponse({ status: 200, type: GetUserTeamResDto, description: 'OK' })
+  findById(@Param() { id }: CommonPathReqDto): Promise<GetUserTeamResDto> {
     return this.userTeamService.findById(id);
   }
 
   /**
    * get own team
+   * @returns {Promise<GetUserTeamResDto>}
    */
   @Get()
   @ApiOperation({
@@ -70,7 +74,8 @@ export class UserTeamController {
   })
   @ComposeAuthDecorator()
   @ComposeOthersErrorsDecorator(EErrors.NOT_FOUND_ERROR)
-  getOwnTeam(@User() user: IUserData) {
+  @ApiResponse({ status: 200, type: GetUserTeamResDto, description: 'OK' })
+  getOwnTeam(@User() user: IUserData): Promise<GetUserTeamResDto> {
     return this.userTeamService.getOwnTeam(user);
   }
 

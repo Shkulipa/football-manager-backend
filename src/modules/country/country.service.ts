@@ -43,7 +43,7 @@ export class CountryService {
     const country = await this.findById(id);
 
     const newCountryData: CreateCountryReqDto = {
-      country: country.country,
+      name: country.name,
     };
 
     if (file) {

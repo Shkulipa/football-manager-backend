@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import { randomIntFromInterval } from 'src/common/helpers/random-int-from-interval.helper';
 import { IORedisKey } from 'src/services/redis/redis.module';
 
-import { TSquad } from '../real-team/interfaces/squad.interface';
+import { TSquadId } from '../real-team/interfaces/squad.interface';
 import { UserPoll } from '../search-opponent/dto/user-poll.dto';
 import { UserRepository } from '../user/user.repository';
 import { UserTeamRepository } from '../user-team/user-team.repository';
@@ -40,7 +40,7 @@ export class MatchRepository {
     }
   }
 
-  async updateSquad(matchId: string, playerKey: string, main: TSquad, bench: (string | Types.ObjectId)[]) {
+  async updateSquad(matchId: string, playerKey: string, main: TSquadId, bench: (string | Types.ObjectId)[]) {
     const key = `${NameKeys.MATCH}:${matchId}`;
     await this.redisClient
       .multi([

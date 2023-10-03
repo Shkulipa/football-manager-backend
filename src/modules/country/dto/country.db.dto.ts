@@ -14,7 +14,7 @@ export class CountryDbDto {
   @IsString()
   @IsNotEmpty()
   @Trim()
-  country: string;
+  name: string;
 
   @ApiProperty({ required: true, type: String })
   @IsString()

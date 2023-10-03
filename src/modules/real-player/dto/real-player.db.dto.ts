@@ -16,7 +16,6 @@ import {
 import { Types } from 'mongoose';
 
 import { EPlayerPositionName } from '../constants/player-position-name.enum';
-import { ERolePlayer } from '../constants/rolePlayer.enum';
 import Trim from './../../../common/decorators/trim.decorator';
 import { PlayerSkillsDto } from './player-skills.dto';
 

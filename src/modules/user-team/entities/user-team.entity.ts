@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model, Types } from 'mongoose';
 import { ECollectionName } from 'src/common/constants/collection-name.enum';
 import { SkillsDto } from 'src/modules/real-team/dto/skills.dto';
-import { TSquad } from 'src/modules/real-team/interfaces/squad.interface';
+import { TSquadId } from 'src/modules/real-team/interfaces/squad.interface';
 import { User } from 'src/modules/user/entities/user.entity';
 
 import { UserTeamDbDto } from './../dto/user-team-db.dto';
@@ -37,7 +37,7 @@ export class UserTeam {
 
   // Squads
   @Prop({ required: true, type: Object, default: {} })
-  main: TSquad;
+  main: TSquadId;
 
   @Prop({ required: true, type: [Types.ObjectId], default: [] })
   bench: Types.ObjectId[];

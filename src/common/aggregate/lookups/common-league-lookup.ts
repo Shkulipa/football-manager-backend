@@ -25,7 +25,7 @@ export const CommonLeagueLookup: PipelineStage.FacetPipelineStage[] = [
             _id: 1, // Specifying the fields you want to select,
             name: 1,
             logoLeague: 1,
-            countryId: { $arrayElemAt: ['$countryId', 0] },
+            country: { $arrayElemAt: ['$countryId', 0] },
           },
         },
       ],
@@ -40,6 +40,17 @@ export const CommonLeagueLookup: PipelineStage.FacetPipelineStage[] = [
           else: '$leagueId', // If false, keep the original value of leagueId
         },
       },
+    },
+  },
+  {
+    $addFields: {
+      league: { $arrayElemAt: ['$leagueId', 0] },
+    },
+  },
+  {
+    $project: {
+      countryId: 0,
+      leagueId: 0,
     },
   },
 ];

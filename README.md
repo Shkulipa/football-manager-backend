@@ -56,8 +56,8 @@ yarn start:local
 <br><br>
 
 Swagger: 
-- [Localhost](http://localhost:8080/api/docs)
-- [Development](http://localhost:8080/api/docs)
+- [development](http://localhost:8080/api/docs)
+- [Staging](http://localhost:8080/api/docs)
 - [Production](http://localhost:8080/api/docs)
 
 ---

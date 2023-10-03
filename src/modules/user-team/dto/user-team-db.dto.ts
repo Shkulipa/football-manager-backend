@@ -20,7 +20,7 @@ import { maxSizeBench } from 'src/common/constants/team';
 import Trim from 'src/common/decorators/trim.decorator';
 import { IsValidPlayerRole } from 'src/modules/real-team/decorators/player-role.decorator';
 import { SkillsDto } from 'src/modules/real-team/dto/skills.dto';
-import { TSquad } from 'src/modules/real-team/interfaces/squad.interface';
+import { TSquadId } from 'src/modules/real-team/interfaces/squad.interface';
 
 export class UserTeamDbDto extends Document {
   @ApiProperty({ required: true, type: String })
@@ -66,7 +66,7 @@ export class UserTeamDbDto extends Document {
   @Transform(({ value }) => JSON.parse(value))
   @IsObject()
   @IsValidPlayerRole()
-  main?: TSquad;
+  main?: TSquadId;
 
   @ApiProperty({ isArray: true, type: String })
   @IsOptional()
