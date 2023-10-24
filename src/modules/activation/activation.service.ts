@@ -6,21 +6,21 @@ import { toId } from 'src/common/helpers/transform.helper';
 import { hoursData, JwtService } from 'src/services/jwt/jwt.service';
 import { EMailTemplatesType } from 'src/services/mailer/dto/mail-template.enum';
 import { EmailService } from 'src/services/mailer/email.service';
+import { ActivationRepository } from 'src/services/repositories/activation/activation.repository';
+import { UserRepository } from 'src/services/repositories/user/user.repository';
 import { v4 as uuidV4 } from 'uuid';
 
-import { UserRepository } from '../user/user.repository';
-import { ActivationRepository } from './activation.repository';
 import { SendActivationEmailReqDto } from './dto/send-activation-email-req.dto';
 import { VerifyNewEmailDto } from './dto/verify-new-email.dto';
 
 @Injectable()
 export class ActivationService {
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly activationRepository: ActivationRepository,
-    private readonly jwtService: JwtService,
+    private readonly userRepository: UserRepository,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
   ) {}
 
   // resend activation

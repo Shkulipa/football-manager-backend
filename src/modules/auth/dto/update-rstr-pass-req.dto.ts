@@ -1,8 +1,7 @@
 import { PickType } from '@nestjs/swagger';
 import { IsEqual } from 'src/common/decorators/is-equal.decorator';
 import Password from 'src/common/decorators/password.decorator';
-
-import { RestorePasswordDbDto } from './restore-password-db.dto';
+import { RestorePasswordDbDto } from 'src/services/repositories/restore-password/dto/restore-password-db.dto';
 
 export class UpdateRstrPassReqDto extends PickType(RestorePasswordDbDto, ['activationId']) {
   @Password({ description: 'new password' })

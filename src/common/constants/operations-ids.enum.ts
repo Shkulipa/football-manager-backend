@@ -5,7 +5,9 @@ export enum OperationIds {
 
   SIGNUP = 'signup',
   LOGIN = 'login',
+  LOGOUT = 'logout',
   AUTH_CONFIRM_EMAIL = 'auth-confirm-email',
+  REFRESH_TOKENS = 'refresh-tokens',
   UPDATE_CONFIRM_EMAIL = 'update_confirm_email',
   RESEND_EMAIL = 'resend-email',
   SEND_RESTORE_PASS = 'send-restore-pass',

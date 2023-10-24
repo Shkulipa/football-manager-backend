@@ -1,25 +1,25 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from 'src/services/jwt/jwt.module';
+import { AuctionRepositoryModule } from 'src/services/repositories/auction/auction-repository.module';
+import { RealPlayerRepositoryModule } from 'src/services/repositories/real-player/real-player-repository.module';
+import { UserRepositoryModule } from 'src/services/repositories/user/user-repository.module';
+import { UserTeamRepositoryModule } from 'src/services/repositories/user-team/user-team-repository.module';
 
-import { RealPlayerModule } from '../real-player/real-player.module';
 import { UserModule } from '../user/user.module';
-import { UserTeamModule } from '../user-team/user-team.module';
 import { AuctionController } from './auction.controller';
-import { AuctionRepository } from './auction.repository';
 import { AuctionService } from './auction.service';
-import { Auction, AuctionSchema } from './entity/auction.entity';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Auction.name, schema: AuctionSchema }]),
+    RealPlayerRepositoryModule,
+    UserTeamRepositoryModule,
+    AuctionRepositoryModule,
+    UserRepositoryModule,
     UserModule,
-    UserTeamModule,
-    RealPlayerModule,
     JwtModule,
   ],
   controllers: [AuctionController],
-  providers: [AuctionService, AuctionRepository],
-  exports: [AuctionService, AuctionRepository],
+  providers: [AuctionService],
+  exports: [AuctionService],
 })
 export class AuctionModule {}

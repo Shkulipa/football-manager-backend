@@ -24,7 +24,6 @@ import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 import { uploadFilesLimits } from 'src/common/helpers/files.helper';
 
 import { CreateRealTeamReqDto } from './dto/create-real-team-req.dto';
-import { GetRealTeamResDto } from './dto/get-real-team-res.dto';
 import { GetRealTeamsFullResDto } from './dto/get-teams-full-info.res.dto';
 import { QueryGetRealTeamsReqDto } from './dto/query-get-real-teams-req.dto';
 import { RealTeamShortResDto } from './dto/real-team-short-info-res.dto';

@@ -6,9 +6,9 @@ import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { EProductsPrices } from 'src/modules/shop/constants/products.enum';
-import { UserRepository } from 'src/modules/user/user.repository';
 import Stripe from 'stripe';
 
+import { UserRepository } from '../repositories/user/user.repository';
 import { CreateSessionBuyingProductReqDto } from './dto/create-session-buying-product-req.dto';
 import { CreateSessionBuyingProductResDto } from './dto/create-session-buying-product-res.dto';
 

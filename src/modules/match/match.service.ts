@@ -1,14 +1,14 @@
-import { BadRequestException, ForbiddenException, Inject, Logger } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject } from '@nestjs/common';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import Redis from 'ioredis';
 import { hasDuplicatesIds } from 'src/common/helpers/duplicates.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { IORedisKey } from 'src/services/redis/redis.module';
+import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 
 import { playerPositions, playerPositionsSecondTeam } from '../real-player/constants/player-positions';
 import averageSkillPlayerHelper from '../real-player/helpers/average-skills-players-helper';
 import { ratingHelper } from '../real-player/helpers/rating.helper';
-import { UserTeamRepository } from '../user-team/user-team.repository';
 import { defaultStats } from './constants/default-stats.interface';
 import { NameKeys } from './constants/name-keys.enum';
 import { UpdateSquadsReqDto } from './dto/update-squads-req.dto';
@@ -20,8 +20,6 @@ import { MatchRepository } from './match.repository';
 
 @Injectable()
 export class MatchService {
-  private readonly logger = new Logger(MatchRepository.name);
-
   constructor(
     @Inject(IORedisKey) private readonly redisClient: Redis,
     private readonly matchRepository: MatchRepository,

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserModule } from 'src/modules/user/user.module';
 
+import { UserRepositoryModule } from '../repositories/user/user-repository.module';
 import { StripeService } from './stripe.service';
 
 @Module({
-  imports: [UserModule],
+  imports: [UserRepositoryModule],
   providers: [StripeService, ConfigService],
   exports: [StripeService],
 })

@@ -1,28 +1,25 @@
-import { forwardRef } from '@nestjs/common';
 import { Module } from '@nestjs/common/decorators/modules/module.decorator';
-import { MongooseModule } from '@nestjs/mongoose/dist/mongoose.module';
 import { JwtModule } from 'src/services/jwt/jwt.module';
+import { CountryRepositoryModule } from 'src/services/repositories/country/country-repository.module';
+import { LeagueRepositoryModule } from 'src/services/repositories/league/league-repository.module';
+import { RealPlayerRepositoryModule } from 'src/services/repositories/real-player/real-player-repository.module';
 import { S3Module } from 'src/services/s3/s3.module';
 
-import { LeagueModule } from '../league/league.module';
-import { RealPlayerModule } from '../real-player/real-player.module';
 import { UserModule } from '../user/user.module';
 import { CountryController } from './country.controller';
-import { CountryRepository } from './country.repository';
 import { CountryService } from './country.service';
-import { Country, CountrySchema } from './entities/country.entity';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Country.name, schema: CountrySchema }]),
-    S3Module,
-    JwtModule,
+    RealPlayerRepositoryModule,
+    CountryRepositoryModule,
+    LeagueRepositoryModule,
     UserModule,
-    forwardRef(() => LeagueModule),
-    forwardRef(() => RealPlayerModule),
+    JwtModule,
+    S3Module,
   ],
   controllers: [CountryController],
-  providers: [CountryService, CountryRepository],
-  exports: [CountryService, CountryRepository],
+  providers: [CountryService],
+  exports: [CountryService],
 })
 export class CountryModule {}

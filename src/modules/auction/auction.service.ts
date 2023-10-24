@@ -2,10 +2,10 @@ import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundEx
 import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 import { toId } from 'src/common/helpers/transform.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
+import { AuctionRepository } from 'src/services/repositories/auction/auction.repository';
+import { UserRepository } from 'src/services/repositories/user/user.repository';
+import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 
-import { UserRepository } from '../user/user.repository';
-import { UserTeamRepository } from './../user-team/user-team.repository';
-import { AuctionRepository } from './auction.repository';
 import { CreateLotReqDto } from './dto/create-lot-req.dto';
 import { GetQueryLotsReqDto } from './dto/get-lots-req.dto';
 
@@ -14,9 +14,9 @@ export class AuctionService {
   private readonly logger = new Logger(AuctionService.name);
 
   constructor(
-    private readonly userRepository: UserRepository,
     private readonly userTeamRepository: UserTeamRepository,
     private readonly auctionRepository: AuctionRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async getLots(getQueryLotsReqDto: GetQueryLotsReqDto): Promise<any> {

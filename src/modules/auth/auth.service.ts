@@ -7,11 +7,12 @@ import { generatePassword } from 'src/common/helpers/generate-password.helper';
 import { hashPasswordHelper } from 'src/common/helpers/hash-password.helper';
 import { toId } from 'src/common/helpers/transform.helper';
 import { hoursData, JwtService } from 'src/services/jwt/jwt.service';
+import { ActivationRepository } from 'src/services/repositories/activation/activation.repository';
+import { RestorePasswordRepository } from 'src/services/repositories/restore-password/restore-password.repository';
+import { UserRepository } from 'src/services/repositories/user/user.repository';
 import { v4 as uuidV4 } from 'uuid';
 
-import { ActivationRepository } from '../activation/activation.repository';
 import { LoginDto } from '../user/dto/login.dto';
-import { UserRepository } from '../user/user.repository';
 import { EEnvVariables } from './../../common/constants/env-variables.enum';
 import { CommonSuccessResDto } from './../../common/dto/common-success-res.dto';
 import { EMailTemplatesType } from './../../services/mailer/dto/mail-template.enum';
@@ -21,7 +22,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserReqDto } from './dto/login-user-req.dto';
 import { RstrPassEmailReqDto } from './dto/rstr-pass-email-req.dto';
 import { UpdateRstrPassReqDto } from './dto/update-rstr-pass-req.dto';
-import { RestorePasswordRepository } from './restore-password.repository';
 
 @Injectable()
 export class AuthService {
@@ -69,6 +69,10 @@ export class AuthService {
   async login(loginUseReqDto: LoginUserReqDto): Promise<AuthLoginResDto> {
     const user = await this.userRepository.validateLogin(loginUseReqDto);
     return this.getAuthLoginResponse(user);
+  }
+
+  async logout(refreshToken: string): Promise<void> {
+    await this.userRepository.findOneAndUpdate({ refreshToken }, { refreshToken: '' });
   }
 
   async socialAuth(email: string) {

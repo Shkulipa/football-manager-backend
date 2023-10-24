@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator'
 import { isEmpty } from 'lodash';
 import getKeyS3Helper from 'src/common/helpers/get-key-s3.helper';
 import { toId } from 'src/common/helpers/transform.helper';
+import { CountryRepository } from 'src/services/repositories/country/country.repository';
+import { LeagueRepository } from 'src/services/repositories/league/league.repository';
+import { RealTeamRepository } from 'src/services/repositories/real-team/real-team.repository';
 import { S3Service } from 'src/services/s3/s3.service';
 
-import { CountryRepository } from '../country/country.repository';
-import { RealTeamRepository } from './../real-team/real-team.repository';
 import { CreateLeagueReqDto } from './dto/create-league-req.dto';
 import { QueryGetLeaguesReqDto } from './dto/query-get-leagues-req.dto';
 import { UpdateLeagueReqDto } from './dto/update-league-req.dto';
-import { LeagueRepository } from './league.repository';
 
 @Injectable()
 export class LeagueService {

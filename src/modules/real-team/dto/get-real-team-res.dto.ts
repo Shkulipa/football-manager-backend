@@ -1,7 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { GetLeagueByIdResDto } from 'src/modules/league/dto/get-league-by-id-res.dto';
-
-import { RealTeamDbDto } from './real-team.db.dto';
+import { RealTeamDbDto } from 'src/services/repositories/real-team/dto/real-team.db.dto';
 
 export class GetRealTeamResDto extends PickType(RealTeamDbDto, ['_id', 'skills', 'clubName', 'logoClub']) {
   @ApiProperty({ required: true, type: GetLeagueByIdResDto })

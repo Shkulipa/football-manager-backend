@@ -19,7 +19,7 @@ export function ComposeAuthDecorator(...allowedRoles: EUserRoles[]) {
     }),
   ];
 
-  const guards: any = [AuthGuard, RolesGuard(...allowedRoles)];
+  const guards = [AuthGuard, RolesGuard(...allowedRoles)];
 
   return applyDecorators(...decorators, UseGuards(...guards));
 }

@@ -1,4 +1,4 @@
-import { PlayerSkillsDto } from 'src/modules/real-player/dto/player-skills.dto';
+import { PlayerSkillsDto } from 'src/services/repositories/real-player/dto/player-skills.dto';
 
 import { IStats } from './stats.interface';
 

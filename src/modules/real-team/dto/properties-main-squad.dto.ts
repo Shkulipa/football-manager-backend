@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { EPlayerPositionName } from 'src/modules/real-player/constants/player-position-name.enum';
 import { RealPlayerFullInfoDto } from 'src/modules/real-player/dto/real-player-full-info.dto';
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
 
 // using for swagger instead of type: ...
 export class PropertiesMainSquadDto {

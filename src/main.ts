@@ -48,12 +48,8 @@ async function bootstrap() {
   const corsWebSites = String(configService.get(EEnvVariables.CORS_WEBSITES)) || '';
 
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      `http://localhost:${clientPort}`,
-      new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-      ...corsWebSites.split(','),
-    ],
+    origin: [new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`), ...corsWebSites.split(',')],
+    credentials: true,
   });
 
   await app.listen(port);

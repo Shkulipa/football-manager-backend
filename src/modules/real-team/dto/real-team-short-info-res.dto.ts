@@ -1,6 +1,6 @@
 import { ApiProperty, IntersectionType, OmitType, PickType } from '@nestjs/swagger';
-import { CountryDbDto } from 'src/modules/country/dto/country.db.dto';
-import { LeagueDbDto } from 'src/modules/league/dto/league.db.dto';
+import { CountryDbDto } from 'src/services/repositories/country/dto/country.db.dto';
+import { LeagueDbDto } from 'src/services/repositories/league/dto/league.db.dto';
 
 import { RealTeamShortInfoDto } from './real-team-short-info.dto';
 

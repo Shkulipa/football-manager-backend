@@ -1,5 +1,6 @@
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
+
 import data from '../constants/ids';
-import { EPlayerPositionName } from './../../modules/real-player/constants/player-position-name.enum';
 
 export const realTeamsData = [
   {

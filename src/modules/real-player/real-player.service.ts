@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { isEmpty } from 'lodash';
 import getKeyS3Helper from 'src/common/helpers/get-key-s3.helper';
 import { toId } from 'src/common/helpers/transform.helper';
+import { CountryRepository } from 'src/services/repositories/country/country.repository';
+import { RealPlayerRepository } from 'src/services/repositories/real-player/real-player.repository';
+import { RealTeamRepository } from 'src/services/repositories/real-team/real-team.repository';
 import { S3Service } from 'src/services/s3/s3.service';
 
-import { CountryRepository } from '../country/country.repository';
-import { RealTeamRepository } from '../real-team/real-team.repository';
 import { CreateRealPlayerReqDto } from './dto/create-real-player-req.dto';
 import { QueryGetRealPlayersReqDto } from './dto/query-get-real-players-req.dto';
 import { UpdateRealPlayerReqDto } from './dto/update-real-player-req.dto';
-import { RealPlayerRepository } from './real-player.repository';
 
 @Injectable()
 export class RealPlayerService {

@@ -4,11 +4,11 @@ import { omit } from 'lodash';
 import { Types } from 'mongoose';
 import { randomIntFromInterval } from 'src/common/helpers/random-int-from-interval.helper';
 import { IORedisKey } from 'src/services/redis/redis.module';
+import { UserRepository } from 'src/services/repositories/user/user.repository';
+import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 
 import { TSquadId } from '../real-team/interfaces/squad.interface';
 import { UserPoll } from '../search-opponent/dto/user-poll.dto';
-import { UserRepository } from '../user/user.repository';
-import { UserTeamRepository } from '../user-team/user-team.repository';
 import { NameKeys } from './constants/name-keys.enum';
 import { getNewRatingElo } from './helpers/get-new-rating-elo.helper';
 import { EStatusMatch, IMatchDetail } from './interfaces/match-detail.interface';

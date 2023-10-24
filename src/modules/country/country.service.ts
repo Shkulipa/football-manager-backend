@@ -3,11 +3,11 @@ import { isEmpty } from 'lodash';
 import { QueryDto } from 'src/common/dto/query.dto';
 import getKeyS3Helper from 'src/common/helpers/get-key-s3.helper';
 import { toId } from 'src/common/helpers/transform.helper';
+import { CountryRepository } from 'src/services/repositories/country/country.repository';
+import { LeagueRepository } from 'src/services/repositories/league/league.repository';
+import { RealPlayerRepository } from 'src/services/repositories/real-player/real-player.repository';
 import { S3Service } from 'src/services/s3/s3.service';
 
-import { LeagueRepository } from '../league/league.repository';
-import { RealPlayerRepository } from '../real-player/real-player.repository';
-import { CountryRepository } from './country.repository';
 import { CreateCountryReqDto } from './dto/create-country-req.dto';
 import { UpdateCountryReqDto } from './dto/update-country-req.dto';
 

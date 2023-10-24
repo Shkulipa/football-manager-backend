@@ -3,26 +3,26 @@ import { isEmpty, pick } from 'lodash';
 import { Types } from 'mongoose';
 import getKeyS3Helper from 'src/common/helpers/get-key-s3.helper';
 import { toId, toIdsArr } from 'src/common/helpers/transform.helper';
+import { LeagueRepository } from 'src/services/repositories/league/league.repository';
+import { RealPlayerRepository } from 'src/services/repositories/real-player/real-player.repository';
+import { RealTeamRepository } from 'src/services/repositories/real-team/real-team.repository';
 import { S3Service } from 'src/services/s3/s3.service';
 
-import { LeagueRepository } from '../league/league.repository';
 import averageSkillPlayerHelper from '../real-player/helpers/average-skills-players-helper';
 import { attackers, defenders, midfielders } from '../real-player/helpers/group-players-by-position.helper';
-import { RealPlayerRepository } from './../real-player/real-player.repository';
 import { CreateRealTeamReqDto } from './dto/create-real-team-req.dto';
 import { QueryGetRealTeamsReqDto } from './dto/query-get-real-teams-req.dto';
 import { RealTeamShortResDto } from './dto/real-team-short-info-res.dto';
 import { UpdateRealTeamReqDto } from './dto/update-real-team-req.dto';
 import { groupTeamsHelper } from './helper/group-teams.helper';
 import { TSquadId } from './interfaces/squad.interface';
-import { RealTeamRepository } from './real-team.repository';
 
 @Injectable()
 export class RealTeamService {
   constructor(
-    private readonly leagueRepository: LeagueRepository,
     private readonly realPlayerRepository: RealPlayerRepository,
     private readonly realTeamRepository: RealTeamRepository,
+    private readonly leagueRepository: LeagueRepository,
     private readonly s3Service: S3Service,
   ) {}
 

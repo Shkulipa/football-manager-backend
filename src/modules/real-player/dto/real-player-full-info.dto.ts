@@ -1,7 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { CountryDbDto } from 'src/modules/country/dto/country.db.dto';
-
-import { RealPlayerDbDto } from './real-player.db.dto';
+import { CountryDbDto } from 'src/services/repositories/country/dto/country.db.dto';
+import { RealPlayerDbDto } from 'src/services/repositories/real-player/dto/real-player.db.dto';
 
 export class RealPlayerFullInfoDto extends PickType(RealPlayerDbDto, [
   '_id',

@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from 'src/services/jwt/jwt.module';
+import { RealPlayerRepositoryModule } from 'src/services/repositories/real-player/real-player-repository.module';
+import { UserRepositoryModule } from 'src/services/repositories/user/user-repository.module';
+import { UserTeamRepositoryModule } from 'src/services/repositories/user-team/user-team-repository.module';
 
-import { RealPlayerModule } from '../real-player/real-player.module';
-import { UserTeamModule } from '../user-team/user-team.module';
-import { UserModule } from './../user/user.module';
+import { UserModule } from '../user/user.module';
 import { PacksController } from './packs.controller';
 import { PacksService } from './packs.service';
 
 @Module({
-  imports: [UserModule, RealPlayerModule, UserTeamModule, JwtModule],
+  imports: [UserModule, UserRepositoryModule, RealPlayerRepositoryModule, UserTeamRepositoryModule, JwtModule],
   controllers: [PacksController],
   providers: [PacksService],
   exports: [PacksService],

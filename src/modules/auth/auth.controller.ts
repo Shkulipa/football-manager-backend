@@ -2,7 +2,7 @@ import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { EErrors } from 'src/common/constants/errors.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
@@ -72,6 +72,25 @@ export class AuthController {
     delete user.refreshToken;
 
     return user;
+  }
+
+  /**
+   * logout
+   * @returns {Promise<CommonSuccessResDto>}
+   */
+  @Post('/logout')
+  @ApiOperation({
+    description: 'logout user',
+    operationId: OperationIds.LOGOUT,
+  })
+  @ApiOkResponse({
+    type: CommonSuccessResDto,
+  })
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<CommonSuccessResDto> {
+    const refreshToken = req.cookies['refreshToken'];
+    await this.authService.logout(refreshToken);
+    res.clearCookie('refreshToken');
+    return { success: true };
   }
 
   /**

@@ -1,20 +1,17 @@
-import { NotFound } from '@aws-sdk/client-s3';
-import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
+import { RealPlayerRepository } from 'src/services/repositories/real-player/real-player.repository';
+import { UserRepository } from 'src/services/repositories/user/user.repository';
+import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 
 import { GetRandomPlayerForPackDto } from '../real-player/dto/get-random-player-for-pack.dto';
-import { UserRepository } from '../user/user.repository';
-import { UserTeamRepository } from '../user-team/user-team.repository';
 import { toId } from './../../common/helpers/transform.helper';
-import { RealPlayerRepository } from './../real-player/real-player.repository';
 import { GetPacksResDto } from './dto/get-packs-res.dto';
 import { OpenPacksReqDto } from './dto/open-packs-req.dto';
 
 @Injectable()
 export class PacksService {
-  private readonly logger = new Logger(PacksService.name);
-
   constructor(
     private readonly userRepository: UserRepository,
     private readonly userTeamRepository: UserTeamRepository,

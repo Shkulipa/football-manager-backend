@@ -1,5 +1,6 @@
+import { PlayerSkillsDto } from 'src/services/repositories/real-player/dto/player-skills.dto';
+
 import { maxRatingPlayer } from '../constants/common-player-values';
-import { PlayerSkillsDto } from '../dto/player-skills.dto';
 
 export const ratingHelper = (skills: PlayerSkillsDto) => {
   const values = Object.values(skills);

@@ -1,6 +1,8 @@
 # Football Manager Simulator(API)
 
 ---
+# Todo
+- [ ] move loading/updating files to bull queue 
 
 ## Project start instructions 
 ### Installation
@@ -187,6 +189,7 @@ Where -l last migrations
 - [flags](https://flagdownload.com/)
 - [teams](https://www.whoscored.com)
 - [Player skills & info](https://www.fmscout.com/club/arsenal.html)
+- [didn't use, but seems ver usefully](https://www.fifaindex.com/ru/players/fifa24_590/)
 
 # Tests
 tutorials:

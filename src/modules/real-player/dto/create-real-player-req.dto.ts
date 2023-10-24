@@ -13,10 +13,10 @@ import {
   Min,
 } from 'class-validator';
 import Trim from 'src/common/decorators/trim.decorator';
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
+import { PlayerSkillsDto } from 'src/services/repositories/real-player/dto/player-skills.dto';
 
-import { EPlayerPositionName } from '../constants/player-position-name.enum';
 import { ERolePlayer } from '../constants/rolePlayer.enum';
-import { PlayerSkillsDto } from './player-skills.dto';
 
 export class CreateRealPlayerReqDto extends PlayerSkillsDto {
   @ApiProperty({ required: true, type: String })

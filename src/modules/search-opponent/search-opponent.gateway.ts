@@ -7,10 +7,10 @@ import { wsExceptionFilterHelper } from 'src/common/helpers/ws-exception-filter.
 import { SocketUserData } from 'src/common/interfaces/socket-user-data.interface';
 import { WSAuthMiddleware } from 'src/common/middlewares/ws-auth.middleware';
 import { JwtService } from 'src/services/jwt/jwt.service';
+import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 
 import { MatchRepository } from '../match/match.repository';
 import { UserService } from '../user/user.service';
-import { UserTeamRepository } from '../user-team/user-team.repository';
 import { UserPoll } from './dto/user-poll.dto';
 
 @UsePipes(new ValidationPipe())

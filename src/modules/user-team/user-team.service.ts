@@ -3,13 +3,13 @@ import { isEmpty, pick } from 'lodash';
 import getKeyS3Helper from 'src/common/helpers/get-key-s3.helper';
 import { toId, toIdsArr } from 'src/common/helpers/transform.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
+import { RealPlayerRepository } from 'src/services/repositories/real-player/real-player.repository';
+import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 import { S3Service } from 'src/services/s3/s3.service';
 
-import { RealPlayerRepository } from '../real-player/real-player.repository';
 import { CreateUserTeamReqDto } from './dto/create-user-team-req.dto';
 import { UpdateUserTeamReqDto } from './dto/update-user-team-req.dto';
 import { checkDuplicatesPlayerHelper } from './helpers/check-duplicates-player.helper';
-import { UserTeamRepository } from './user-team.repository';
 
 @Injectable()
 export class UserTeamService {

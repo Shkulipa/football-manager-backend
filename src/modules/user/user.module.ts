@@ -1,24 +1,18 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { EmailModule } from 'src/services/mailer/email.module';
+import { ActivationRepositoryModule } from 'src/services/repositories/activation/activation-repository.module';
+import { UserRepositoryModule } from 'src/services/repositories/user/user-repository.module';
 
 import { ActivationModule } from '../activation/activation.module';
 import { JwtModule } from './../../services/jwt/jwt.module';
-import { User, UserSchema } from './entities/user.entity';
 import { UserController } from './user.controller';
-import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    JwtModule,
-    EmailModule,
-    forwardRef(() => ActivationModule),
-  ],
+  imports: [UserRepositoryModule, JwtModule, EmailModule, ActivationModule, ActivationRepositoryModule],
   controllers: [UserController],
-  providers: [UserService, UserRepository, ConfigService],
-  exports: [UserService, UserRepository],
+  providers: [UserService, ConfigService],
+  exports: [UserService],
 })
 export class UserModule {}

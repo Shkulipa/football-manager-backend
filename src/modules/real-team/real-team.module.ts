@@ -1,27 +1,25 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module } from '@nestjs/common';
 import { JwtModule } from 'src/services/jwt/jwt.module';
+import { LeagueRepositoryModule } from 'src/services/repositories/league/league-repository.module';
+import { RealPlayerRepositoryModule } from 'src/services/repositories/real-player/real-player-repository.module';
+import { RealTeamRepositoryModule } from 'src/services/repositories/real-team/real-team-repository.module';
 import { S3Module } from 'src/services/s3/s3.module';
 
-import { LeagueModule } from '../league/league.module';
-import { RealPlayerModule } from '../real-player/real-player.module';
 import { UserModule } from '../user/user.module';
-import { RealTeam, RealTeamSchema } from './entities/real-team.entity';
 import { RealTeamController } from './real-team.controller';
-import { RealTeamRepository } from './real-team.repository';
 import { RealTeamService } from './real-team.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: RealTeam.name, schema: RealTeamSchema }]),
+    RealPlayerRepositoryModule,
+    RealTeamRepositoryModule,
+    LeagueRepositoryModule,
     S3Module,
-    forwardRef(() => LeagueModule),
     JwtModule,
     UserModule,
-    forwardRef(() => RealPlayerModule),
   ],
   controllers: [RealTeamController],
-  providers: [RealTeamService, RealTeamRepository],
-  exports: [RealTeamService, RealTeamRepository],
+  providers: [RealTeamService],
+  exports: [RealTeamService],
 })
 export class RealTeamModule {}

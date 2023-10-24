@@ -1,4 +1,5 @@
-import { EPlayerPositionName } from '../constants/player-position-name.enum';
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
+
 import { PlayerGroupDto } from '../dto/player-group.dto';
 
 export const attackers = (players: PlayerGroupDto[]): PlayerGroupDto[] =>

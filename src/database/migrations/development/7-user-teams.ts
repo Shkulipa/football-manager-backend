@@ -2,11 +2,11 @@ import './../../../../env.setup';
 
 import { MigrationInterface } from 'mongo-migrate-ts/dist/lib/MigrationInterface';
 import { Db } from 'mongodb/mongodb';
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
 
 import { ECollectionName } from './../../../common/constants/collection-name.enum';
 import { usersData } from './../../../database/data/users.data';
 import { userTeams } from './../../../database/data/users-team.data';
-import { EPlayerPositionName } from './../../../modules/real-player/constants/player-position-name.enum';
 import data from './../../constants/ids';
 
 const commonData = {

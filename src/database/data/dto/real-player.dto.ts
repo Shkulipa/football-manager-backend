@@ -1,7 +1,6 @@
 import { PickType } from '@nestjs/swagger';
 import { Types } from 'mongoose';
-
-import { RealPlayerDbDto } from './../../../modules/real-player/dto/real-player.db.dto';
+import { RealPlayerDbDto } from 'src/services/repositories/real-player/dto/real-player.db.dto';
 
 export class RealPlayerDto extends PickType(RealPlayerDbDto, [
   '_id',

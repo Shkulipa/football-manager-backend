@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Request } from 'express';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
 import { ComposeErrorsDecorator } from 'src/common/decorators/compose-errors.decorator';
 import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
@@ -13,13 +12,17 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService, private readonly stripeService: StripeService) {}
 
+  /**
+   * get readme.md
+   * @returns {string}
+   */
   @Get()
   @ApiOperation({
     description: 'Get content of <b>README.md</b> file',
     operationId: OperationIds.APP_DOC,
   })
   @ApiResponse({ status: 200, type: 'string', description: 'OK' })
-  readme() {
+  readme(): string {
     return this.appService.getReadme();
   }
 

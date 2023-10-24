@@ -1,6 +1,6 @@
 import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { sign, verify } from 'jsonwebtoken';
+import { sign, TokenExpiredError, verify } from 'jsonwebtoken';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { UserJtwDataDto } from 'src/common/dto/user-jwt-data.dto';
 
@@ -15,6 +15,11 @@ export class JwtService {
       const decoded = verify(token, secret);
       return decoded;
     } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        // Refresh token has expired
+        throw new UnauthorizedException('Your Session has expired, please login again');
+      }
+
       throw new UnauthorizedException(err.message);
     }
   }
@@ -97,8 +102,8 @@ export class JwtService {
     const SECRET_ACCESS = this.configService.get<string>(EEnvVariables.SECRET_ACCESS);
     const SECRET_REFRESH = this.configService.get<string>(EEnvVariables.SECRET_REFRESH);
 
-    const accessToken = this.createToken(jwtData, SECRET_ACCESS, '7d');
-    const refreshToken = this.createToken(jwtData, SECRET_REFRESH, '30d');
+    const accessToken = this.createToken(jwtData, SECRET_ACCESS, '4h');
+    const refreshToken = this.createToken(jwtData, SECRET_REFRESH, '2d');
 
     return { accessToken, refreshToken };
   }

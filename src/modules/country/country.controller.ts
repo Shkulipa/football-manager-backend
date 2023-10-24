@@ -24,9 +24,9 @@ import { CommonPathReqDto } from 'src/common/dto/common-path-req.dto';
 import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { uploadFilesLimits } from 'src/common/helpers/files.helper';
+import { CountryDbDto } from 'src/services/repositories/country/dto/country.db.dto';
 
 import { CountryService } from './country.service';
-import { CountryDbDto } from './dto/country.db.dto';
 import { CreateCountryReqDto } from './dto/create-country-req.dto';
 import { GetCountriesResDto } from './dto/get-countries-res.dto';
 import { UpdateCountryReqDto } from './dto/update-country-req.dto';

@@ -12,14 +12,13 @@ import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 
 import { UpdateSquadsReqDto } from './dto/update-squads-req.dto';
-import { MatchRepository } from './match.repository';
 import { MatchService } from './match.service';
 
 @Controller(MATCH_TAG)
 @Controller(REAL_PLAYER_TAG)
 @ComposeErrorsDecorator()
 export class MatchController {
-  constructor(private readonly matchRepository: MatchRepository, private readonly matchService: MatchService) {}
+  constructor(private readonly matchService: MatchService) {}
 
   /**
    * updateMainSquad

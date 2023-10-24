@@ -1,8 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsDefined, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 import Trim from 'src/common/decorators/trim.decorator';
-
-import { RealTeamDbDto } from './real-team.db.dto';
+import { RealTeamDbDto } from 'src/services/repositories/real-team/dto/real-team.db.dto';
 
 export class CreateRealTeamReqDto extends PickType(RealTeamDbDto, ['main', 'bench']) {
   @ApiProperty({ required: true, type: String })

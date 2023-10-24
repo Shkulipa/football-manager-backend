@@ -1,6 +1,6 @@
-import { Controller, Post, Req } from '@nestjs/common';
+import { Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { EErrors } from 'src/common/constants/errors.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
 import { TOKEN_TAG } from 'src/common/constants/tags';
@@ -22,12 +22,18 @@ export class RefreshTokenController {
    */
   @Post('/refresh')
   @ApiOperation({
-    description: 'get real teams',
-    operationId: OperationIds.REAL_TEAM_GET_MANY,
+    description: 'refresh tokens',
+    operationId: OperationIds.REFRESH_TOKENS,
   })
   @ApiResponse({ status: 200, type: RefreshResDto, description: 'OK' })
   @ComposeOthersErrorsDecorator(EErrors.NOT_FOUND_ERROR)
-  async refresh(@Req() req: Request): Promise<RefreshResDto> {
-    return this.refreshTokenService.refresh(req.cookies.refreshToken);
+  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<RefreshResDto> {
+    const { refreshToken, ...rest } = await this.refreshTokenService.refresh(req.cookies.refreshToken);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+
+    return rest;
   }
 }

@@ -9,14 +9,14 @@ import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { JwtService } from 'src/services/jwt/jwt.service';
 import { EMailTemplatesType } from 'src/services/mailer/dto/mail-template.enum';
 import { EmailService } from 'src/services/mailer/email.service';
+import { ActivationRepository } from 'src/services/repositories/activation/activation.repository';
+import { UserRepository } from 'src/services/repositories/user/user.repository';
 import { v4 as uuidV4 } from 'uuid';
 
-import { ActivationRepository } from '../activation/activation.repository';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { UpdateEmailReqDto } from './dto/update-email-req.dto';
 import { UpdatePasswordReqDto } from './dto/update-password-req.dto';
 import { UpdateUsernameReqDto } from './dto/update-username-req.dto';
-import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {

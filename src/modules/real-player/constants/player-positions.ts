@@ -1,4 +1,4 @@
-import { EPlayerPositionName } from './player-position-name.enum';
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
 
 type TPlayerPositions = {
   [key in EPlayerPositionName]: [number, number];
