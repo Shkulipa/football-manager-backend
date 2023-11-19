@@ -68,6 +68,7 @@ export class AuthController {
 
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
+      sameSite: 'none',
     });
     delete user.refreshToken;
 
