@@ -96,7 +96,7 @@ export class MatchGateway implements OnGatewayInit {
     const iterationHalfTime = gameLength / 2;
     let currIteration = 0;
     let matchInfo: IMatchInfo;
-    console.log('gameLength', typeof gameLength, gameLength);
+
     const matchData = {
       gameLength,
       simulations: [],

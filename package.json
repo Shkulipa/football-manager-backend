@@ -13,7 +13,7 @@
     "Football Simulator"
   ],
   "engines": {
-    "node": "16.19.0"
+    "node": "20.9.0"
   },
   "repository": {
     "type": "git",
