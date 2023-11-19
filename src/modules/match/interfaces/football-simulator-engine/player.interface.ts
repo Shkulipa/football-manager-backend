@@ -1,6 +1,5 @@
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
-import { PlayerSkillsDto } from 'src/services/repositories/real-player/dto/player-skills.dto';
-
+import { EPlayerPositionName } from './../../../../services/repositories/real-player/constants/player-position-name.enum';
+import { PlayerSkillsDto } from './../../../../services/repositories/real-player/dto/player-skills.dto';
 import { IStats } from './stats.interface';
 
 export interface IPlayer {

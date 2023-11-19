@@ -1,5 +1,4 @@
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
-
+import { EPlayerPositionName } from '../../../services/repositories/real-player/constants/player-position-name.enum';
 import data from './../../constants/ids';
 import { RealPlayerDto } from './../dto/real-player.dto';
 

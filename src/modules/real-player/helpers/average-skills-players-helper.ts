@@ -1,6 +1,5 @@
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
-
 import { PlayerGroupDto } from '../dto/player-group.dto';
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
 
 const averageSkillPlayerHelper = (players: PlayerGroupDto[]) => {
   const averageVal =

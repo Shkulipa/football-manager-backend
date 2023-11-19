@@ -14,9 +14,9 @@ import { CreateRealTeamReqDto } from 'src/modules/real-team/dto/create-real-team
 import { QueryGetRealTeamsReqDto } from 'src/modules/real-team/dto/query-get-real-teams-req.dto';
 import { UpdateRealTeamReqDto } from 'src/modules/real-team/dto/update-real-team-req.dto';
 import checkDuplicatePlayerHelper from 'src/modules/real-team/helper/check-duplicate-player.helper';
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
 import { RealPlayerRepository } from 'src/services/repositories/real-player/real-player.repository';
 
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
 import { RealTeam, RealTeamDocument } from './entities/real-team.entity';
 
 @Injectable()

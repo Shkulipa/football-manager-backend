@@ -1,8 +1,7 @@
-import { positions } from 'src/modules/packs/constants/zone-positons';
-import { TSquadRealTeamFullInfo } from 'src/modules/real-team/interfaces/squad.interface';
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
-
 import { RealPlayerFullInfoDto } from '../dto/real-player-full-info.dto';
+import { positions } from './../../../modules/packs/constants/zone-positons';
+import { TSquadRealTeamFullInfo } from './../../../modules/real-team/interfaces/squad.interface';
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
 import { averageSkillsPlayersFromMainSquad } from './average-skills-players-from-main-squad';
 
 export type TPlayerPositionMain = [EPlayerPositionName, RealPlayerFullInfoDto];

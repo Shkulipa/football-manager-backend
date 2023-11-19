@@ -1,6 +1,5 @@
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
-import { PlayerSkillsDto } from 'src/services/repositories/real-player/dto/player-skills.dto';
-
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
+import { PlayerSkillsDto } from './../../../services/repositories/real-player/dto/player-skills.dto';
 import { TPlayerPositionMain } from './group-players-by-position-in-main-squad';
 
 export const averageSkillsPlayersFromMainSquad = (players: TPlayerPositionMain[]) => {

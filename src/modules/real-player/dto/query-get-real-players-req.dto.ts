@@ -6,9 +6,9 @@ import { IsCheckGreaterThan } from 'src/common/decorators/is-check-greater-than.
 import Trim from 'src/common/decorators/trim.decorator';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { commonArrayNullIdValidator } from 'src/common/validators/common-array-null-id.validator';
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
 
 import { maxSkillPlayer, minSkillPlayer } from '../constants/common-player-values';
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
 
 export class QueryGetRealPlayersReqDto extends QueryDto {
   @ApiProperty({ type: String })

@@ -1,4 +1,4 @@
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
 
 const attackers: EPlayerPositionName[] = [
   EPlayerPositionName.LCF,

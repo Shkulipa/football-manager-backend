@@ -7,7 +7,8 @@ import {
 } from 'class-validator';
 import { ValidationOptions } from 'joi';
 import { Types } from 'mongoose';
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
+
+import { EPlayerPositionName } from './../../../services/repositories/real-player/constants/player-position-name.enum';
 
 const name = 'playerRole';
 @ValidatorConstraint({ name, async: false })
