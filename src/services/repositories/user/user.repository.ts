@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { Model } from 'mongoose';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 import { LoginUserReqDto } from 'src/modules/auth/dto/login-user-req.dto';

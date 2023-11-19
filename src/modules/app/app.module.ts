@@ -24,7 +24,7 @@ import { AuctionModule } from '../auction/auction.module';
 import { AuthModule } from '../auth/auth.module';
 import { ChatsModule } from '../chats/chats.module';
 import { CountryModule } from '../country/country.module';
-import { HealthCheckModule } from '../healthCheck/healthCheck.module';
+import { HealthModule } from '../health/health.module';
 import { MatchModule } from '../match/match.module';
 import { PacksModule } from '../packs/packs.module';
 import { RealPlayerModule } from '../real-player/real-player.module';
@@ -45,7 +45,7 @@ import { AppService } from './app.service';
     MailerModule.forRootAsync(mailerOptions),
     NestjsStripeModule.forRootAsync(stripeOptions),
     TasksModule,
-    HealthCheckModule,
+    HealthModule,
     AuthModule,
     CountryModule,
     LeagueModule,

@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { omit } from 'lodash';
 import { Types } from 'mongoose';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';

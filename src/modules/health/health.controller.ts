@@ -12,7 +12,7 @@ import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 @ApiTags(HEALTH_TAG)
 @ComposeErrorsDecorator()
 @Controller()
-export class HealthCheckController {
+export class HealthController {
   /**
    * /health endpoint handler - checks if the server is alive
    * @returns {CommonSuccessResDto}
