@@ -211,3 +211,6 @@ tutorials:
 tutorials:
 1. [watch video](https://www.youtube.com/watch?v=-90OHI_Gd80&t=829s&ab_channel=UnBox)
 2. https://www.youtube.com/watch?v=JTGgYVIBZjI&ab_channel=HarrisonMilbradt
+
+# s3
+https://www.youtube.com/watch?v=eQAIojcArRY&t=1162s&ab_channel=SamMeech-Ward

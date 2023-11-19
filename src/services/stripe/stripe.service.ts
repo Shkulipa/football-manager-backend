@@ -51,10 +51,8 @@ export class StripeService {
         email: email,
         price,
       },
-      // success_url: `${client}/success`,
-      // cancel_url: `${client}/cancel`,
-      success_url: 'http://localhost:5001/success',
-      cancel_url: `http://localhost:5001/cancel`,
+      success_url: `${client}/success`,
+      cancel_url: `${client}/cancel`,
     });
 
     return { url: session.url };

@@ -31,7 +31,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "docker:compose": "docker-compose up -d",
     "start": "nest start",
-    "prod": "node dist/main",
+    "prod": "node dist/src/main",
     "start:prod": "NODE_ENV=production nest start --watch",
     "start:stag": "NODE_ENV=staging nest start --watch",
     "start:dev": "NODE_ENV=development nest start --watch",
