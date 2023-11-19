@@ -16,9 +16,6 @@
     "type": "git",
     "url": "git+https://github.com/Shkulipa/football-manager-backend"
   },
-  "engines": {
-    "node": "18.17.1"
-  },
   "bugs": {
     "url": "https://github.com/Shkulipa/football-manager-backend/issues"
   },
