@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { CommonServerErrorResDto } from '../dto/common-server-error-res.dto';
 
@@ -34,6 +34,16 @@ export const wsExceptionFilterHelper = (exception: Error) => {
     error.statusCode = exception.getStatus() || 404;
     error.message = msg;
     error.error = 'Not Found';
+  }
+
+  if (exception instanceof ConflictException) {
+    error.statusCode = exception.getStatus() || 401;
+    const exceptionData = exception.getResponse();
+    const msg = exceptionData['message'] || exception.message;
+
+    error.statusCode = exception.getStatus() || 409;
+    error.message = msg;
+    error.error = 'Conflict';
   }
 
   return error;

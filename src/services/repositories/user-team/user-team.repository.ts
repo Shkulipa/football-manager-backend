@@ -6,9 +6,7 @@ import { CommonRealPlayerLookup } from 'src/common/aggregate/lookups/common-real
 import { CommonUserLookup } from 'src/common/aggregate/lookups/common-user.lookup';
 import { toId } from 'src/common/helpers/transform.helper';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
-import { PlayerGroupDto } from 'src/modules/real-player/dto/player-group.dto';
-import averageSkillPlayerHelper from 'src/modules/real-player/helpers/average-skills-players-helper';
-import { attackers, defenders, midfielders } from 'src/modules/real-player/helpers/group-players-by-position.helper';
+import { groupPlayersByPositionInMainSquad } from 'src/modules/real-player/helpers/group-players-by-position-in-main-squad';
 import { UserTeamDbDto } from 'src/modules/user-team/dto/user-team-db.dto';
 
 import { UserTeam } from './entities/user-team.entity';
@@ -69,9 +67,10 @@ export class UserTeamRepository extends BaseMongoRepository<UserTeamDbDto> {
 
   async matchmakingTeam(userId: string) {
     const team = await this.userTeamModel.findOne({ userId: new Types.ObjectId(userId) });
-    if (!team) throw new NotFoundException("Team for user wasn't found");
+    if (!team) throw new NotFoundException("Team for user wasn't found, please create your team(In 'Your Team')");
 
-    if (Object.values(team.main).length < 11) throw new BadRequestException('Your main squad should exist 11 players');
+    if (Object.values(team.main).length < 11)
+      throw new BadRequestException("Your main squad in your team should exist 11 players(In 'Your Team')");
 
     return team;
   }
@@ -79,23 +78,7 @@ export class UserTeamRepository extends BaseMongoRepository<UserTeamDbDto> {
   async countSkillUserTeam(id: string) {
     const teamPlayers = await this.findById(id);
 
-    const playersMain: PlayerGroupDto[] = Object.values(teamPlayers.main).map((p: PlayerGroupDto) => ({
-      positions: p.positions,
-      skills: p.skills,
-    }));
-
-    const playersBench: PlayerGroupDto[] = teamPlayers.bench.map((p: PlayerGroupDto) => ({
-      positions: p.positions,
-      skills: p.skills,
-    }));
-
-    const players = [...playersMain, ...playersBench];
-
-    const att = averageSkillPlayerHelper(attackers(players));
-    const mid = averageSkillPlayerHelper(midfielders(players));
-    const def = averageSkillPlayerHelper(defenders(players));
-
-    const skills = { att, mid, def };
+    const skills = groupPlayersByPositionInMainSquad(teamPlayers.main);
 
     await this.userTeamModel.updateOne({ _id: toId(id) }, { $set: { skills } });
   }

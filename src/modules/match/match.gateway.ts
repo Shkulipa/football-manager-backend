@@ -11,6 +11,7 @@ import { initiateGame, playIteration, startSecondHalf } from 'footballsimulation
 import { Namespace } from 'socket.io';
 import { WsExceptionFilter } from 'src/common/exceptions/ws-exception-filter.decorator';
 import { GatewayAuthGuard } from 'src/common/guards/gateway-auth.guard';
+import { wsExceptionFilterHelper } from 'src/common/helpers/ws-exception-filter.helper';
 import { SocketUserData } from 'src/common/interfaces/socket-user-data.interface';
 import { WSAuthMiddleware } from 'src/common/middlewares/ws-auth.middleware';
 import { JwtService } from 'src/services/jwt/jwt.service';
@@ -54,22 +55,28 @@ export class MatchGateway implements OnGatewayInit {
   @UseGuards(GatewayAuthGuard)
   @SubscribeMessage('join')
   async joinToMatch(@ConnectedSocket() client: SocketUserData, @MessageBody('matchId') matchId: string) {
-    const match = await this.matchRepository.getMatchById(matchId);
-    this.logger.debug(`user(socketId(${client.id}) connected to ${matchId}`);
+    try {
+      const match = await this.matchRepository.getMatchById(matchId);
 
-    const roomName = matchId;
-    await client.join(roomName);
+      const roomName = matchId;
+      await client.join(roomName);
 
-    // check if user from match
-    await this.matchRepository.setPlayerReady(match, matchId, client.user._id.toString());
-    const updatedMatch = await this.matchRepository.getMatchById(matchId);
+      // check if user from match
+      if (match.status === EStatusMatch.PREPARE) {
+        await this.matchRepository.setPlayerReady(match, matchId, client.user._id.toString());
+      }
 
-    // options of room
-    const connectedClients = this.io.adapter.rooms?.get(roomName)?.size ?? 0;
-    this.logger.debug(`Total clients connected to match '${roomName}': ${connectedClients}`);
+      const updatedMatch = await this.matchRepository.getMatchById(matchId);
+      // options of room
+      const connectedClients = this.io.adapter.rooms?.get(roomName)?.size ?? 0;
+      this.logger.debug(`Total clients connected to match '${roomName}': ${connectedClients}`);
 
-    // here you can handle situation with spectators
-    this.io.to(matchId).emit('join', updatedMatch);
+      // here you can handle situation with spectators
+      this.io.to(matchId).emit('join', updatedMatch);
+    } catch (err) {
+      const error = wsExceptionFilterHelper(err);
+      this.io.to(client.id).emit('exception', JSON.stringify(error));
+    }
   }
 
   @UseGuards(GatewayAuthGuard)
@@ -78,61 +85,81 @@ export class MatchGateway implements OnGatewayInit {
     const match = await this.matchService.validationStartMatch(matchId);
 
     // simulation match
-    let countIterations = 0;
-    const matchData = {
-      simulations: [],
-    };
-
-    const gameLength = 5000;
+    const gameLength = 2500;
+    const checkIteration = 500;
+    const iterationHalfTime = gameLength / 2;
     let currIteration = 0;
     let matchInfo: IMatchInfo;
 
+    const matchData = {
+      gameLength,
+      simulations: [],
+    };
+
     // fo start need normal coordinates, and we say it the both team on the KICK_OFF_TEAM side of field;
     // for replacements need to say correct side for teams
-    const guests = await this.matchService.parseSquad(match.player1, ENameTeams.KICK_OFF_TEAM); // secondTeam in engine simulator
-    const hosts = await this.matchService.parseSquad(match.player2, ENameTeams.KICK_OFF_TEAM); // kickOffTeam in engine simulator
+    const guests = JSON.parse(
+      JSON.stringify(await this.matchService.parseSquad(match.player1, ENameTeams.KICK_OFF_TEAM)),
+    ); // secondTeam in engine simulator
+    const hosts = JSON.parse(
+      JSON.stringify(await this.matchService.parseSquad(match.player2, ENameTeams.KICK_OFF_TEAM)),
+    ); // kickOffTeam in engine simulator
     initiateGame(hosts, guests, pitchSize).then(function (newMatchInfo: IMatchInfo) {
       matchInfo = newMatchInfo;
       matchData.simulations.push(newMatchInfo);
     });
 
-    this.logger.debug(`Start simulation for match: ${matchId}`);
     const simulation = setInterval(async () => {
-      this.logger.debug(`simulation #${currIteration} for match: ${matchId}`);
-
       // check every some part of game on changes squads in players from redis
-      if (countIterations % 500 === 0) {
-        this.logger.debug(`check updating squad for match ${matchId}`);
-
+      const isCloseHalfTime =
+        currIteration >= iterationHalfTime - checkIteration + 25 &&
+        currIteration <= iterationHalfTime + checkIteration + 25;
+      if (currIteration % checkIteration === 0 && !isCloseHalfTime) {
         const matchData = await this.matchRepository.getMatchById(matchId);
-        if (matchData.player1.isNeedUpdateSquad && matchData.player1.replacements.length !== 0) {
-          const newSquad = await this.matchService.updateSquadForEngineSimulator(
+        if (matchData.player1.isNeedUpdateSquad) {
+          const { main, bench, replacements } = await this.matchService.updateSquadForEngineSimulator(
             matchInfo,
             matchData.player1,
             ENameTeams.SECOND_TEAM,
           );
 
-          matchInfo.secondTeam.players = [...newSquad];
+          matchInfo = {
+            ...matchInfo,
+            secondTeam: {
+              ...matchInfo.secondTeam,
+              players: [...main],
+              bench: [...bench],
+              replacements: [...replacements],
+            },
+          };
         }
 
-        if (matchData.player2.isNeedUpdateSquad && matchData.player2.replacements.length !== 0) {
-          const newSquad = await this.matchService.updateSquadForEngineSimulator(
+        if (matchData.player2.isNeedUpdateSquad) {
+          const { main, bench, replacements } = await this.matchService.updateSquadForEngineSimulator(
             matchInfo,
             matchData.player2,
             ENameTeams.KICK_OFF_TEAM,
           );
 
-          matchInfo.kickOffTeam.players = [...newSquad];
+          matchInfo = {
+            ...matchInfo,
+            kickOffTeam: {
+              ...matchInfo.kickOffTeam,
+              players: [...main],
+              bench: [...bench],
+              replacements: [...replacements],
+            },
+          };
         }
 
         await this.matchRepository.setReplacementsUpdated(matchId);
       }
 
       // check on the second half
-      if (currIteration === gameLength / 2) {
+      const halfTime = +(gameLength / 2).toFixed(0);
+      if (currIteration === halfTime) {
         startSecondHalf(matchInfo).then(function (newMatchInfo: IMatchInfo) {
           matchInfo = newMatchInfo;
-          currIteration++;
         });
       }
 
@@ -140,26 +167,26 @@ export class MatchGateway implements OnGatewayInit {
       playIteration(matchInfo).then(function (newMatchInfo: IMatchInfo) {
         matchInfo = newMatchInfo;
         matchData.simulations.push(newMatchInfo);
-        currIteration++;
       });
 
       // send notification(array of iterations) to users(every <count> iterations)
-      if (countIterations % 20 === 0) {
-        this.logger.debug(`notify players for match ${matchId}`);
-        this.io.to(matchId).emit('match-simulation', JSON.stringify(matchData));
+      if (currIteration % 2 === 0) {
+        this.io.to(matchId).emit('match-simulation', JSON.stringify({ ...matchData, currIteration }));
         matchData.simulations = [];
       }
 
       // check finishing game
-      if (countIterations === gameLength) {
-        this.logger.debug(`match(${matchId}) was finished`);
+      if (currIteration === gameLength) {
         clearInterval(simulation);
 
-        await this.matchRepository.setStatusMatch(matchId, EStatusMatch.FINISHED, 300);
-        await this.matchRepository.setResult(matchId, matchInfo);
+        const reward = await this.matchRepository.setResult(matchId, matchInfo);
+
+        this.io.to(matchId).emit('match-result', reward);
+        this.io.socketsLeave(matchId); // drop all plyers from room
+        return;
       }
 
-      countIterations++;
+      currIteration++;
     }, 20);
   }
 }

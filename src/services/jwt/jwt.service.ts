@@ -102,8 +102,8 @@ export class JwtService {
     const SECRET_ACCESS = this.configService.get<string>(EEnvVariables.SECRET_ACCESS);
     const SECRET_REFRESH = this.configService.get<string>(EEnvVariables.SECRET_REFRESH);
 
-    const accessToken = this.createToken(jwtData, SECRET_ACCESS, '4h');
-    const refreshToken = this.createToken(jwtData, SECRET_REFRESH, '2d');
+    const accessToken = this.createToken(jwtData, SECRET_ACCESS, '30m');
+    const refreshToken = this.createToken(jwtData, SECRET_REFRESH, '4h');
 
     return { accessToken, refreshToken };
   }

@@ -1,3 +1,4 @@
+import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { Module } from '@nestjs/common/decorators/modules/module.decorator';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose/dist/mongoose.module';
@@ -5,6 +6,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { LoggerModule } from 'nestjs-pino';
 import { StripeModule as NestjsStripeModule } from 'nestjs-stripe';
+import { ManyRequestsMiddleware } from 'src/common/middlewares/many-requests.middleware';
 import { modeConfig } from 'src/configs/app/mode.config';
 import mongooseConfig from 'src/configs/database/mongo/mongoose.config';
 import { loggerAsyncOptions } from 'src/logger/logger-options';
@@ -65,4 +67,8 @@ import { AppService } from './app.service';
   controllers: [AppController],
   providers: [AppService, MongoConnection],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ManyRequestsMiddleware).forRoutes('*');
+  }
+}

@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EErrors } from 'src/common/constants/errors.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';

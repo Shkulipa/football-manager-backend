@@ -1,8 +1,8 @@
-import { Body, Controller, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EErrors } from 'src/common/constants/errors.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
-import { MATCH_TAG, REAL_PLAYER_TAG } from 'src/common/constants/tags';
+import { MATCH_TAG } from 'src/common/constants/tags';
 import { ComposeAuthDecorator } from 'src/common/decorators/compose-auth.decorator';
 import { ComposeErrorsDecorator } from 'src/common/decorators/compose-errors.decorator';
 import { ComposeOthersErrorsDecorator } from 'src/common/decorators/compose-others-errors.decorator';
@@ -15,10 +15,25 @@ import { UpdateSquadsReqDto } from './dto/update-squads-req.dto';
 import { MatchService } from './match.service';
 
 @Controller(MATCH_TAG)
-@Controller(REAL_PLAYER_TAG)
 @ComposeErrorsDecorator()
 export class MatchController {
   constructor(private readonly matchService: MatchService) {}
+
+  /**
+   * @info
+   * get open current match
+   */
+  @Get()
+  @ApiOperation({
+    description: 'Get open current live match',
+    operationId: OperationIds.MATCH_GET_CURRENT_LIVE,
+  })
+  @ComposeAuthDecorator()
+  @ApiResponse({ status: 200, type: CommonSuccessResDto, description: 'OK' })
+  @ComposeOthersErrorsDecorator(EErrors.FORBIDDEN_ERROR, EErrors.NOT_FOUND_ERROR)
+  async getCurrentLiveMatch(@User() user: IUserData): Promise<string> {
+    return this.matchService.getCurrentLiveMatch(user);
+  }
 
   /**
    * updateMainSquad

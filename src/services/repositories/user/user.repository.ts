@@ -58,4 +58,13 @@ export class UserRepository extends BaseMongoRepository<UsersDbDto> {
     if (userByEmail) throw new BadRequestException('Email already been taken');
     if (userByUsername) throw new BadRequestException('Username already been taken');
   }
+
+  async logout(refreshToken: string) {
+    await this.userModel.findOneAndUpdate(
+      {
+        refreshToken,
+      },
+      { refreshToken: '' },
+    );
+  }
 }

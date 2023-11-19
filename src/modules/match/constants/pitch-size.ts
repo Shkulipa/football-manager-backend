@@ -1,5 +1,5 @@
 export const pitchSize = {
-  pitchWidth: 680,
+  pitchWidth: 650,
   pitchHeight: 1050,
   goalWidth: 90,
 };

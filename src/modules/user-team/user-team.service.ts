@@ -89,7 +89,7 @@ export class UserTeamService {
     // update logo link
     if (file) {
       const key = getKeyS3Helper(userTeam.logoClub);
-      await this.s3Service.delete(key);
+      if (key) await this.s3Service.delete(key);
       const logoClubUrl = await this.s3Service.create(file, this.path);
       const updatedObj = { logoClub: logoClubUrl };
       Object.assign(newUserTeamData, { ...updatedObj });

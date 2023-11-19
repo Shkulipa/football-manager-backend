@@ -68,13 +68,6 @@ export class LeagueController {
     return await this.leagueService.findById(id);
   }
 
-  @Post('/test')
-  @ComposeAuthDecorator(EUserRoles.LEAGUE_CREATE)
-  @ComposeOthersErrorsDecorator(EErrors.FORBIDDEN_ERROR, EErrors.NOT_FOUND_ERROR)
-  async createasd(): Promise<string> {
-    return 'test';
-  }
-
   /**
    * create league
    * @returns {Promise<CommonSuccessResDto>}

@@ -14,9 +14,9 @@ const commonData = {
   logoClub: '',
   createdAt: new Date(),
   skills: {
-    att: 64,
-    mid: 65,
-    def: 57,
+    att: 56,
+    mid: 47,
+    def: 45,
   },
   main: {
     [EPlayerPositionName.GK]: data.realPlayer.realMadrid.p6,

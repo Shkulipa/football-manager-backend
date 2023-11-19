@@ -23,22 +23,7 @@ export class FileConsumer {
       };
 
       // const fileData = await this.s3Service.create(file, data.path);
-
-      // /** create record about file */
-      // const newFile = {
-      //   companyId: new Types.ObjectId(companyId),
-      //   uploaderId: new Types.ObjectId(user._id),
-      //   uploadSource: EUploadSource.DIRECT,
-      //   fileName: fileData.filename,
-      //   pathIdentifier: fileData.key,
-      //   hash: fileData.hash,
-      //   category,
-      // };
-
-      // const resFile = await this.filesRepository.create(newFile);
-
-      // if (user.role === EUserRoles.CO_USER)
-      //   await this.logsRepository.addLog(user, companyId, resFile._id.toString(), ELogsActions.IMPORT_FILE);
+      // update country/league/real-team/real-player photo
 
       job.finished();
     } catch (err) {

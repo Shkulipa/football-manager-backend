@@ -57,6 +57,7 @@ export enum OperationIds {
   PACK_OPEN = 'pack-open',
 
   MATCH_UPDATE_SQUADS = 'match-update-squads',
+  MATCH_GET_CURRENT_LIVE = 'match-get-current-live',
 
   STRIPE_WEBHOOK = 'stripe_webhook',
 }

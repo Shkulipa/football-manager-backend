@@ -8,20 +8,22 @@ export class AllExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     const statusCode = exception instanceof HttpException ? exception.getStatus() : 500;
+    const error = exception.name || 'Error';
 
     if (exception instanceof BadRequestException) {
       const msg = exception.getResponse()['message'] || exception.message;
       const message = Array.isArray(msg) ? msg.join(', ').trim() : msg;
-
       return response.status(statusCode).json({
         statusCode,
         message,
+        error,
       });
     }
 
     return response.status(statusCode).json({
       statusCode,
       message: exception.message,
+      error,
     });
   }
 }

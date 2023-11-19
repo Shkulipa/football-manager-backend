@@ -29,7 +29,7 @@ export class RealPlayers implements MigrationInterface {
   }
 
   public async down(db: Db) {
-    const arrObjRealPlayers = playersIds.map((realPlayerId) => ({ _id: realPlayerId }));
+    const arrObjRealPlayers = playersIds.map((playerId) => ({ _id: playerId }));
     await db.collection(ECollectionName.REAL_PLAYERS).deleteMany({ $or: arrObjRealPlayers });
   }
 }

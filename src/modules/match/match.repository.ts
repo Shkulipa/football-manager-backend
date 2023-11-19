@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { omit } from 'lodash';
 import { Types } from 'mongoose';
@@ -12,6 +12,7 @@ import { UserPoll } from '../search-opponent/dto/user-poll.dto';
 import { NameKeys } from './constants/name-keys.enum';
 import { getNewRatingElo } from './helpers/get-new-rating-elo.helper';
 import { EStatusMatch, IMatchDetail } from './interfaces/match-detail.interface';
+import { IMatchReward } from './interfaces/match-reward.interface';
 
 @Injectable()
 export class MatchRepository {
@@ -24,7 +25,7 @@ export class MatchRepository {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async checkExistInMatch(userId: string) {
+  async getCurrentMatchLive(userId: string) {
     const keysMatches = await this.redisClient.keys(`${NameKeys.MATCH}:*`);
     for (const key of keysMatches) {
       const matchStatus = await this.redisClient.call('JSON.GET', key, '.status');
@@ -35,8 +36,8 @@ export class MatchRepository {
 
       userId = `"${userId}"`;
 
-      if (player1UserId === userId || player2UserId === userId)
-        throw new BadRequestException('You are already in match');
+      const matchId = key.split(':')[1];
+      if (player1UserId === userId || player2UserId === userId) return matchId;
     }
   }
 
@@ -77,17 +78,12 @@ export class MatchRepository {
   }
 
   async setResult(matchId: string, matchInfo: any) {
-    const key = `${NameKeys.MATCH}:${matchId}`;
-
     const statistics = {
       host: { clubName: matchInfo.kickOffTeam.name, ...matchInfo.kickOffTeamStatistics },
       guests: { clubName: matchInfo.secondTeam.name, ...matchInfo.secondTeamStatistics },
     };
 
-    await this.redisClient.call('JSON.SET', key, '.statistics', JSON.stringify(statistics));
-
     // add money for win and defeat;
-
     // re-count rating elo fro players
     const match = await this.getMatchById(matchId);
     const team1 = {
@@ -148,6 +144,33 @@ export class MatchRepository {
       );
     }
 
+    const matchReward: IMatchReward = {
+      rewardPlayer1: {
+        _id: match.player1.user._id,
+        username: match.player1.user.username,
+        money: team1.money,
+        oldRating: match.player1.team.ratingElo,
+        newRating: team1.rating,
+      },
+      rewardPlayer2: {
+        _id: match.player2.user._id,
+        username: match.player2.user.username,
+        money: team2.money,
+        oldRating: match.player2.team.ratingElo,
+        newRating: team2.rating,
+      },
+    };
+
+    const key = `${NameKeys.MATCH}:${matchId}`;
+    await this.redisClient
+      .multi([
+        ['call', 'JSON.SET', key, '.status', JSON.stringify(EStatusMatch.FINISHED)],
+        ['call', 'JSON.SET', key, '.statistics', JSON.stringify(statistics)],
+        ['call', 'JSON.SET', key, '.reward', JSON.stringify(matchReward)],
+        ['expire', key, 300],
+      ])
+      .exec();
+
     await this.userTeamRepository.findByIdAndUpdate(
       { _id: new Types.ObjectId(match.player1.team._id) },
       { ratingElo: team1.rating },
@@ -165,11 +188,15 @@ export class MatchRepository {
       { _id: new Types.ObjectId(match.player2.user._id) },
       { $inc: { money: team2.money } },
     );
+
+    const matchDetails = await this.getMatchById(matchId);
+    return matchDetails;
   }
 
   async getMatchById(id: string) {
     const key = `${NameKeys.MATCH}:${id}`;
     const match = (await this.redisClient.call('JSON.GET', key, '.')) as string;
+
     if (!match) throw new NotFoundException(`Match with id(${id}) wasn't found`);
     return JSON.parse(match) as IMatchDetail;
   }

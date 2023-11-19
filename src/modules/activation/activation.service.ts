@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { CommonDecodedTokenJwtDto } from 'src/common/dto/common-decoded-token-jwt.dto';
@@ -25,12 +25,16 @@ export class ActivationService {
 
   // resend activation
   async activateSend(sendReqDto: SendActivationEmailReqDto) {
-    const { email } = sendReqDto;
+    const { username } = sendReqDto;
 
     /** user should be exist and not been activated adn not deleted */
-    const user = await this.userRepository.findOne({ email });
+    // const user = await this.userModel
+    //   .findOne()
+    //   .or([{ username }, { email: username }])
+    //   .lean();
+    const user = await this.userRepository.findOne({ $or: [{ email: username }, { username }] });
     if (!user) throw new NotFoundException('User not found');
-    if (user.isConfirmEmail) throw new BadRequestException('User has activated yet');
+    if (user.isConfirmEmail) throw new ConflictException('User has activated yet');
 
     await this.activationRepository.deleteMany({ userId: toId(user._id) });
     const token = this.jwtService.createEmailActivationToken(user._id.toString());
@@ -42,10 +46,10 @@ export class ActivationService {
     });
 
     const CLIENT_URL = this.configService.get<string>(EEnvVariables.CLIENT_URL);
-    const activationLink = `${CLIENT_URL}/confirm-new-email/${activationId}`;
+    const activationLink = `${CLIENT_URL}/confirm-email/${activationId}?username=${user.username}`;
 
     /** send activate link to email */
-    this.emailService.sendEmail(email, user.username, EMailTemplatesType.ACTIVATION, activationLink);
+    this.emailService.sendEmail(user.email, user.username, EMailTemplatesType.ACTIVATION, activationLink);
 
     return { success: true };
   }

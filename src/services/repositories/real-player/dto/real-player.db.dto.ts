@@ -53,7 +53,7 @@ export class RealPlayerDbDto {
   name: string;
 
   @ApiProperty({ required: true, type: String })
-  photo: string;
+  photo?: string;
 
   @ApiProperty({ required: true, type: Number })
   @IsDefined()

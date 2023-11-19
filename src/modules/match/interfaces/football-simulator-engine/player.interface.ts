@@ -1,9 +1,10 @@
+import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
 import { PlayerSkillsDto } from 'src/services/repositories/real-player/dto/player-skills.dto';
 
 import { IStats } from './stats.interface';
 
 export interface IPlayer {
-  realPlayerId: string;
+  _id: string;
   name: string;
   rating: number;
   position: string;
@@ -18,9 +19,32 @@ export interface IPlayer {
   offside: boolean;
   hasBall: boolean;
   stats: IStats;
+  photo?: string;
+  age: number;
+  number: number;
+  positions: EPlayerPositionName;
+  country: ICountry;
+}
+
+export interface ICountry {
+  _id: string;
+  name: string;
+  flag: string;
 }
 
 export type IPlayerParse = Pick<
   IPlayer,
-  'realPlayerId' | 'name' | 'rating' | 'position' | 'skill' | 'currentPOS' | 'fitness' | 'injured'
+  | '_id'
+  | 'name'
+  | 'rating'
+  | 'position'
+  | 'skill'
+  | 'currentPOS'
+  | 'fitness'
+  | 'injured'
+  | 'country'
+  | 'positions'
+  | 'number'
+  | 'age'
+  | 'photo'
 >;

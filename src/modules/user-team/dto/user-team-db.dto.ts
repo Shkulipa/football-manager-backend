@@ -51,7 +51,7 @@ export class UserTeamDbDto extends Document {
   @IsString()
   @IsNotEmpty()
   @Trim()
-  @Matches(/^[a-zA-Z0-9\s]*$/, { message: 'clubName should only contain letters or digits' })
+  @Matches(/^[a-zA-Z0-9\s]*$/, { message: 'clubName should only contain letters, digits, or spaces' })
   clubName: string;
 
   @ApiProperty({ required: true, type: SkillsDto })

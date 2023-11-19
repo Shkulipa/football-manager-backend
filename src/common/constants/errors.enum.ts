@@ -4,4 +4,5 @@ export enum EErrors {
   INTERNAL_SERVER_ERROR = 'internal server error',
   FORBIDDEN_ERROR = 'invalid credentials',
   UNAUTHORIZED = 'unauthorized',
+  TOO_MANY_REQUESTS = 'too many requests',
 }

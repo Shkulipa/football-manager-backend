@@ -10,6 +10,7 @@ export class RealPlayerFullInfoDto extends PickType(RealPlayerDbDto, [
   'positions',
   'skills',
   'rating',
+  'photo',
 ]) {
   @ApiProperty({ required: true, type: CountryDbDto })
   county: CountryDbDto;

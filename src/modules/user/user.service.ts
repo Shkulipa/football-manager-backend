@@ -99,7 +99,7 @@ export class UserService {
     });
 
     const CLIENT_URL = this.configService.get<string>(EEnvVariables.CLIENT_URL);
-    const activationLink = `${CLIENT_URL}/confirm-new-email/${activationId}`;
+    const activationLink = `${CLIENT_URL}/confirm-new-email/${activationId}?email=${newEmail}`;
 
     /** send activate link to email */
     this.emailService.sendEmail(

@@ -1,4 +1,4 @@
-import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import { ConflictException, Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { pick } from 'lodash';
 import { Namespace } from 'socket.io';
@@ -12,6 +12,10 @@ import { UserTeamRepository } from 'src/services/repositories/user-team/user-tea
 import { MatchRepository } from '../match/match.repository';
 import { UserService } from '../user/user.service';
 import { UserPoll } from './dto/user-poll.dto';
+
+const nameRoom = {
+  playersInPoll: 'players-in-poll',
+};
 
 @UsePipes(new ValidationPipe())
 @UseFilters(new WsExceptionFilter())
@@ -42,6 +46,7 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
     );
     this.pollUsers = this.pollUsers.filter((user) => user.socketId !== client.id);
     this.logger.debug(`current poll: ${JSON.stringify(this.pollUsers)}`);
+    this.io.to(nameRoom.playersInPoll).emit('players-in-poll', this.pollUsers.length);
   }
 
   async handleConnection(client: SocketUserData) {
@@ -49,9 +54,13 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
       `connected user: socketId(${client.id}) id(${client.user._id}), username(${client.user.username})`,
     );
 
+    // check on already existing in pool
+    if (this.pollUsers.find((p) => p.socketId === client.id)) return;
+
     // find most fit player or add this player in array
     try {
-      await this.matchRepository.checkExistInMatch(client.user._id.toString());
+      const matchId = await this.matchRepository.getCurrentMatchLive(client.user._id.toString());
+      if (matchId) throw new ConflictException('You are already in match');
 
       const team = await this.userTeamRepository.matchmakingTeam(client.user._id.toString());
       const teamData = {
@@ -68,11 +77,16 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
       this.logger.debug(`current poll: ${JSON.stringify(this.pollUsers)}`);
 
       // finding opponent
+      await client.join(nameRoom.playersInPoll);
+      this.io.to(nameRoom.playersInPoll).emit('players-in-poll', this.pollUsers.length);
+
       const foundOpponent = this.findOpponent(currPlayer);
       this.logger.debug(`current user(${currPlayer.user.username}) find opponent...`);
 
       if (foundOpponent) {
         this.startMatch(currPlayer, foundOpponent);
+        this.io.to(nameRoom.playersInPoll).emit('players-in-poll', this.pollUsers.length);
+        return;
       }
     } catch (err) {
       const error = wsExceptionFilterHelper(err);
@@ -85,7 +99,10 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
       return user.socketId !== currPlayer.socketId && Math.abs(user.team.ratingElo - currPlayer.team.ratingElo) <= 150;
     });
 
-    if (opponent) return opponent;
+    if (opponent) {
+      this.io.sockets.get(opponent.socketId).leave(nameRoom.playersInPoll);
+      return opponent;
+    }
 
     return;
   }
@@ -107,5 +124,6 @@ export class SearchOpponentGateway implements OnGatewayConnection, OnGatewayInit
     );
     this.logger.debug('remove From Poll user with socket id:', currPlayer.socketId);
     this.logger.debug('remove From Poll user with socket id:', player2.socketId);
+    this.io.emit('players-in-poll', this.pollUsers.length);
   }
 }

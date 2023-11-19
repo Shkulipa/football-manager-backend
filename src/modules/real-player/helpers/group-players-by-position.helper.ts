@@ -1,45 +1,12 @@
-import { EPlayerPositionName } from 'src/services/repositories/real-player/constants/player-position-name.enum';
+import { positions } from 'src/modules/packs/constants/zone-positons';
 
 import { PlayerGroupDto } from '../dto/player-group.dto';
 
 export const attackers = (players: PlayerGroupDto[]): PlayerGroupDto[] =>
-  players.filter((player) =>
-    [
-      EPlayerPositionName.LCF,
-      EPlayerPositionName.ST,
-      EPlayerPositionName.RCF,
-      EPlayerPositionName.LWM,
-      EPlayerPositionName.AML,
-      EPlayerPositionName.AMC,
-      EPlayerPositionName.AMR,
-      EPlayerPositionName.RWM,
-    ].some((position) => player.positions.includes(position)),
-  );
+  players.filter((player) => positions.attackers.some((position) => player.positions.includes(position)));
 
 export const midfielders = (players: PlayerGroupDto[]): PlayerGroupDto[] =>
-  players.filter((player) =>
-    [
-      EPlayerPositionName.LM,
-      EPlayerPositionName.LCM,
-      EPlayerPositionName.CM,
-      EPlayerPositionName.RCM,
-      EPlayerPositionName.RM,
-    ].some((position) => player.positions.includes(position)),
-  );
+  players.filter((player) => positions.midfielders.some((position) => player.positions.includes(position)));
 
 export const defenders = (players: PlayerGroupDto[]): PlayerGroupDto[] =>
-  players.filter((player) =>
-    [
-      EPlayerPositionName.LWB,
-      EPlayerPositionName.LDM,
-      EPlayerPositionName.CDM,
-      EPlayerPositionName.RDM,
-      EPlayerPositionName.RWB,
-      EPlayerPositionName.LB,
-      EPlayerPositionName.LCB,
-      EPlayerPositionName.CB,
-      EPlayerPositionName.RCB,
-      EPlayerPositionName.RB,
-      EPlayerPositionName.GK,
-    ].some((position) => player.positions.includes(position)),
-  );
+  players.filter((player) => positions.defenders.some((position) => player.positions.includes(position)));

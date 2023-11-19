@@ -58,7 +58,7 @@ export class AuthService {
     });
 
     const CLIENT_URL = this.configService.get<string>(EEnvVariables.CLIENT_URL);
-    const activationLink = `${CLIENT_URL}/confirm-email/${activationId}`;
+    const activationLink = `${CLIENT_URL}/confirm-email/${activationId}?username=${username}`;
 
     /** send activate link to email */
     this.emailService.sendEmail(email, username, EMailTemplatesType.ACTIVATION, activationLink);
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   async logout(refreshToken: string): Promise<void> {
-    await this.userRepository.findOneAndUpdate({ refreshToken }, { refreshToken: '' });
+    await this.userRepository.logout(refreshToken);
   }
 
   async socialAuth(email: string) {
@@ -144,7 +144,7 @@ export class AuthService {
     });
 
     const CLIENT_URL = this.configService.get<string>(EEnvVariables.CLIENT_URL);
-    const activationLink = `${CLIENT_URL}/restore-password/${activationId}`;
+    const activationLink = `${CLIENT_URL}/restore-password/${activationId}?email=${email}`;
 
     /** send activate link to email */
     this.emailService.sendEmail(email, user.username, EMailTemplatesType.RESTORE_PASSWORD, activationLink);

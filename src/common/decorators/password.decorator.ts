@@ -17,11 +17,16 @@ function Password(values: IPassword): PropertyDecorator {
     IsString()(target, propertyKey);
     MaxLength(maxLengthPass)(target, propertyKey);
     MinLength(minLengthPass)(target, propertyKey);
-    IsStrongPassword({
-      minNumbers: 1,
-      minSymbols: 1,
-      minUppercase: 1,
-    })(target, propertyKey);
+    IsStrongPassword(
+      {
+        minNumbers: 1,
+        minSymbols: 1,
+        minUppercase: 1,
+      },
+      {
+        message: `Password must contain at least 1 number, 1 symbol, 1 uppercase letter, and be between ${minLengthPass} and ${maxLengthPass} characters long.`,
+      },
+    )(target, propertyKey);
   };
 }
 

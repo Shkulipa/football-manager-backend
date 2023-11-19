@@ -2,7 +2,9 @@
 
 ---
 # Todo
-- [ ] move loading/updating files to bull queue 
+- [ ] integrate(replace) UserRepositoryModule into RefreshTokenModule,
+because there is directly inject user entity
+- [ ] move loading/updating files to bull queue(buffer & id of post into bull queue)
 
 ## Project start instructions 
 ### Installation
@@ -38,6 +40,16 @@ yarn prod (run dist/main)
 ```
 
 ---
+
+## Redis
+if you are using desktop redis app
+create database with:
+port: 127.0.0.1:6379
+
+if you wanna use it by browser
+host: redis
+port: 6379
+name: any(redis:6379)
 
 ## Docs
 1. generate compodoc(documentation):
@@ -198,3 +210,4 @@ tutorials:
 # Stripe
 tutorials:
 1. [watch video](https://www.youtube.com/watch?v=-90OHI_Gd80&t=829s&ab_channel=UnBox)
+2. https://www.youtube.com/watch?v=JTGgYVIBZjI&ab_channel=HarrisonMilbradt

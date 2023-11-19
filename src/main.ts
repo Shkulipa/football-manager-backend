@@ -1,4 +1,4 @@
-import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config/dist/config.service';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -26,15 +26,10 @@ async function bootstrap() {
   /** swagger */
   if (mode === EMode.DEVELOPMENT || mode === EMode.STAGING) {
     const document = SwaggerModule.createDocument(app, swaggerConfig);
-    SwaggerModule.setup('/api/docs', app, document);
+    SwaggerModule.setup('/docs', app, document);
   }
 
-  app.use(`/api/webhook`, raw({ type: '*/*' }));
-
-  /** prefix in url */
-  app.setGlobalPrefix('api', {
-    exclude: [{ path: '', method: RequestMethod.GET }],
-  });
+  app.use(`/webhook`, raw({ type: '*/*' }));
 
   /** cookie */
   app.use(cookieParser());

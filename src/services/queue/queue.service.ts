@@ -4,6 +4,8 @@ import { ISendMailOptions } from '@nestjs-modules/mailer';
 import { Queue } from 'bull';
 
 import { EQueueNames } from './../../services/queue/dto/queue-names';
+import { EProcessFile } from './consumers/file/file.constants';
+import { IUploadFileDataDto } from './consumers/file/interfaces/file';
 import { EProcessMail } from './consumers/mail/mail.constants';
 
 @Injectable()
@@ -19,7 +21,7 @@ export class QueueService {
   }
 
   /** files queue */
-  /*   async uploadFile(uploadFileDataDto: IUploadFileDto) {
-    return await this.fileQueue.add(EProccessFile.UPLOAD_FILE, uploadFileDataDto);
-  } */
+  async uploadFile(uploadFileDataDto: IUploadFileDataDto) {
+    return await this.fileQueue.add(EProcessFile.UPLOAD_FILE, uploadFileDataDto);
+  }
 }

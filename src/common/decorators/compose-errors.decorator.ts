@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiInternalServerErrorResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiTooManyRequestsResponse } from '@nestjs/swagger';
 
 import { EErrors } from '../constants/errors.enum';
 import { CommonServerErrorResDto } from '../dto/common-server-error-res.dto';
@@ -16,6 +16,10 @@ export function ComposeErrorsDecorator() {
     ApiInternalServerErrorResponse({
       type: CommonServerErrorResDto,
       description: EErrors.INTERNAL_SERVER_ERROR,
+    }),
+    ApiTooManyRequestsResponse({
+      type: CommonServerErrorResDto,
+      description: EErrors.TOO_MANY_REQUESTS,
     }),
   ];
 
