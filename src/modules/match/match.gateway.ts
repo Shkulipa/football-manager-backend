@@ -1,4 +1,5 @@
 import { Logger, UseFilters, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ConnectedSocket,
   MessageBody,
@@ -9,6 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { initiateGame, playIteration, startSecondHalf } from 'footballsimulationengine';
 import { Namespace } from 'socket.io';
+import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { WsExceptionFilter } from 'src/common/exceptions/ws-exception-filter.decorator';
 import { GatewayAuthGuard } from 'src/common/guards/gateway-auth.guard';
 import { wsExceptionFilterHelper } from 'src/common/helpers/ws-exception-filter.helper';
@@ -34,10 +36,14 @@ export class MatchGateway implements OnGatewayInit {
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
     private readonly matchService: MatchService,
+    private readonly configService: ConfigService,
     private readonly matchRepository: MatchRepository,
   ) {}
   @WebSocketServer()
   io: Namespace;
+
+  private readonly GAME_LENGTH = this.configService.get<string>(EEnvVariables.GAME_LENGTH);
+  private readonly CHECK_ITERATION = this.configService.get<string>(EEnvVariables.CHECK_ITERATION);
 
   afterInit() {
     const middle = WSAuthMiddleware(this.jwtService, this.userService);
@@ -85,12 +91,12 @@ export class MatchGateway implements OnGatewayInit {
     const match = await this.matchService.validationStartMatch(matchId);
 
     // simulation match
-    const gameLength = 2500;
-    const checkIteration = 500;
+    const gameLength = parseInt(this.GAME_LENGTH);
+    const checkIteration = parseInt(this.CHECK_ITERATION);
     const iterationHalfTime = gameLength / 2;
     let currIteration = 0;
     let matchInfo: IMatchInfo;
-
+    console.log('gameLength', typeof gameLength, gameLength);
     const matchData = {
       gameLength,
       simulations: [],

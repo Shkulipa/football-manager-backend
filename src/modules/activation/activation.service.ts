@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { CommonDecodedTokenJwtDto } from 'src/common/dto/common-decoded-token-jwt.dto';
@@ -28,10 +28,6 @@ export class ActivationService {
     const { username } = sendReqDto;
 
     /** user should be exist and not been activated adn not deleted */
-    // const user = await this.userModel
-    //   .findOne()
-    //   .or([{ username }, { email: username }])
-    //   .lean();
     const user = await this.userRepository.findOne({ $or: [{ email: username }, { username }] });
     if (!user) throw new NotFoundException('User not found');
     if (user.isConfirmEmail) throw new ConflictException('User has activated yet');
