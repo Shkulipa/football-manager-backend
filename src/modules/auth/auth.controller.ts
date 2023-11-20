@@ -5,6 +5,7 @@ import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags }
 import { Request, Response } from 'express';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { EErrors } from 'src/common/constants/errors.enum';
+import { EMode } from 'src/common/constants/mode.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
 import { ComposeOthersErrorsDecorator } from 'src/common/decorators/compose-others-errors.decorator';
 
@@ -66,9 +67,16 @@ export class AuthController {
   ): Promise<AuthLoginResDto> {
     const user = await this.authService.login(LoginUseReqDto);
 
+    const mode = this.configService.get(EEnvVariables.NODE_ENV);
+
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
-      sameSite: 'none',
+      ...(mode === EMode.DEVELOPMENT
+        ? {}
+        : {
+            sameSite: 'none',
+            secure: false,
+          }),
     });
     delete user.refreshToken;
 
