@@ -68,7 +68,6 @@ export class AuthController {
     const user = await this.authService.login(LoginUseReqDto);
 
     const mode = this.configService.get(EEnvVariables.NODE_ENV);
-
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
       ...(mode === EMode.DEVELOPMENT

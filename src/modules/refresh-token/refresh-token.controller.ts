@@ -1,7 +1,10 @@
 import { Controller, Post, Req, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { EErrors } from 'src/common/constants/errors.enum';
+import { EMode } from 'src/common/constants/mode.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
 import { TOKEN_TAG } from 'src/common/constants/tags';
 import { ComposeErrorsDecorator } from 'src/common/decorators/compose-errors.decorator';
@@ -14,7 +17,10 @@ import { RefreshTokenService } from './refresh-token.service';
 @Controller(TOKEN_TAG)
 @ComposeErrorsDecorator()
 export class RefreshTokenController {
-  constructor(private readonly refreshTokenService: RefreshTokenService) {}
+  constructor(
+    private readonly refreshTokenService: RefreshTokenService,
+    private readonly configService: ConfigService,
+  ) {}
 
   /**
    * refresh access token
@@ -30,8 +36,15 @@ export class RefreshTokenController {
   async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response): Promise<RefreshResDto> {
     const { refreshToken, ...rest } = await this.refreshTokenService.refresh(req.cookies.refreshToken);
 
+    const mode = this.configService.get(EEnvVariables.NODE_ENV);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
+      ...(mode === EMode.DEVELOPMENT
+        ? {}
+        : {
+            sameSite: 'none',
+            secure: true,
+          }),
     });
 
     return rest;

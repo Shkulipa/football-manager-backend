@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User } from 'src/common/decorators/user.decorator';
 import { JwtModule } from 'src/services/jwt/jwt.module';
@@ -9,7 +9,7 @@ import { RefreshTokenController } from './refresh-token.controller';
 import { RefreshTokenService } from './refresh-token.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), JwtModule],
+  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), ConfigModule, JwtModule],
   controllers: [RefreshTokenController],
   providers: [RefreshTokenService, ConfigService],
 })
