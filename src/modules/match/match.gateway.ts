@@ -181,7 +181,7 @@ export class MatchGateway implements OnGatewayInit {
       });
 
       // send notification(array of iterations) to users(every <count> iterations)
-      if (currIteration % 2 === 0) {
+      if (currIteration % 1 === 0) {
         this.io.to(matchId).emit('match-simulation', JSON.stringify({ ...matchData, currIteration }));
         matchData.simulations = [];
       }
