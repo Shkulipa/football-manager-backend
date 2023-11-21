@@ -68,18 +68,14 @@ export class AuthController {
     const user = await this.authService.login(LoginUseReqDto);
 
     const mode = this.configService.get(EEnvVariables.NODE_ENV);
-    const expirationDate = new Date();
-    const timeExpire = 4 * 60 * 60 * 1000;
-    expirationDate.setTime(expirationDate.getTime() + timeExpire);
+
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
       ...(mode === EMode.DEVELOPMENT
         ? {}
         : {
             sameSite: 'none',
-            secure: true,
-            maxAge: timeExpire,
-            expires: expirationDate,
+            secure: false,
           }),
     });
     delete user.refreshToken;
