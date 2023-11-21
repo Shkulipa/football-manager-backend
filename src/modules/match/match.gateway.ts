@@ -73,25 +73,30 @@ export class MatchGateway implements OnGatewayInit {
       }
 
       const updatedMatch = await this.matchRepository.getMatchById(matchId);
-      // options of room
-      const connectedClients = this.io.adapter.rooms?.get(roomName)?.size ?? 0;
-      this.logger.debug(`Total clients connected to match '${roomName}': ${connectedClients}`);
-
       // here you can handle situation with spectators
       this.io.to(matchId).emit('join', updatedMatch);
+
+      // checking on start match
+      if (
+        updatedMatch.status === EStatusMatch.PREPARE &&
+        updatedMatch.player1.isReady &&
+        updatedMatch.player2.isReady
+      ) {
+        await this.match(matchId);
+      }
     } catch (err) {
       const error = wsExceptionFilterHelper(err);
       this.io.to(client.id).emit('exception', JSON.stringify(error));
     }
   }
 
-  @UseGuards(GatewayAuthGuard)
   @SubscribeMessage('start-match')
   async match(@MessageBody('matchId') matchId: string) {
     const match = await this.matchService.validationStartMatch(matchId);
 
     // simulation match
     const gameLength = parseInt(this.GAME_LENGTH);
+    // const gameLength = 100;
     const checkIteration = parseInt(this.CHECK_ITERATION);
     const iterationHalfTime = gameLength / 2;
     let currIteration = 0;

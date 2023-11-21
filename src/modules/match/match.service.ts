@@ -38,7 +38,7 @@ export class MatchService {
 
     if (match.status === `${EStatusMatch.FINISHED}`) throw new BadRequestException('Match has already finished');
 
-    if (!match.player1.isReady || !match.player1.isReady)
+    if (!match.player1.isReady || !match.player2.isReady)
       throw new BadRequestException(`For starting match(${matchId}) need be ready for both players`);
 
     await this.matchRepository.setStatusMatch(matchId, EStatusMatch.IN_PROCESS, 900);
@@ -230,7 +230,13 @@ export class MatchService {
         ...playerData,
         position,
         originPOS:
-          engineNameTeam === ENameTeams.KICK_OFF_TEAM ? playerPositions[position] : playerPositionsSecondTeam[position],
+          engineNameTeam === ENameTeams.KICK_OFF_TEAM
+            ? matchInfo.half === 1
+              ? playerPositions[position]
+              : playerPositionsSecondTeam[position]
+            : matchInfo.half === 1
+            ? playerPositionsSecondTeam[position]
+            : playerPositions[position],
       };
 
       newReplacePositionsMainSquad.push(newData);
