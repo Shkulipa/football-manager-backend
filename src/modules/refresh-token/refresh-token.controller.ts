@@ -37,6 +37,11 @@ export class RefreshTokenController {
     const { refreshToken, ...rest } = await this.refreshTokenService.refresh(req.cookies.refreshToken);
 
     const mode = this.configService.get(EEnvVariables.NODE_ENV);
+
+    const expirationDate = new Date();
+    const timeExpire = 4 * 60 * 60;
+    expirationDate.setTime(expirationDate.getTime() + timeExpire * 1000);
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       ...(mode === EMode.DEVELOPMENT
@@ -44,6 +49,8 @@ export class RefreshTokenController {
         : {
             sameSite: 'none',
             secure: true,
+            expires: expirationDate,
+            maxAge: timeExpire,
           }),
     });
 
