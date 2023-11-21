@@ -75,7 +75,7 @@ export class AuthController {
         ? {}
         : {
             sameSite: 'none',
-            secure: false,
+            secure: true,
           }),
     });
     delete user.refreshToken;
