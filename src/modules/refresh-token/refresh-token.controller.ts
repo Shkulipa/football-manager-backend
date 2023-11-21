@@ -47,6 +47,7 @@ export class RefreshTokenController {
       ...(mode === EMode.DEVELOPMENT
         ? {}
         : {
+            domain: 'https://football-manager-front-sigma.vercel.app',
             sameSite: 'none',
             secure: true,
             expires: expirationDate,
