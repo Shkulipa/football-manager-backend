@@ -77,11 +77,9 @@ export class MatchGateway implements OnGatewayInit {
       this.io.to(matchId).emit('join', updatedMatch);
 
       // checking on start match
-      if (
-        updatedMatch.status === EStatusMatch.PREPARE &&
-        updatedMatch.player1.isReady &&
-        updatedMatch.player2.isReady
-      ) {
+      const readyPlayer1 = updatedMatch.player2.user._id === client.user._id.toString() && updatedMatch.player1.isReady;
+      const readyPlayer2 = updatedMatch.player1.user._id === client.user._id.toString() && updatedMatch.player2.isReady;
+      if (updatedMatch.status === EStatusMatch.PREPARE && (readyPlayer1 || readyPlayer2)) {
         await this.match(matchId);
       }
     } catch (err) {
@@ -96,7 +94,6 @@ export class MatchGateway implements OnGatewayInit {
 
     // simulation match
     const gameLength = parseInt(this.GAME_LENGTH);
-    // const gameLength = 100;
     const checkIteration = parseInt(this.CHECK_ITERATION);
     const iterationHalfTime = gameLength / 2;
     let currIteration = 0;
