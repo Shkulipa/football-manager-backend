@@ -38,6 +38,7 @@ export class RefreshTokenController {
 
     const mode = this.configService.get(EEnvVariables.NODE_ENV);
 
+    // set cookies
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       ...(mode === EMode.DEVELOPMENT
