@@ -69,8 +69,8 @@ export class AuthController {
 
     const mode = this.configService.get(EEnvVariables.NODE_ENV);
     const expirationDate = new Date();
-    const timeExpire = 4 * 60 * 60;
-    expirationDate.setTime(expirationDate.getTime() + timeExpire * 1000);
+    const timeExpire = 4 * 60 * 60 * 1000;
+    expirationDate.setTime(expirationDate.getTime() + timeExpire);
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
       ...(mode === EMode.DEVELOPMENT
