@@ -71,9 +71,9 @@ export class MatchRepository {
     }
   }
 
-  async setStatusMatch(matchId: string, nweStatus: EStatusMatch, ttl?: number) {
+  async setStatusMatch(matchId: string, newStatus: EStatusMatch, ttl?: number) {
     const key = `${NameKeys.MATCH}:${matchId}`;
-    await this.redisClient.call('JSON.SET', key, '.status', JSON.stringify(nweStatus));
+    await this.redisClient.call('JSON.SET', key, '.status', JSON.stringify(newStatus));
     if (ttl) await this.redisClient.expire(key, ttl);
   }
 
