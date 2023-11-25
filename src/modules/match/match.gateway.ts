@@ -110,7 +110,7 @@ export class MatchGateway implements OnGatewayInit {
     const match = await this.matchService.validationStartMatch(matchId);
 
     // simulation match
-    const gameLength = 100;
+    const gameLength = parseInt(this.GAME_LENGTH);
     const checkIteration = parseInt(this.CHECK_ITERATION);
     let currIteration = 0;
     let matchInfo: IMatchInfo;
