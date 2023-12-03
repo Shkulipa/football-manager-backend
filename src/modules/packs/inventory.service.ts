@@ -5,22 +5,26 @@ import { RealPlayerRepository } from 'src/services/repositories/real-player/real
 import { UserRepository } from 'src/services/repositories/user/user.repository';
 import { UserTeamRepository } from 'src/services/repositories/user-team/user-team.repository';
 
+import { toId } from '../../common/helpers/transform.helper';
 import { GetRandomPlayerForPackDto } from '../real-player/dto/get-random-player-for-pack.dto';
-import { toId } from './../../common/helpers/transform.helper';
-import { GetPacksResDto } from './dto/get-packs-res.dto';
+import { GetInventoryResDto } from './dto/get-inventory-res.dto';
 import { OpenPacksReqDto } from './dto/open-packs-req.dto';
 
 @Injectable()
-export class PacksService {
+export class InventoryService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly userTeamRepository: UserTeamRepository,
     private readonly realPlayerRepository: RealPlayerRepository,
   ) {}
 
-  async getPacks(user: IUserData): Promise<GetPacksResDto> {
-    const { packs } = await this.userRepository.findById(user._id);
-    return packs;
+  async getInventory(user: IUserData): Promise<GetInventoryResDto> {
+    const { packs, money } = await this.userRepository.findById(user._id);
+    const res: GetInventoryResDto = {
+      packs,
+      money,
+    };
+    return res;
   }
 
   async openPack(user: IUserData, openPacksReqDto: OpenPacksReqDto): Promise<GetRandomPlayerForPackDto> {
@@ -40,12 +44,12 @@ export class PacksService {
     );
 
     // delete duplicates
-    const newPlayersIds = openRes.players.filter((p) => !playersIdsInUserTeam.includes(p._id.toString()));
-    const parseIdsNewPlayersIds = newPlayersIds.map((p) => toId(p._id));
+    const newPlayers = openRes.players.filter((p) => !playersIdsInUserTeam.includes(p._id.toString()));
+    const parseIdsNewPlayersIds = newPlayers.map((p) => toId(p._id));
 
     const res: GetRandomPlayerForPackDto = {
       ...openRes,
-      players: openRes.players.filter((p) => parseIdsNewPlayersIds.includes(p._id)),
+      players: newPlayers,
     };
 
     // add  players into reserve

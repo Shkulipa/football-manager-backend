@@ -1,4 +1,4 @@
-import { UsersDbDto } from 'src/services/repositories/user-team/dto/user-db.dto';
+import { UsersDbDto } from 'src/services/repositories/user/dto/user-db.dto';
 
 export interface IPlayerRewardData extends Pick<UsersDbDto, '_id' | 'username'> {
   money: number;

@@ -1,7 +1,7 @@
 import { ApiProperty, IntersectionType, PickType } from '@nestjs/swagger';
 import { RealPlayerFullInfoDto } from 'src/modules/real-player/dto/real-player-full-info.dto';
 import { RealTeamFullInfoDto } from 'src/modules/real-team/dto/real-team-full-info.dto';
-import { UsersDbDto } from 'src/services/repositories/user-team/dto/user-db.dto';
+import { UsersDbDto } from 'src/services/repositories/user/dto/user-db.dto';
 
 import { UserTeamDbDto } from './user-team-db.dto';
 

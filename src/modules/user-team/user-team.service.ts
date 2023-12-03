@@ -1,5 +1,6 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, Query } from '@nestjs/common';
 import { isEmpty, pick } from 'lodash';
+import { QueryDto } from 'src/common/dto/query.dto';
 import getKeyS3Helper from 'src/common/helpers/get-key-s3.helper';
 import { toId, toIdsArr } from 'src/common/helpers/transform.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
@@ -20,6 +21,16 @@ export class UserTeamService {
     private readonly s3Service: S3Service,
     private readonly realPlayerRepository: RealPlayerRepository,
   ) {}
+
+  async getUsersTeamsByRating(user: IUserData, query: QueryDto) {
+    const rating = await this.userTeamRepository.getUsersTeamsByRating(query);
+    const getOwnRating = await this.userTeamRepository.getOwnRating(user);
+
+    return {
+      rating,
+      ...getOwnRating,
+    };
+  }
 
   async create(user: IUserData, createUserTeamDto: CreateUserTeamReqDto, file: Express.Multer.File) {
     const { clubName } = createUserTeamDto;

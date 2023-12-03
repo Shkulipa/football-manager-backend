@@ -44,6 +44,7 @@ export enum OperationIds {
 
   USER_TEAM_GET_BY_ID = 'user-team-get-by-id',
   USER_TEAM_GET_OWN = 'user-team-get-own',
+  USER_TEAM_BY_RATING = 'user-team-by-rating',
   USER_TEAM_CREATE = 'user-team-create',
   USER_TEAM_UPDATE = 'user-team-update',
   USER_TEAM_DELETE = 'user-team-delete',
@@ -53,7 +54,7 @@ export enum OperationIds {
   AUCTION_BUY_LOT = 'auction-buy-lot',
   AUCTION_CANCEL_LOT = 'auction-cancel-lot',
 
-  PACK_GET = 'pack-get',
+  INVENTORY_GET = 'inventory-get',
   PACK_OPEN = 'pack-open',
 
   MATCH_UPDATE_SQUADS = 'match-update-squads',

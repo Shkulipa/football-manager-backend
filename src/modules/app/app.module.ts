@@ -26,7 +26,7 @@ import { ChatsModule } from '../chats/chats.module';
 import { CountryModule } from '../country/country.module';
 import { HealthModule } from '../health/health.module';
 import { MatchModule } from '../match/match.module';
-import { PacksModule } from '../packs/packs.module';
+import { InventoryModule } from '../packs/inventory.module';
 import { RealPlayerModule } from '../real-player/real-player.module';
 import { RealTeamModule } from '../real-team/real-team.module';
 import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
@@ -60,7 +60,7 @@ import { AppService } from './app.service';
     MatchModule,
     StripeModule,
     ShopModule,
-    PacksModule,
+    InventoryModule,
     AuctionModule,
     ChatsModule,
   ],

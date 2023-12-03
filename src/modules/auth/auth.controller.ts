@@ -142,7 +142,7 @@ export class AuthController {
     return 'Google auth';
   }
 
-  @Get('google/redirect')
+  @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req: ISocialAuth, @Res() res: Response) {
     const email = req.user.email;
@@ -151,7 +151,7 @@ export class AuthController {
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
     });
-    return res.redirect(`${this.clientUrl}/social-auth?accessToken=${user.accessToken}`);
+    return res.redirect(`${this.clientUrl}/auth/sign-in/social?accessToken=${user.accessToken}`);
   }
 
   /**
@@ -159,19 +159,19 @@ export class AuthController {
    */
   @Get('/facebook')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLogin(): Promise<any> {
+  async facebookLogin() {
     return 'Facebook auth';
   }
 
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req: ISocialAuth, @Res() res: Response): Promise<any> {
+  async facebookLoginRedirect(@Req() req: ISocialAuth, @Res() res: Response) {
     const email = req.user.email;
     const user = await this.authService.socialAuth(email);
 
     res.cookie('refreshToken', user.refreshToken, {
       httpOnly: true,
     });
-    return res.redirect(`${this.clientUrl}/social-auth?accessToken=${user.accessToken}`);
+    return res.redirect(`${this.clientUrl}/auth/sign-in/social?accessToken=${user.accessToken}`);
   }
 }

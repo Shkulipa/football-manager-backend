@@ -5,13 +5,13 @@ import { UserRepositoryModule } from 'src/services/repositories/user/user-reposi
 import { UserTeamRepositoryModule } from 'src/services/repositories/user-team/user-team-repository.module';
 
 import { UserModule } from '../user/user.module';
-import { PacksController } from './packs.controller';
-import { PacksService } from './packs.service';
+import { InventoryController } from './inventory.controller';
+import { InventoryService } from './inventory.service';
 
 @Module({
   imports: [UserModule, UserRepositoryModule, RealPlayerRepositoryModule, UserTeamRepositoryModule, JwtModule],
-  controllers: [PacksController],
-  providers: [PacksService],
-  exports: [PacksService],
+  controllers: [InventoryController],
+  providers: [InventoryService],
+  exports: [InventoryService],
 })
-export class PacksModule {}
+export class InventoryModule {}

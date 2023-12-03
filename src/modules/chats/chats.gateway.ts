@@ -14,11 +14,12 @@ import { wsExceptionFilterHelper } from 'src/common/helpers/ws-exception-filter.
 import { SocketUserData } from 'src/common/interfaces/socket-user-data.interface';
 import { WSAuthMiddleware } from 'src/common/middlewares/ws-auth.middleware';
 import { JwtService } from 'src/services/jwt/jwt.service';
+import { v4 as uuidv4 } from 'uuid';
 
 import { UserService } from '../user/user.service';
 import { ClientDto } from './dto/client.dto';
+import { IMsgDto } from './dto/msg.dto';
 import { SendMsgChatReqDto } from './dto/send-msg-chat.dto';
-import { SendMsgDirectReqDto } from './dto/send-msg-direct.dto';
 
 @UsePipes(new ValidationPipe())
 @UseFilters(new WsExceptionFilter())
@@ -31,6 +32,8 @@ export class ChatsGateway implements OnGatewayInit {
   @WebSocketServer()
   io: Namespace;
 
+  private msgGeneralChat: IMsgDto[] = [];
+
   // need for getting user from <@ConnectedSocket() client: SocketUserData>
   afterInit() {
     const middle = WSAuthMiddleware(this.jwtService, this.userService);
@@ -39,9 +42,6 @@ export class ChatsGateway implements OnGatewayInit {
   }
 
   handleDisconnect(client: SocketUserData) {
-    this.logger.debug(
-      `disconnect user: socketId(${client.id}) id(${client.user._id}), username(${client.user.username})`,
-    );
     client.rooms.forEach((r) => client.leave(r));
     this.clients = this.clients.filter((c) => c.socketId !== client.id);
   }
@@ -53,11 +53,11 @@ export class ChatsGateway implements OnGatewayInit {
 
     try {
       const currPlayer: ClientDto = { socketId: client.id, username: client.user.username, _id: client.user._id };
+      this.clients = this.clients.filter((u) => u._id !== client.user._id);
       this.clients.push(currPlayer);
-      this.io.emit('users-online', JSON.stringify({ count: this.clients.length, clients: this.clients }));
     } catch (err) {
       const error = wsExceptionFilterHelper(err);
-      this.io.to(client.id).emit('exception', JSON.stringify(error));
+      this.io.to(client.id).emit('exception', error);
     }
   }
 
@@ -70,30 +70,26 @@ export class ChatsGateway implements OnGatewayInit {
 
     // options of room
     const connectedClients = this.io.adapter.rooms?.get(chatId)?.size ?? 0;
+    if (chatId === 'general') this.io.to(client.id).emit('get-old-messages', this.msgGeneralChat);
     this.logger.debug(`Total clients connected to '${chatId}': ${connectedClients}`);
   }
 
   @UseGuards(GatewayAuthGuard)
   @SubscribeMessage('send-msg-chat')
   async sendMsgChat(@ConnectedSocket() client: SocketUserData, @MessageBody() sendMsgChatReqDto: SendMsgChatReqDto) {
-    const { username } = client.user;
     const { chatId, msg } = sendMsgChatReqDto;
-    this.io.to(chatId).emit('msg-chat', JSON.stringify({ username, msg, date: Date.now() }));
-  }
 
-  @UseGuards(GatewayAuthGuard)
-  @SubscribeMessage('send-msg-direct')
-  async sendMsgDirect(
-    @ConnectedSocket() client: SocketUserData,
-    @MessageBody() sendMsgDirectlyReqDto: SendMsgDirectReqDto,
-  ) {
-    const { userSocketId, msg } = sendMsgDirectlyReqDto;
-    if (!this.clients.find((c) => c.socketId === userSocketId))
-      throw new NotFoundException('This user not online right now');
+    const newMsg = { id: uuidv4(), user: client.user, msg, date: Date.now() };
 
-    const { username } = client.user;
-    this.io
-      .to(userSocketId)
-      .emit('msg-direct', JSON.stringify({ senderSocketId: client.id, username, msg, date: Date.now() }));
+    // if chat is common
+    if (chatId === 'general') {
+      const maxLengthGeneralChat = 25;
+      this.msgGeneralChat =
+        this.msgGeneralChat.length < maxLengthGeneralChat
+          ? [...this.msgGeneralChat, newMsg]
+          : [...this.msgGeneralChat.slice(0, maxLengthGeneralChat - 1), newMsg];
+    }
+
+    this.io.to(chatId).emit('msg-chat', newMsg);
   }
 }

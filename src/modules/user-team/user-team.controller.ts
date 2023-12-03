@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EErrors } from 'src/common/constants/errors.enum';
@@ -11,11 +22,13 @@ import { ComposeOthersErrorsDecorator } from 'src/common/decorators/compose-othe
 import { User } from 'src/common/decorators/user.decorator';
 import { CommonPathReqDto } from 'src/common/dto/common-path-req.dto';
 import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
+import { QueryDto } from 'src/common/dto/query.dto';
 import { uploadFilesLimits } from 'src/common/helpers/files.helper';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 
 import { CreateUserTeamReqDto } from './dto/create-user-team-req.dto';
 import { GetUserTeamResDto } from './dto/get-user-team-res.dto';
+import { IGetUsersTeamsByRatingResDto } from './dto/get-users-teams-by-rating-res.dto';
 import { UpdateUserTeamReqDto } from './dto/update-user-team-req.dto';
 import { UserTeamService } from './user-team.service';
 
@@ -26,6 +39,21 @@ const userTeamImgField = 'userTeamImgField';
 @ComposeErrorsDecorator()
 export class UserTeamController {
   constructor(private readonly userTeamService: UserTeamService) {}
+
+  /**
+   * get users team sorted by rating
+   * @returns {Promise<IGetUsersTeamsByRatingResDto>}
+   */
+  @Get('/rating')
+  @ApiOperation({
+    description: 'get users team sorted by rating',
+    operationId: OperationIds.USER_TEAM_BY_RATING,
+  })
+  @ApiResponse({ status: 200, type: IGetUsersTeamsByRatingResDto, description: 'OK' })
+  @ComposeAuthDecorator()
+  getUsersTeamsByRating(@User() user: IUserData, @Query() query: QueryDto): Promise<IGetUsersTeamsByRatingResDto> {
+    return this.userTeamService.getUsersTeamsByRating(user, query);
+  }
 
   /**
    * create user team

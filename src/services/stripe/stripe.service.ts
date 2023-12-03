@@ -5,7 +5,6 @@ import { InjectStripe } from 'nestjs-stripe';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { CommonSuccessResDto } from 'src/common/dto/common-success-res.dto';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
-import { EProductsPrices } from 'src/modules/shop/constants/products.enum';
 import Stripe from 'stripe';
 
 import { UserRepository } from '../repositories/user/user.repository';
@@ -51,8 +50,8 @@ export class StripeService {
         email: email,
         price,
       },
-      success_url: `${client}/success`,
-      cancel_url: `${client}/cancel`,
+      success_url: `${client}/shop/success`,
+      cancel_url: `${client}/shop/cancel`,
     });
 
     return { url: session.url };
@@ -81,28 +80,33 @@ export class StripeService {
       throw new BadRequestException('Webhook signature verification failed');
     }
 
+    const STRIPE_PRODUCT_MONEY = this.configService.get<string>(EEnvVariables.STRIPE_PRODUCT_MONEY);
+    const STRIPE_PRODUCT_PACK_BRONZE = this.configService.get<string>(EEnvVariables.STRIPE_PRODUCT_PACK_BRONZE);
+    const STRIPE_PRODUCT_PACK_SILVER = this.configService.get<string>(EEnvVariables.STRIPE_PRODUCT_PACK_SILVER);
+    const STRIPE_PRODUCT_PACK_GOLD = this.configService.get<string>(EEnvVariables.STRIPE_PRODUCT_PACK_GOLD);
+
     switch (event.type) {
       case 'checkout.session.completed':
         const { email, price } = event.data.object.metadata;
-        if (price === EProductsPrices.MONEY1000) {
-          this.logger.debug(`user ${email} want buy MONEY1000`);
-          await this.userRepository.findOneAndUpdate({ email }, { $inc: { money: 1000 } });
+        if (price === STRIPE_PRODUCT_MONEY) {
+          this.logger.debug(`user ${email} want buy MONEY`);
+          await this.userRepository.findOneAndUpdate({ email }, { $inc: { money: 50000 } });
           break;
         }
 
-        if (price === EProductsPrices.PACK_BRONZE) {
+        if (price === STRIPE_PRODUCT_PACK_BRONZE) {
           this.logger.debug(`user ${email} want buy PACK_BRONZE`);
           await this.userRepository.findOneAndUpdate({ email }, { $inc: { 'packs.bronze': 1 } });
           break;
         }
 
-        if (price === EProductsPrices.PACK_SILVER) {
+        if (price === STRIPE_PRODUCT_PACK_SILVER) {
           this.logger.debug(`user ${email} want buy PACK_SILVER`);
           await this.userRepository.findOneAndUpdate({ email }, { $inc: { 'packs.silver': 1 } });
           break;
         }
 
-        if (price === EProductsPrices.PACK_GOLD) {
+        if (price === STRIPE_PRODUCT_PACK_GOLD) {
           this.logger.debug(`user ${email} want buy PACK_GOLD`);
           await this.userRepository.findOneAndUpdate({ email }, { $inc: { 'packs.gold': 1 } });
           break;

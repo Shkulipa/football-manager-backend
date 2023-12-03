@@ -10,7 +10,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     super({
       clientID: configService.get<string>(EEnvVariables.AUTH_CLIENT_ID_FACEBOOK),
       clientSecret: configService.get<string>(EEnvVariables.AUTH_CLIENT_SECRET_FACEBOOK),
-      callbackURL: `${configService.get<string>(EEnvVariables.SERVER_URL)}/api/auth/facebook/redirect`,
+      callbackURL: `${configService.get<string>(EEnvVariables.SERVER_URL)}/auth/facebook/redirect`,
       scope: 'email',
       profileFields: ['emails', 'name'],
     });

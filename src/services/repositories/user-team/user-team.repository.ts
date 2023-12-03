@@ -4,7 +4,9 @@ import { Model, Types } from 'mongoose';
 import { CommonJoinMainSquad } from 'src/common/aggregate/lookups/common-join-main-squad';
 import { CommonRealPlayerLookup } from 'src/common/aggregate/lookups/common-real-player.lookup';
 import { CommonUserLookup } from 'src/common/aggregate/lookups/common-user.lookup';
+import { QueryDto } from 'src/common/dto/query.dto';
 import { toId } from 'src/common/helpers/transform.helper';
+import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 import { groupPlayersByPositionInMainSquad } from 'src/modules/real-player/helpers/group-players-by-position-in-main-squad';
 import { UserTeamDbDto } from 'src/modules/user-team/dto/user-team-db.dto';
@@ -20,6 +22,144 @@ export class UserTeamRepository extends BaseMongoRepository<UserTeamDbDto> {
     private readonly userTeamModel: Model<UserTeamDbDto>,
   ) {
     super(userTeamModel, 'User Team');
+  }
+
+  async getOwnRating(user: IUserData) {
+    const result = await this.userTeamModel.aggregate([
+      {
+        $facet: {
+          items: [
+            { $sort: { ratingElo: -1 } },
+            {
+              $project: {
+                _id: 1,
+                logoClub: 1,
+                clubName: 1,
+                ratingElo: 1,
+              },
+            },
+          ],
+          userRating: [
+            {
+              $match: {
+                userId: toId(user._id),
+              },
+            },
+            {
+              $project: {
+                _id: 1,
+                logoClub: 1,
+                clubName: 1,
+                ratingElo: 1,
+              },
+            },
+            {
+              $limit: 1,
+            },
+          ],
+        },
+      },
+      {
+        $unwind: {
+          path: '$userRating',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          userRating: {
+            $mergeObjects: [
+              '$userRating',
+              {
+                rank: {
+                  $add: [
+                    {
+                      $indexOfArray: ['$items._id', '$userRating._id'],
+                    },
+                    1,
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $project: {
+          userTeam: '$userRating',
+        },
+      },
+    ]);
+    return result[0];
+  }
+
+  async getUsersTeamsByRating(query: QueryDto) {
+    const { limit, page } = query;
+    const skip = (page - 1) * limit;
+
+    const result = await this.userTeamModel.aggregate([
+      {
+        $facet: {
+          items: [
+            { $sort: { ratingElo: -1 } },
+            { $skip: skip },
+            { $limit: limit },
+            {
+              $project: {
+                _id: 1,
+                logoClub: 1,
+                clubName: 1,
+                ratingElo: 1,
+              },
+            },
+          ],
+          count: [
+            {
+              $count: 'count',
+            },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          items: {
+            $map: {
+              input: '$items',
+              as: 'item',
+              in: {
+                $mergeObjects: [
+                  '$$item',
+                  {
+                    rank: {
+                      $add: [
+                        {
+                          $indexOfArray: ['$items._id', '$$item._id'],
+                        },
+                        1,
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $unwind: {
+          path: '$count',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          items: '$items',
+          count: { $ifNull: ['$count.count', 0] },
+        },
+      },
+    ]);
+
+    return result[0];
   }
 
   async findById(id: string) {

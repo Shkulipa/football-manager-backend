@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 import { LoginUserReqDto } from 'src/modules/auth/dto/login-user-req.dto';
 import { LoginDto } from 'src/modules/user/dto/login.dto';
-import { UsersDbDto } from 'src/services/repositories/user-team/dto/user-db.dto';
+import { UsersDbDto } from 'src/services/repositories/user/dto/user-db.dto';
 
 import { User } from './entities/user.entity';
 

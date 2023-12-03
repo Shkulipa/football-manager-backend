@@ -70,9 +70,8 @@ yarn start:local
 <br><br>
 
 Swagger: 
-- [development](http://localhost:8080/api/docs)
-- [Staging](http://localhost:8080/api/docs)
-- [Production](http://localhost:8080/api/docs)
+- [development](http://localhost:8080/docs)
+- [Staging](http://localhost:8080/docs)
 
 ---
 ## Commits
@@ -106,7 +105,7 @@ Also, you commit shouldn't more than 88 characters
 ## Stripe
 in terminal:
 1. login stripe
-2. stripe listen --forward-to http://localhost:8080/api/webhook
+2. stripe listen --forward-to http://localhost:8080/webhook
 3. copy -> past secret that was selected in bold in .env STRIPE_WEBHOOK_ENDPOINT_SECRET
 
 https://stripe.com/docs/testing#regulatory-cards - tests cards

@@ -4,7 +4,7 @@ import { ECollectionName } from 'src/common/constants/collection-name.enum';
 import { EUserRoles } from 'src/common/constants/user-roles.enum';
 import { hashPasswordHelper } from 'src/common/helpers/hash-password.helper';
 import { PacksDto } from 'src/modules/packs/dto/packs.dto';
-import { UsersDbDto } from 'src/services/repositories/user-team/dto/user-db.dto';
+import { UsersDbDto } from 'src/services/repositories/user/dto/user-db.dto';
 
 const arrayRoles: EUserRoles[] = [...Object.keys(EUserRoles).map((key) => EUserRoles[key])];
 

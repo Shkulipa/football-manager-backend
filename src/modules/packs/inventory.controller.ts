@@ -1,36 +1,36 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
-import { PACKS_TAG } from 'src/common/constants/tags';
+import { INVENTORY_TAG } from 'src/common/constants/tags';
 import { ComposeAuthDecorator } from 'src/common/decorators/compose-auth.decorator';
 import { ComposeErrorsDecorator } from 'src/common/decorators/compose-errors.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 
 import { GetRandomPlayerForPackDto } from '../real-player/dto/get-random-player-for-pack.dto';
-import { GetPacksResDto } from './dto/get-packs-res.dto';
+import { GetInventoryResDto } from './dto/get-inventory-res.dto';
 import { OpenPacksReqDto } from './dto/open-packs-req.dto';
-import { PacksService } from './packs.service';
+import { InventoryService } from './inventory.service';
 
-@ApiTags(PACKS_TAG)
-@Controller(PACKS_TAG)
+@ApiTags(INVENTORY_TAG)
+@Controller(INVENTORY_TAG)
 @ComposeErrorsDecorator()
-export class PacksController {
-  constructor(private readonly packsService: PacksService) {}
+export class InventoryController {
+  constructor(private readonly inventoryService: InventoryService) {}
 
   /**
    * get packs of player
-   * @returns {Promise<GetPacksResDto>}
+   * @returns {Promise<GetInventoryResDto>}
    */
   @Get()
   @ApiOperation({
-    description: 'get packs of player',
-    operationId: OperationIds.PACK_GET,
+    description: 'get inventory of player',
+    operationId: OperationIds.INVENTORY_GET,
   })
-  @ApiResponse({ status: 200, type: GetPacksResDto, description: 'OK' })
+  @ApiResponse({ status: 200, type: GetInventoryResDto, description: 'OK' })
   @ComposeAuthDecorator()
-  async getPacks(@User() user: IUserData): Promise<GetPacksResDto> {
-    return await this.packsService.getPacks(user);
+  async getInventory(@User() user: IUserData): Promise<GetInventoryResDto> {
+    return await this.inventoryService.getInventory(user);
   }
 
   /**
@@ -48,6 +48,6 @@ export class PacksController {
     @User() user: IUserData,
     @Body() openPacksReqDto: OpenPacksReqDto,
   ): Promise<GetRandomPlayerForPackDto> {
-    return await this.packsService.openPack(user, openPacksReqDto);
+    return await this.inventoryService.openPack(user, openPacksReqDto);
   }
 }
