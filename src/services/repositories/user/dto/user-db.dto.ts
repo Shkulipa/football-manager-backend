@@ -45,7 +45,7 @@ export class UsersDbDto extends Document {
   @IsString()
   @Trim()
   @MinLength(4)
-  @Matches(/^[a-zA-Z0-9]*$/, { message: 'Username should only contain letters or digits' })
+  @Matches(/^[a-zA-Z0-9@.]*$/, { message: 'Username should only contain letters or digits' })
   username: string;
 
   @ApiProperty({ required: true, type: Boolean })

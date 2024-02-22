@@ -32,7 +32,7 @@ export class UserRepository extends BaseMongoRepository<UsersDbDto> {
 
     /** compare pass */
     const isEqualPassword = await compare(password, user.password);
-    if (!isEqualPassword) throw new ForbiddenException('Password incorrect');
+    if (!isEqualPassword) throw new BadRequestException('Password incorrect');
 
     const res: LoginDto = {
       _id: user._id,

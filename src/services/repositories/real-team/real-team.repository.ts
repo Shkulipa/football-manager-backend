@@ -165,7 +165,7 @@ export class RealTeamRepository extends BaseMongoRepository<RealTeamDocument> {
 
     const match: PipelineStage.FacetPipelineStage = {
       $match: {
-        ...(clubName ? { name: { $regex: new RegExp(clubName, 'i') } } : {}),
+        ...(clubName ? { clubName: { $regex: new RegExp(clubName, 'i') } } : {}),
         ...commonItemsMatch(parsedIdsWithNull(leagueId), 'leagueId'),
       },
     };

@@ -82,33 +82,16 @@ export class UserService {
   }
 
   async updateEmail(user: IUserData, updateEmailReqDto: UpdateEmailReqDto) {
-    const { _id, email: currentEmail, username } = user;
-    const { email: newEmail } = updateEmailReqDto;
+    const { email: newEmail, password } = updateEmailReqDto;
+
+    const currentUser = await this.userRepository.findById(user._id);
+    const isEqualPassword = await compare(password, currentUser.password);
+    if (!isEqualPassword) throw new BadRequestException('Password incorrect');
 
     const isEmail = await this.userRepository.findOne({ email: newEmail });
     if (isEmail) throw new BadRequestException('Email has already taken');
 
-    const token = this.jwtService.createNewEmailActivationToken(_id.toString(), newEmail);
-    const activationId = uuidV4();
-
-    await this.activationRepository.deleteOne({ userId: toId(_id) }); // delete old records
-    await this.activationRepository.create({
-      activationId,
-      token,
-      userId: toId(_id),
-    });
-
-    const CLIENT_URL = this.configService.get<string>(EEnvVariables.CLIENT_URL);
-    const activationLink = `${CLIENT_URL}/confirm-new-email/${activationId}?email=${newEmail}`;
-
-    /** send activate link to email */
-    this.emailService.sendEmail(
-      currentEmail,
-      username,
-      EMailTemplatesType.NEW_EMAIL_CONFIRMATION,
-      activationLink,
-      newEmail,
-    );
+    await this.userRepository.findByIdAndUpdate(toId(user._id), { $set: { email: newEmail } });
 
     return { success: true };
   }

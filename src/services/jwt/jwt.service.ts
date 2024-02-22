@@ -86,12 +86,6 @@ export class JwtService {
     return token;
   }
 
-  createNewEmailActivationToken(userId: string, email: string) {
-    const SECRET_EMAIL_ACTIVATION = this.configService.get<string>(EEnvVariables.SECRET_NEW_EMAIL_ACTIVATION);
-    const token = sign({ _id: userId, email }, SECRET_EMAIL_ACTIVATION, { expiresIn: `${hoursData}h` });
-    return token;
-  }
-
   private createToken(jwtData: UserJtwDataDto, secret: string, expiresIn: string) {
     return sign(jwtData, secret, {
       expiresIn,

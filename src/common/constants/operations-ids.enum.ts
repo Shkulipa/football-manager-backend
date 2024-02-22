@@ -26,6 +26,7 @@ export enum OperationIds {
   LEAGUE_DELETE = 'league-delete',
 
   REAL_TEAM_GET_MANY = 'real-team-get-many',
+  REAL_TEAM_GET_MANY_FILTERS = 'real-team-get-many-filters',
   REAL_TEAM_GET_MANY_INFO = 'real-team-get-many-info',
   REAL_TEAM_GET_BY_ID = 'real-team-get-by-id',
   REAL_TEAM_CREATE = 'real-team-create',
@@ -50,6 +51,7 @@ export enum OperationIds {
   USER_TEAM_DELETE = 'user-team-delete',
 
   AUCTION_GET_LOTS = 'auction-get-lot',
+  AUCTION_GET_OWN_LOTS = 'auction-own-get-lot',
   AUCTION_CREATE_LOT = 'auction-create-lot',
   AUCTION_BUY_LOT = 'auction-buy-lot',
   AUCTION_CANCEL_LOT = 'auction-cancel-lot',

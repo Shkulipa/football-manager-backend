@@ -8,7 +8,7 @@ export class QueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(50)
+  @Max(1000)
   limit: number;
 
   @ApiProperty({ type: Number })

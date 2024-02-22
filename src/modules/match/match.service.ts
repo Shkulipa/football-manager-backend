@@ -17,7 +17,6 @@ import { ENameTeams } from './interfaces/football-simulator-engine/name-teams.in
 import { IPlayer, IPlayerParse } from './interfaces/football-simulator-engine/player.interface';
 import { EStatusMatch, IPlayerData } from './interfaces/match-detail.interface';
 import { MatchRepository } from './match.repository';
-
 @Injectable()
 export class MatchService {
   constructor(

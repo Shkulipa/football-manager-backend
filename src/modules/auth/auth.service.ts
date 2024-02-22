@@ -144,7 +144,7 @@ export class AuthService {
     });
 
     const CLIENT_URL = this.configService.get<string>(EEnvVariables.CLIENT_URL);
-    const activationLink = `${CLIENT_URL}/restore-password/${activationId}?email=${email}`;
+    const activationLink = `${CLIENT_URL}/auth/restore-password/${activationId}`;
 
     /** send activate link to email */
     this.emailService.sendEmail(email, user.username, EMailTemplatesType.RESTORE_PASSWORD, activationLink);

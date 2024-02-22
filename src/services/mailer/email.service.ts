@@ -21,9 +21,6 @@ export class EmailService {
       case EMailTemplatesType.ACTIVATION:
         subject = 'Confirmation email';
         break;
-      case EMailTemplatesType.NEW_EMAIL_CONFIRMATION:
-        subject = 'New Email Confirmation email';
-        break;
       case EMailTemplatesType.RESTORE_PASSWORD:
         subject = 'Restore password';
         break;
@@ -38,10 +35,10 @@ export class EmailService {
     const mode = this.configService.get(EEnvVariables.NODE_ENV);
     const address = this.configService.get(EEnvVariables.SMTP_USER);
 
-    if (mode === EMode.DEVELOPMENT) {
-      this.logger.log(`LINK: ${link}`);
-      return;
-    }
+    // if (mode === EMode.DEVELOPMENT) {
+    //   this.logger.log(`LINK: ${link}`);
+    //   return;
+    // }
 
     const sendEmailOptions: ISendMailOptions = {
       to,

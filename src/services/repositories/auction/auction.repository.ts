@@ -3,8 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, PipelineStage } from 'mongoose';
 import { CommonRealPlayerLookup } from 'src/common/aggregate/lookups/common-real-player.lookup';
 import { toId } from 'src/common/helpers/transform.helper';
+import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { BaseMongoRepository } from 'src/database/base-repository/base-mongo.repository';
 import { GetQueryLotsReqDto } from 'src/modules/auction/dto/get-lots-req.dto';
+import { ILot } from 'src/modules/auction/dto/lot.dto';
 import {
   maxAgePlayer,
   maxRatingPlayer,
@@ -27,7 +29,26 @@ export class AuctionRepository extends BaseMongoRepository<AuctionDocument> {
     super(auctionModel, 'lot');
   }
 
-  async getLots(getQueryLotsReqDto: GetQueryLotsReqDto) {
+  async getOwnLots(user: IUserData) {
+    const match: PipelineStage.FacetPipelineStage = {
+      $match: {
+        userId: user._id,
+      },
+    };
+
+    const result = await this.auctionModel
+      .aggregate([
+        {
+          $lookup: CommonRealPlayerLookup('playerId', 'player'),
+        },
+        match,
+      ])
+      .exec();
+
+    return result.map((p) => ({ ...p, player: p.player[0] })) as ILot[];
+  }
+
+  async getLots(getQueryLotsReqDto: GetQueryLotsReqDto, user: IUserData) {
     const { page, limit, search, positions, country, ratingFrom, ratingTo, ageFrom, ageTo, priceFrom, priceTo } =
       getQueryLotsReqDto;
     const {
@@ -50,18 +71,19 @@ export class AuctionRepository extends BaseMongoRepository<AuctionDocument> {
     } = getQueryLotsReqDto; // skills
     const skip = (page - 1) * limit;
 
-    const nameField = 'playerId';
+    const nameField = 'player';
     const match: PipelineStage.FacetPipelineStage = {
       $match: {
+        userId: { $ne: user._id },
         price: {
-          $gte: priceFrom || 10,
+          $gte: priceFrom || 1,
           $lte: priceTo || Number.POSITIVE_INFINITY,
         },
         ...(search ? { [`${nameField}.name`]: { $regex: new RegExp(search, 'i') } } : {}),
-        ...(positions ? { [`${nameField}.positions`]: { $all: positions } } : {}),
+        ...(positions ? { [`${nameField}.positions`]: { $in: positions } } : {}),
         ...(country
           ? {
-              [`${nameField}.countryId._id`]: {
+              [`${nameField}.country._id`]: {
                 $in: country.map((id) => toId(id)),
               },
             }
@@ -91,7 +113,7 @@ export class AuctionRepository extends BaseMongoRepository<AuctionDocument> {
     const result = await this.auctionModel
       .aggregate([
         {
-          $lookup: CommonRealPlayerLookup('playerId', 'playerId'),
+          $lookup: CommonRealPlayerLookup('playerId', 'player'),
         },
         match,
         {
@@ -112,7 +134,20 @@ export class AuctionRepository extends BaseMongoRepository<AuctionDocument> {
         },
         {
           $project: {
-            items: '$items',
+            items: {
+              $map: {
+                input: '$items',
+                as: 'item',
+                in: {
+                  $mergeObjects: [
+                    '$$item',
+                    {
+                      player: { $arrayElemAt: ['$$item.player', 0] },
+                    },
+                  ],
+                },
+              },
+            },
             count: { $ifNull: ['$count.count', 0] },
           },
         },

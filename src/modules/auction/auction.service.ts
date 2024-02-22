@@ -8,6 +8,8 @@ import { UserTeamRepository } from 'src/services/repositories/user-team/user-tea
 
 import { CreateLotReqDto } from './dto/create-lot-req.dto';
 import { GetQueryLotsReqDto } from './dto/get-lots-req.dto';
+import { GetLotsResDto } from './dto/get-lots-res.dto';
+import { ILot } from './dto/lot.dto';
 
 @Injectable()
 export class AuctionService {
@@ -19,8 +21,12 @@ export class AuctionService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async getLots(getQueryLotsReqDto: GetQueryLotsReqDto): Promise<any> {
-    return await this.auctionRepository.getLots(getQueryLotsReqDto);
+  async getLots(getQueryLotsReqDto: GetQueryLotsReqDto, user: IUserData): Promise<GetLotsResDto> {
+    return await this.auctionRepository.getLots(getQueryLotsReqDto, user);
+  }
+
+  async getOwnLots(user: IUserData): Promise<ILot[]> {
+    return await this.auctionRepository.getOwnLots(user);
   }
 
   async createLot(user: IUserData, createLotReqDto: CreateLotReqDto): Promise<CommonSuccessResDto> {
@@ -29,7 +35,9 @@ export class AuctionService {
     const team = await this.userTeamRepository.findOne({ userId: toId(user._id) });
     if (!team) throw new NotFoundException("Team for user wasn't found");
 
-    const mainSquad = Object.values(team.main);
+    const lots = await this.auctionRepository.getOwnLots(user);
+    if (lots.length === 5) throw new BadRequestException('Maximum Created lots, please cancel already existed');
+    const mainSquad = Object.values(team.main).filter((v) => Boolean(v));
     const parsePlayerId = playerId.toString();
     const userId = toId(user._id);
     const isMainPlayer = mainSquad.map((p) => p.toString()).includes(parsePlayerId);
@@ -40,6 +48,7 @@ export class AuctionService {
     if (isMainPlayer) {
       this.logger.debug(`Player(${playerId}) is in main squad`);
       const arrUpdatedSquad = Object.entries(team.main).map(([key, value]) => {
+        if (!value) return [key, value];
         if (value.toString() === playerId) return [key, null];
         return [key, value];
       });
@@ -70,7 +79,11 @@ export class AuctionService {
   }
 
   async buyLot(id: string, user: IUserData): Promise<CommonSuccessResDto> {
-    const lot = await this.auctionRepository.validation(id);
+    const lot = await this.auctionRepository.findById(id);
+    if (!lot)
+      throw new NotFoundException(
+        "Lot doesn't exist already or he was bought by other player, please refresh your page",
+      );
 
     // protect from own buying
     if (lot.userId.toString() === user._id.toString())
@@ -86,7 +99,9 @@ export class AuctionService {
 
     // check on duplication players
     const allPlayersIds = [
-      ...Object.values(team.main).map((p) => p.toString()),
+      ...Object.values(team.main)
+        .filter((p) => Boolean(p))
+        .map((p) => p.toString()),
       team.bench.map((p) => p.toString()),
       team.reserve.map((p) => p.toString()),
     ];

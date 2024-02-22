@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EErrors } from 'src/common/constants/errors.enum';
 import { OperationIds } from 'src/common/constants/operations-ids.enum';
@@ -46,20 +46,5 @@ export class ActivationController {
   @ApiResponse({ status: 200, type: CommonSuccessResDto, description: 'OK' })
   async activateSend(@Body() sendReqDto: SendActivationEmailReqDto): Promise<CommonSuccessResDto> {
     return await this.activationService.activateSend(sendReqDto);
-  }
-
-  /**
-   * confirm update email
-   * @returns {Promise<CommonSuccessResDto>}
-   */
-  @Patch('/confirm-update-email/:activationId')
-  @ApiOperation({
-    description: 'confirm update email',
-    operationId: OperationIds.UPDATE_CONFIRM_EMAIL,
-  })
-  @ApiResponse({ status: 200, type: CommonSuccessResDto, description: 'OK' })
-  @ComposeOthersErrorsDecorator(EErrors.NOT_FOUND_ERROR)
-  async confirmUpdateEmail(@Param('activationId') activationId: string): Promise<CommonSuccessResDto> {
-    return await this.activationService.confirmUpdateEmail(activationId);
   }
 }

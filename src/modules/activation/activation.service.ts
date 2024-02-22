@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { EEnvVariables } from 'src/common/constants/env-variables.enum';
 import { CommonDecodedTokenJwtDto } from 'src/common/dto/common-decoded-token-jwt.dto';
 import { toId } from 'src/common/helpers/transform.helper';
+import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { hoursData, JwtService } from 'src/services/jwt/jwt.service';
 import { EMailTemplatesType } from 'src/services/mailer/dto/mail-template.enum';
 import { EmailService } from 'src/services/mailer/email.service';
@@ -11,7 +12,6 @@ import { UserRepository } from 'src/services/repositories/user/user.repository';
 import { v4 as uuidV4 } from 'uuid';
 
 import { SendActivationEmailReqDto } from './dto/send-activation-email-req.dto';
-import { VerifyNewEmailDto } from './dto/verify-new-email.dto';
 
 @Injectable()
 export class ActivationService {
@@ -64,15 +64,8 @@ export class ActivationService {
     return { success: true };
   }
 
-  async confirmUpdateEmail(activationId: string) {
-    const activation = await this.activationRepository.validateActivation(activationId);
-
-    // check expires
-    const jwtDecoded = this.jwtService.verifyNewEmailActivationToken(activation.token) as VerifyNewEmailDto;
-
-    await this.userRepository.findByIdAndUpdate(toId(activation.userId), { $set: { email: jwtDecoded.email } });
-    await this.activationRepository.deleteOne({ activationId });
-
+  async updateEmail(user: IUserData, newEmail: string) {
+    await this.userRepository.findByIdAndUpdate(toId(user._id), { $set: { email: newEmail } });
     return { success: true };
   }
 

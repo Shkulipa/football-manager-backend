@@ -2,6 +2,7 @@ import { PipelineStage } from 'mongoose';
 import { ECollectionName } from 'src/common/constants/collection-name.enum';
 
 import { CommonCountryLookup } from './common-country.lookup';
+import { CommonRealTeamLookup } from './common-real-team.lookup';
 
 export const CommonRealPlayerLookup = (localField: string, as: string): PipelineStage.Lookup['$lookup'] => ({
   from: ECollectionName.REAL_PLAYERS,
@@ -13,6 +14,9 @@ export const CommonRealPlayerLookup = (localField: string, as: string): Pipeline
       $lookup: CommonCountryLookup,
     },
     {
+      $lookup: CommonRealTeamLookup,
+    },
+    {
       $project: {
         _id: 1, // Specifying the fields you want to select,
         name: 1,
@@ -22,6 +26,7 @@ export const CommonRealPlayerLookup = (localField: string, as: string): Pipeline
         positions: 1,
         skills: 1,
         rating: 1,
+        realTeam: { $arrayElemAt: ['$realTeamId', 0] },
       },
     },
   ],

@@ -14,6 +14,8 @@ import { IUserData } from 'src/common/interfaces/user-data.interfaces';
 import { AuctionService } from './auction.service';
 import { CreateLotReqDto } from './dto/create-lot-req.dto';
 import { GetQueryLotsReqDto } from './dto/get-lots-req.dto';
+import { GetLotsResDto } from './dto/get-lots-res.dto';
+import { ILot } from './dto/lot.dto';
 
 @ApiTags(AUCTION_TAG)
 @Controller(AUCTION_TAG)
@@ -23,16 +25,32 @@ export class AuctionController {
 
   /**
    * get lots
-   * @returns {Promise<CommonSuccessResDto>}
+   * @returns {Promise<GetLotsResDto>}
    */
   @Get('/')
   @ApiOperation({
     description: 'get lots',
     operationId: OperationIds.AUCTION_GET_LOTS,
   })
-  @ApiResponse({ status: 200, type: CommonSuccessResDto, description: 'OK' })
-  async getLots(@Query() getQueryLotsReqDto: GetQueryLotsReqDto): Promise<any> {
-    return this.auctionService.getLots(getQueryLotsReqDto);
+  @ComposeAuthDecorator()
+  @ApiResponse({ status: 200, type: GetLotsResDto, description: 'OK' })
+  async getLots(@Query() getQueryLotsReqDto: GetQueryLotsReqDto, @User() user: IUserData): Promise<GetLotsResDto> {
+    return this.auctionService.getLots(getQueryLotsReqDto, user);
+  }
+
+  /**
+   * get own lots
+   * @returns {Promise<ILot[]>}
+   */
+  @Get('/own-lots')
+  @ApiOperation({
+    description: 'get own lots',
+    operationId: OperationIds.AUCTION_GET_OWN_LOTS,
+  })
+  @ComposeAuthDecorator()
+  @ApiResponse({ status: 200, type: [ILot], description: 'OK' })
+  async getOwnLots(@User() user: IUserData): Promise<ILot[]> {
+    return this.auctionService.getOwnLots(user);
   }
 
   /**
